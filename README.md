@@ -43,6 +43,29 @@ you find `pushpaairtravels@gmail.com`, which belongs to the sister travel
 business — so it is deliberately left off the page rather than guessed at.
 Add the real one to the footer and the `JewelryStore` JSON-LD block when you have it.
 
+## Getting the real photography
+
+The build environment has no outbound network access — every host, including
+Instagram, Facebook and the old WooCommerce site, is refused by the egress
+proxy. So the images have to be fetched from a machine that can reach them.
+
+`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library:
+
+```sh
+sh tools/fetch-images.sh https://saravanas.lk
+```
+
+It walks `/wp-json/wp/v2/media`, saves every image into `product-images/`, and
+writes `manifest.tsv` mapping each file to its title and alt text — which is
+what tells us which shot is which piece. If the REST route is disabled it
+prints a `wget` fallback that mirrors `/wp-content/uploads/`.
+
+Commit that folder and the images can be wired into the slots below.
+
+**Before using them, confirm the photographs are the client's to use.** Product
+photography is normally owned by whoever shot it, and a site being "the old
+site" is worth verifying if the domain belongs to a different trading name.
+
 ## Replacing the illustrations with real photography
 
 Every image on the page is drawn in SVG — gradient-shaded renderings of a
