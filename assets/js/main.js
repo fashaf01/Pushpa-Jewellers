@@ -113,6 +113,17 @@
   }
 
   /* ------------------------------------------------------------------
+     Wishlist toggles — local to the visitor's own browser
+     ------------------------------------------------------------------ */
+  document.querySelectorAll('.product__wish').forEach(function (btn) {
+    btn.setAttribute('aria-pressed', 'false');
+    btn.addEventListener('click', function () {
+      var on = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', on ? 'false' : 'true');
+    });
+  });
+
+  /* ------------------------------------------------------------------
      Assurance marquee — duplicate the items so the loop is seamless
      ------------------------------------------------------------------ */
   var track = document.getElementById('assuranceTrack');

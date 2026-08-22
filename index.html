@@ -18,7 +18,7 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
 
 <script type="application/ld+json">
@@ -457,34 +457,37 @@
 <section class="hero" aria-label="Introduction">
   <div class="hero__grid">
 
-    <div class="hero__panel surface surface--emerald">
-      <svg class="art" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#pj-loose" x="0" y="0" width="600" height="700"/></svg>
-      <span class="hero__scrim"></span>
-      <div class="hero__copy">
-        <span class="eyebrow" style="color:var(--gold-pale)">The jeweller's art since 1967</span>
-        <h1 class="hero__title">Natural gold, diamonds &amp; Ceylon stones</h1>
-        <p class="hero__text">
-          Since 1967 our goldsmiths in Negombo have turned 22kt gold and hand-picked
-          stones into pieces made to be worn for a lifetime — and passed on.
-        </p>
-        <div class="hero__actions">
-          <a class="btn btn--gold" href="#appointment">Commission a piece</a>
-          <a class="btn btn--light" href="#collections">View collections</a>
-        </div>
+    <div class="hero__stage">
+      <p class="hero__piece serif">Ceylon Solitaire, 22kt</p>
+
+      <div class="hero__composite">
+        <span class="hero__ghost serif" aria-hidden="true">
+          <span>Ceylon</span>
+          <span>Solitaire</span>
+        </span>
+        <svg class="hero__object" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <use href="#pj-ring-solitaire" width="200" height="200"/>
+        </svg>
       </div>
+
+      <p class="hero__price">Priced at today's gold rate</p>
+
+      <p class="hero__note">
+        Made on our own bench in Negombo since 1967 — <em>natural</em> stones,
+        assured 22kt gold, and a fitting before you take it home. Every piece is
+        <em>one</em> commission at a time.
+      </p>
     </div>
 
-    <div class="hero__aside surface surface--gold">
-      <svg class="art" viewBox="0 0 500 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#pj-ring-solitaire" x="112" y="146" width="292" height="292"/><use href="#pj-drops" x="66" y="418" width="168" height="168"/><use href="#pj-brilliant" x="188" y="424" width="92" height="92"/></svg>
-      <span class="hero__scrim"></span>
+    <div class="hero__aside surface surface--taupe">
+      <svg class="art" viewBox="0 0 500 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <use href="#pj-bridal" x="42" y="150" width="416" height="416"/>
+      </svg>
       <span class="hero__badge">
         <svg aria-hidden="true"><use href="#i-shield"/></svg>
         Third-party assayed gold
       </span>
-      <p class="hero__caption">
-        Handcrafted in&nbsp;Negombo
-        <span>Est. 1967</span>
-      </p>
+      <a class="hero__shop" href="#collections">Shop now</a>
     </div>
 
   </div>
@@ -508,65 +511,52 @@
     <div class="section-head reveal">
       <div>
         <span class="eyebrow">Our jewellery</span>
-        <h2 class="section-title" id="collectionsTitle">Collections</h2>
+        <h2 class="section-title" id="collectionsTitle">Jewellery made in Negombo</h2>
       </div>
       <p class="section-lede">
         Ready-to-wear pieces you can take home today — or use any of them as the
         starting point for something made only for you.
       </p>
     </div>
+  </div>
 
-    <div class="categories__grid">
-
-      <a class="category reveal" href="#appointment" data-delay="0">
-        <span class="category__media surface surface--stone">
-          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-ring-solitaire" x="0" y="0" width="200" height="200"/></svg>
+  <div class="cat-strip reveal">
+      <a class="cat" href="#appointment">
+        <span class="cat__media surface surface--taupe">
+          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <use href="#pj-pendant" width="200" height="200"/>
+          </svg>
         </span>
-        <span class="category__veil"></span>
-        <span class="category__body">
-          <span class="category__name">Rings</span>
-          <span class="category__cta">View collection</span>
-        </span>
+        <span class="cat__label">Necklaces</span>
       </a>
-
-      <a class="category reveal" href="#appointment" data-delay="1">
-        <span class="category__media surface surface--stone">
-          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-drops" x="0" y="0" width="200" height="200"/></svg>
+      <a class="cat" href="#appointment">
+        <span class="cat__media surface surface--taupe cat__media--alt">
+          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <use href="#pj-drops" width="200" height="200"/>
+          </svg>
         </span>
-        <span class="category__veil"></span>
-        <span class="category__body">
-          <span class="category__name">Earrings</span>
-          <span class="category__cta">View collection</span>
-        </span>
+        <span class="cat__label">Earrings</span>
       </a>
-
-      <a class="category reveal" href="#appointment" data-delay="2">
-        <span class="category__media surface surface--stone">
-          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-pendant" x="0" y="0" width="200" height="200"/></svg>
+      <a class="cat" href="#appointment">
+        <span class="cat__media surface surface--taupe">
+          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <use href="#pj-ring-solitaire" width="200" height="200"/>
+          </svg>
         </span>
-        <span class="category__veil"></span>
-        <span class="category__body">
-          <span class="category__name">Necklaces &amp; Pendants</span>
-          <span class="category__cta">View collection</span>
-        </span>
+        <span class="cat__label">Rings</span>
       </a>
-
-      <a class="category reveal" href="#appointment" data-delay="3">
-        <span class="category__media surface surface--stone">
-          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-bangles" x="0" y="0" width="200" height="200"/></svg>
+      <a class="cat" href="#appointment">
+        <span class="cat__media surface surface--taupe cat__media--alt">
+          <svg class="art" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <use href="#pj-bangles" width="200" height="200"/>
+          </svg>
         </span>
-        <span class="category__veil"></span>
-        <span class="category__body">
-          <span class="category__name">Bangles &amp; Bracelets</span>
-          <span class="category__cta">View collection</span>
-        </span>
+        <span class="cat__label">Bangles</span>
       </a>
+  </div>
 
-    </div>
-
-    <div class="categories__foot reveal">
-      <a class="btn" href="#appointment">See the full catalogue</a>
-    </div>
+  <div class="shell categories__foot reveal">
+    <a class="btn" href="#appointment">See the full catalogue</a>
   </div>
 </section>
 
@@ -576,10 +566,7 @@
 <section class="section" id="featured" aria-labelledby="featuredTitle">
   <div class="shell">
     <div class="carousel__head reveal">
-      <div>
-        <span class="eyebrow">Chosen by our clients</span>
-        <h2 class="section-title" id="featuredTitle">Favourites this season</h2>
-      </div>
+      <h2 class="section-title" id="featuredTitle">Favourites this season</h2>
       <div class="carousel__nav">
         <button class="carousel__btn" type="button" data-carousel-prev aria-label="Previous items">
           <svg aria-hidden="true"><use href="#i-arrow-l"/></svg>
@@ -595,9 +582,11 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
-            <span class="product__flag">Bridal</span>
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
+            <span class="product__badge">Bridal</span>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-ring-solitaire" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Solitaire engagement ring</h3>
           <p class="product__spec">18kt white gold · 0.50ct natural diamond</p>
@@ -606,9 +595,11 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
-            <span class="product__flag product__flag--gold">22kt</span>
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
+            <span class="product__badge">22kt gold</span>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-bridal" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Kandyan bridal necklace</h3>
           <p class="product__spec">22kt gold · 42.6 g</p>
@@ -617,8 +608,10 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-studs" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Diamond stud earrings</h3>
           <p class="product__spec">18kt white gold · 0.30ct pair</p>
@@ -627,9 +620,11 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
-            <span class="product__flag">Ceylon stone</span>
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
+            <span class="product__badge">Ceylon stone</span>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-ring-sapphire" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Ceylon blue sapphire ring</h3>
           <p class="product__spec">18kt gold · 2.10ct sapphire</p>
@@ -638,8 +633,10 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-tennis" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Diamond tennis bracelet</h3>
           <p class="product__spec">18kt white gold · 3.00ct total</p>
@@ -648,9 +645,11 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
-            <span class="product__flag product__flag--gold">22kt</span>
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
+            <span class="product__badge">22kt gold</span>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-bangles" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Classic bangle pair</h3>
           <p class="product__spec">22kt gold · 24.8 g</p>
@@ -659,8 +658,10 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-pendant-pear" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Pear drop pendant</h3>
           <p class="product__spec">18kt white gold · 0.45ct pear diamond</p>
@@ -669,9 +670,11 @@
 
         <article class="product">
           <div class="product__media surface surface--stone">
-            <span class="product__flag product__flag--gold">22kt</span>
+            <button class="product__wish" type="button" aria-label="Save this piece">
+              <svg aria-hidden="true"><use href="#i-heart"/></svg>
+            </button>
+            <span class="product__badge">22kt gold</span>
             <svg class="art" viewBox="-16 -16 232 232" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#pj-chain" x="0" y="0" width="200" height="200"/></svg>
-            <a class="product__quick" href="#appointment">Enquire</a>
           </div>
           <h3 class="product__name">Handmade gold chain, 20&quot;</h3>
           <p class="product__spec">22kt gold · 16.2 g</p>
