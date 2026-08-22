@@ -9,6 +9,9 @@ No build step, no dependencies. Open `index.html`, or serve the folder:
 python3 -m http.server 8000
 ```
 
+`node build.js` inlines the CSS, JS and favicon into a single self-contained
+`dist/pushpa-jewellers.html`, for hosting that serves one file.
+
 ## Files
 
 ```
@@ -42,17 +45,20 @@ Add the real one to the footer and the `JewelryStore` JSON-LD block when you hav
 
 ## Replacing the illustrations with real photography
 
-Every image on the page is drawn in SVG. That was a constraint, not a preference:
-the build environment blocks all outbound network access, so the Instagram and
-Facebook product shots could not be downloaded. The line art is a deliberate
-placeholder that looks intentional rather than broken — but real photographs of
-real pieces will sell far better.
+Every image on the page is drawn in SVG — gradient-shaded renderings of a
+solitaire, bangles, studs, a tennis bracelet, a bridal set and so on, lit from
+the upper left and sat on a studio sweep. That was a constraint, not a
+preference: the build environment blocks all outbound network access, so the
+Instagram and Facebook product shots could not be downloaded. They are sample
+imagery, deliberately styled to sit in the layout as a packshot would — but
+real photographs of real pieces will sell far better, and these are meant to
+be replaced.
 
 Each slot follows the same shape:
 
 ```html
 <div class="product__media surface surface--stone">
-  <svg class="art" viewBox="0 0 300 300" aria-hidden="true">…</svg>
+  <svg class="art" viewBox="-16 -16 232 232" aria-hidden="true">…</svg>
 </div>
 ```
 
