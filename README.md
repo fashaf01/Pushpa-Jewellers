@@ -66,50 +66,48 @@ Commit that folder and the images can be wired into the slots below.
 photography is normally owned by whoever shot it, and a site being "the old
 site" is worth verifying if the domain belongs to a different trading name.
 
-## Replacing the illustrations with real photography
+## Adding photography
 
-Every image on the page is drawn in SVG — gradient-shaded renderings of a
-solitaire, bangles, studs, a tennis bracelet, a bridal set and so on, lit from
-the upper left and sat on a studio sweep. That was a constraint, not a
-preference: the build environment blocks all outbound network access, so the
-Instagram and Facebook product shots could not be downloaded. They are sample
-imagery, deliberately styled to sit in the layout as a packshot would — but
-real photographs of real pieces will sell far better, and these are meant to
-be replaced.
+Every image is drawn in SVG. To use real photographs, you do not touch the
+markup — open `assets/js/main.js` and paste a URL against the slot you want:
 
-Each slot follows the same shape:
-
-```html
-<div class="product__media surface surface--stone">
-  <svg class="art" viewBox="-16 -16 232 232" aria-hidden="true">…</svg>
-</div>
+```js
+var PHOTOS = {
+  heroAside: 'https://images.unsplash.com/photo-XXXX?w=1600&q=80&fm=webp',
+  catRings:  'assets/img/rings.jpg',
+  ...
+};
 ```
 
-To use a photograph, replace the `<svg class="art">` with:
+A slot with a URL swaps to the photograph; a slot left empty keeps its
+drawing, so the page never shows a hole. The drawing is only removed once the
+photograph has actually loaded, so a broken or slow URL degrades quietly.
 
-```html
-<img class="art" src="assets/img/solitaire-ring.jpg" alt="Solitaire engagement ring in 18kt white gold"
-     style="object-fit:cover" loading="lazy" width="800" height="800">
-```
+Any direct image URL works: an Unsplash CDN link (the
+`https://images.unsplash.com/photo-…` address behind their Download button),
+or your own file committed under `assets/img/`. Appending
+`?w=1600&q=80&fm=webp` to an Unsplash URL keeps the page light.
 
-`.art` is already absolutely positioned to fill its slot, so nothing else changes.
-Drop the `surface surface--stone` classes from the parent once a photo covers it.
+The nineteen slots, and the crop each one wants:
 
-Slots, and the crop each one wants:
-
-| Section | Slots | Crop |
+| Key | Where | Crop |
 |---|---|---|
-| Hero, left panel | 1 | portrait, loose stones on cloth |
-| Hero, right panel | 1 | portrait, model wearing stacked rings |
-| Collections | 4 | landscape, single piece on a plain ground |
-| Favourites carousel | 8 | square, packshot on white |
-| Workshop | 2 | portrait — bench in use, and a stone in tweezers |
-| Our story tiles | 4 | mixed |
-| Bridal | 3 | tall portrait |
-| Showrooms | 2 | wide, shopfront or interior |
+| `heroAside` | Hero, right panel | tall portrait — model wearing a bridal set |
+| `catNecklaces` `catEarrings` `catRings` `catBangles` | Category strip | portrait lifestyle — neck, ear, hand, wrist |
+| `prodSolitaire` `prodBridalNecklace` `prodStuds` `prodSapphire` `prodTennis` `prodBangles` `prodPendant` `prodChain` | Favourites carousel | square packshot on white |
+| `workshop` | Workshop panel | bench, tools, a jeweller at work |
+| `bridalSet` `bridalEarrings` `bridalBangles` | Bridal | tall portrait |
+| `showroomNegombo` `showroomKatunayake` | Showrooms | wide — shopfront or interior |
 
-For the carousel, the eight `<article class="product">` blocks also carry the name,
-metal/stone spec and price line — update those alongside the images.
+Two cautions worth keeping in mind:
+
+- **Stock photography is not your stock.** A generic photo beside a specific
+  listing ("22kt gold · 42.6 g") reads as a real product that you can be asked
+  to sell. Use stock for the atmosphere slots — hero, categories, bridal,
+  workshop, showrooms — and hold the eight carousel slots for photographs of
+  pieces you actually have.
+- **Check the licence covers commercial use.** The Unsplash licence does; many
+  other "free" libraries require attribution or bar commercial use.
 
 ## Prices
 

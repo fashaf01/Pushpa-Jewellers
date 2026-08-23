@@ -2,6 +2,66 @@
 (function () {
   'use strict';
 
+  /* ------------------------------------------------------------------
+     PHOTOGRAPHY
+     Paste an image URL against a slot and that slot switches from the
+     drawn placeholder to the real photograph. Leave a slot empty and the
+     drawing stays, so the page never shows a hole.
+
+     Any direct image URL works — Unsplash CDN links (the
+     https://images.unsplash.com/photo-… address behind "Download"),
+     or your own files committed under assets/img/.
+
+     Add ?w=1600&q=80&fm=webp to an Unsplash URL to keep it light.
+     ------------------------------------------------------------------ */
+  var PHOTOS = {
+    heroAside:          '',   /* tall — a model wearing a bridal set     */
+
+    catNecklaces:       '',   /* portrait lifestyle, neck and chest      */
+    catEarrings:        '',   /* portrait lifestyle, ear detail          */
+    catRings:           '',   /* portrait lifestyle, hand                */
+    catBangles:         '',   /* portrait lifestyle, wrist               */
+
+    prodSolitaire:      '',   /* square packshot                         */
+    prodBridalNecklace: '',
+    prodStuds:          '',
+    prodSapphire:       '',
+    prodTennis:         '',
+    prodBangles:        '',
+    prodPendant:        '',
+    prodChain:          '',
+
+    workshop:           '',   /* bench, tools, a jeweller at work        */
+
+    bridalSet:          '',   /* tall portrait                           */
+    bridalEarrings:     '',
+    bridalBangles:      '',
+
+    showroomNegombo:    '',   /* wide — shopfront or interior            */
+    showroomKatunayake: ''
+  };
+
+  Object.keys(PHOTOS).forEach(function (key) {
+    var url = PHOTOS[key];
+    if (!url) return;
+    document.querySelectorAll('[data-photo="' + key + '"]').forEach(function (slot) {
+      var img = document.createElement('img');
+      img.src = url;
+      img.alt = '';
+      img.className = 'art art--photo';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      /* Keep the drawing until the photograph has actually loaded, so a
+         broken or slow URL never leaves an empty panel. */
+      img.addEventListener('load', function () {
+        var drawn = slot.querySelector('svg.art');
+        if (drawn) drawn.remove();
+        slot.classList.add('has-photo');
+      });
+      slot.appendChild(img);
+    });
+  });
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ------------------------------------------------------------------

@@ -575,6 +575,19 @@ section[id],
     radial-gradient(120% 100% at 50% 18%, #FFFFFF 0%, #F5F3EF 46%, #E3DFD7 100%);
 }
 
+/* A real photograph, once one is supplied for the slot */
+.art--photo {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* With a photograph in place the drawn ground and its texture only muddy it */
+.has-photo::before,
+.has-photo::after { display: none; }
+
+.has-photo .product__badge,
+.has-photo .showroom__tag { backdrop-filter: blur(4px); }
+
 /* The SVG artwork that sits inside a surface */
 .art {
   position: absolute;
@@ -705,25 +718,36 @@ section[id],
 }
 .hero__badge svg { width: 14px; height: 14px; color: var(--gold); flex: none; }
 
-/* The hard black block the reference drops over the corner of the image */
-.hero__shop {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+/* A quiet caption closes the panel instead of a hard block in the corner */
+.hero__caption {
+  position: relative;
   z-index: 3;
-  display: grid;
-  place-items: center;
-  width: clamp(120px, 18vw, 168px);
-  aspect-ratio: 1;
-  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.hero__caption .serif {
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
   color: #fff;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  text-shadow: 0 1px 16px rgba(20, 18, 15, 0.4);
+}
+
+.hero__caption-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
-  transition: background var(--fast);
+  color: #fff;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  transition: gap var(--fast), border-color var(--fast);
 }
-.hero__shop:hover { background: var(--gold); }
+.hero__caption-link:hover { gap: 0.9rem; border-color: #fff; }
 
 /* Marquee of assurances beneath the hero */
 .assurance {

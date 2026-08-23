@@ -26,7 +26,10 @@ const out = path.join(root, 'dist');
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, 'pushpa-jewellers.html'), html);
 
-for (const [label, marker] of [['stylesheet', 'assets/css/'], ['script', 'assets/js/'], ['favicon', 'assets/img/']]) {
-  if (html.includes(marker)) throw new Error(`${label} was not inlined — ${marker} still referenced`);
+/* Check for real attribute references only — prose mentioning a path
+   (the PHOTOS guidance in main.js does) is not a leftover link. */
+for (const [label, dir] of [['stylesheet', 'css'], ['script', 'js'], ['favicon', 'img']]) {
+  const ref = new RegExp(`(?:href|src)=["']assets/${dir}/`);
+  if (ref.test(html)) throw new Error(`${label} was not inlined — assets/${dir}/ still linked`);
 }
 console.log(`dist/pushpa-jewellers.html  ${(html.length / 1024).toFixed(0)} KB — fully self-contained`);
