@@ -15,12 +15,12 @@
      Add ?w=1600&q=80&fm=webp to an Unsplash URL to keep it light.
      ------------------------------------------------------------------ */
   var PHOTOS = {
-    heroAside:          '',   /* tall — a model wearing a bridal set     */
+    heroAside:          'https://img.magnific.com/free-photo/young-brunette-model-demonstrating-jewelry_7502-7050.jpg',   /* tall — a model wearing a bridal set     */
 
-    catNecklaces:       '',   /* portrait lifestyle, neck and chest      */
-    catEarrings:        '',   /* portrait lifestyle, ear detail          */
-    catRings:           '',   /* portrait lifestyle, hand                */
-    catBangles:         '',   /* portrait lifestyle, wrist               */
+    catNecklaces:       'https://img.magnific.com/free-photo/young-model-demonstrating-golden-necklace_7502-7049.jpg',   /* portrait lifestyle, neck and chest      */
+    catEarrings:        'https://img.magnific.com/free-photo/model-demonstrating-silver-earrings_7502-7054.jpg',   /* portrait lifestyle, ear detail          */
+    catRings:           'https://img.magnific.com/free-photo/young-model-demonstrating-expensive-ring_7502-7051.jpg',   /* portrait lifestyle, hand                */
+    catBangles:         'https://img.magnific.com/free-photo/woman-s-arms-wearing-beautiful-jewelry_23-2149640597.jpg',   /* portrait lifestyle, wrist               */
 
     prodSolitaire:      '',   /* square packshot                         */
     prodBridalNecklace: '',
