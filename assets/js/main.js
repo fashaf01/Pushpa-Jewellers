@@ -22,23 +22,23 @@
     catRings:           'https://img.magnific.com/free-photo/young-model-demonstrating-expensive-ring_7502-7051.jpg',   /* portrait lifestyle, hand                */
     catBangles:         'https://img.magnific.com/free-photo/woman-s-arms-wearing-beautiful-jewelry_23-2149640597.jpg',   /* portrait lifestyle, wrist               */
 
-    prodSolitaire:      '',   /* square packshot                         */
-    prodBridalNecklace: '',
-    prodStuds:          '',
-    prodSapphire:       '',
-    prodTennis:         '',
-    prodBangles:        '',
-    prodPendant:        '',
-    prodChain:          '',
+    prodSolitaire:      'https://img.magnific.com/free-photo/gold-ring-with-diamonds_1203-1534.jpg',   /* square packshot                         */
+    prodBridalNecklace: 'https://img.magnific.com/free-photo/top-view-bright-gold-necklace_23-2149836468.jpg',
+    prodStuds:          'https://img.magnific.com/free-photo/aesthetic-golden-earrings-assortment_23-2149846587.jpg',
+    prodSapphire:       'https://img.magnific.com/free-photo/golden-ring-with-purple-gemstone_1203-1529.jpg',
+    prodTennis:         'https://img.magnific.com/free-photo/side-view-hand-holding-gold-bracelet_23-2149836428.jpg',
+    prodBangles:        'https://img.magnific.com/free-photo/high-angle-shot-beautiful-golden-necklace-bracelet-earing-white-surface_181624-58013.jpg',
+    prodPendant:        'https://img.magnific.com/free-photo/beautiful-luxury-necklace-jewelry-stand-neck_1339-7946.jpg',
+    prodChain:          'https://img.magnific.com/free-photo/top-view-gold-chain-white-background_23-2149836434.jpg',
 
-    workshop:           '',   /* bench, tools, a jeweller at work        */
+    workshop:           'https://img.magnific.com/free-photo/medium-shot-jeweler-making-jewellery_23-2150931446.jpg',   /* bench, tools, a jeweller at work        */
 
-    bridalSet:          '',   /* tall portrait                           */
-    bridalEarrings:     '',
-    bridalBangles:      '',
+    bridalSet:          'https://img.magnific.com/free-photo/charming-model-with-dark-hair-shows-rich-golden-earrings-necklace-ring_8353-5040.jpg',   /* tall portrait                           */
+    bridalEarrings:     'https://img.magnific.com/free-photo/long-earring-with-violet-precious-stones-hang-from-woman-s-ear_8353-5042.jpg',
+    bridalBangles:      'https://img.magnific.com/free-photo/model-shows-earrings-ring-with-beautiful-blue-precious-stones_8353-5044.jpg',
 
-    showroomNegombo:    '',   /* wide — shopfront or interior            */
-    showroomKatunayake: ''
+    showroomNegombo:    'https://img.magnific.com/free-photo/golden-jewelry-store-window_1398-4127.jpg',   /* wide — shopfront or interior            */
+    showroomKatunayake: 'https://img.magnific.com/free-photo/gold-jewelry-with-gems-showcase_1398-4327.jpg'
   };
 
   Object.keys(PHOTOS).forEach(function (key) {
