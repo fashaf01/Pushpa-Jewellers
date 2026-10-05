@@ -125,7 +125,7 @@
       ['jewellery-collection-showcase', 'Rings, tried on', '0:10', 'Stacking rings and a matching necklace, worn in the showroom.']
     ];
     return '<div class="swipe reels" id="reels">' + R.map(function (r) {
-      return '<figure class="reel"><video controls playsinline preload="none" poster="assets/img/' + r[0] + '-poster.webp" aria-label="' + r[1] + '"><source src="assets/video/' + r[0] + '.mp4" type="video/mp4"></video><figcaption><div class="reel-meta"><h3>' + r[1] + '</h3><span class="len num">' + r[2] + '</span></div><p>' + r[3] + '</p></figcaption></figure>';
+      return '<figure class="reel"><div class="reel-media"><video playsinline preload="none" poster="assets/img/' + r[0] + '-poster.webp" aria-label="' + r[1] + '"><source src="assets/video/' + r[0] + '.mp4" type="video/mp4"></video><button class="reel-play" type="button" aria-label="Play: ' + r[1] + '"><span>' + ico('play') + '</span></button></div><figcaption><div class="reel-meta"><h3>' + r[1] + '</h3><span class="len num">' + r[2] + '</span></div><p>' + r[3] + '</p></figcaption></figure>';
     }).join('') + '</div>';
   }
   function stackHtml() {
@@ -198,7 +198,7 @@
   }
   function viewShop(cat, band) {
     var title = cat ? CAT[cat].name : 'All jewellery';
-    var thumbs = '<a class="thumb" href="#' + shopHash('', band) + '"' + (!cat ? ' aria-current="page"' : '') + '><span class="thumb-all">All</span><span>All</span></a>' +
+    var thumbs = '<a class="thumb" href="#' + shopHash('', band) + '"' + (!cat ? ' aria-current="page"' : '') + '><i class="thumb-all" aria-hidden="true">' + CATS.slice(0, 4).map(function (c) { return '<img src="' + img(c.img) + '" alt="" width="48" height="48">'; }).join('') + '</i><span>All</span></a>' +
       CATS.map(function (c) { return '<a class="thumb" href="#' + shopHash(c.id, band) + '"' + (c.id === cat ? ' aria-current="page"' : '') + '><img src="' + img(c.img) + '" alt="" width="96" height="96"><span>' + c.name + '</span></a>'; }).join('');
     return '<div class="wrap page-head shop-head">' + crumbs(cat ? [['home', 'Home'], ['shop', 'Shop'], ['', title]] : [['home', 'Home'], ['', 'Shop']]) + '<h1>' + esc(title) + '</h1></div>' +
       '<nav class="thumbs" aria-label="Categories">' + thumbs + '</nav>' +
@@ -213,9 +213,9 @@
     var n = (band ? 1 : 0) + (state.weighed ? 1 : 0);
     var nEl = document.getElementById('filterN'); nEl.hidden = !n; nEl.textContent = n;
     var chips = [];
-    if (band) chips.push('<a class="chip" href="#' + shopHash(cat, '') + '" aria-label="Remove filter ' + BAND[band].name + '">' + BAND[band].name + ' <span class="x" aria-hidden="true">×</span></a>');
-    if (state.weighed) chips.push('<button class="chip" type="button" data-unweighed aria-label="Remove filter: listed weight only">Listed weight only <span class="x" aria-hidden="true">×</span></button>');
-    if (state.q.trim()) chips.push('<button class="chip" type="button" data-unsearch aria-label="Clear search">“' + esc(state.q.trim()) + '” <span class="x" aria-hidden="true">×</span></button>');
+    if (band) chips.push('<a class="chip" href="#' + shopHash(cat, '') + '" aria-label="Remove filter ' + BAND[band].name + '">' + BAND[band].name + ' <svg class="icon x" aria-hidden="true"><use href="#i-close"/></svg></a>');
+    if (state.weighed) chips.push('<button class="chip" type="button" data-unweighed aria-label="Remove filter: listed weight only">Listed weight only <svg class="icon x" aria-hidden="true"><use href="#i-close"/></svg></button>');
+    if (state.q.trim()) chips.push('<button class="chip" type="button" data-unsearch aria-label="Clear search">“' + esc(state.q.trim()) + '” <svg class="icon x" aria-hidden="true"><use href="#i-close"/></svg></button>');
     var ac = document.getElementById('activeChips');
     ac.hidden = !chips.length;
     ac.innerHTML = chips.join('') + (chips.length > 1 ? '<button class="clear-all" type="button" data-clearall>Clear all</button>' : '');
@@ -276,7 +276,7 @@
             '<details><summary>In the showrooms</summary><div class="acc-body"><p>Both showrooms are open seven days a week. Call ahead to check this piece is at the counter you plan to visit.</p><p><a href="#visit">Addresses and opening hours</a></p></div></details>' +
             '<details><summary>About the price</summary><div class="acc-body"><p>The weight shown is the gold weight printed on the shop’s photograph of this piece. Gold is priced by weight, so ask the showroom to confirm the weight and today’s 22KT rate before you buy.</p></div></details>' +
             '<details><summary>Caring for your gold</summary><div class="acc-body"><p>Keep each piece in its own pouch so stones and edges don’t scratch one another. Take jewellery off before swimming, cleaning or putting on perfume and lotion, and wipe it with a soft dry cloth after wearing.</p></div></details>' +
-            '<details><summary>Photograph</summary><div class="acc-body"><p><a href="' + IG + p.ig + '/" target="_blank" rel="noopener">See this piece on Instagram ↗</a></p></div></details>' +
+            '<details><summary>Photograph</summary><div class="acc-body"><p><a href="' + IG + p.ig + '/" target="_blank" rel="noopener">See this piece on Instagram' + ico('ext') + '</a></p></div></details>' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -434,6 +434,15 @@
         var v = it.querySelector('video'); if (d > 0.6 && v && !v.paused) v.pause();
       });
     }
+    items.forEach(function (it) {
+      var v = it.querySelector('video'), b = it.querySelector('.reel-play'); if (!v || !b) return;
+      b.addEventListener('click', function () {
+        el.querySelectorAll('video').forEach(function (o) { if (o !== v) o.pause(); });
+        v.controls = true; it.classList.add('playing'); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+        it.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+      });
+      v.addEventListener('ended', function () { v.controls = false; it.classList.remove('playing'); });
+    });
     el.addEventListener('scroll', function () { requestAnimationFrame(upd); }, { passive: true });
     // start on the middle reel
     requestAnimationFrame(function () { if (items[1]) el.scrollLeft = items[1].offsetLeft - (el.clientWidth - items[1].offsetWidth) / 2; upd(); });
