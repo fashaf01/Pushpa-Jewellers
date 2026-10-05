@@ -39,6 +39,8 @@
   ];
   var BY = {}; P.forEach(function (p) { BY[p.s] = p; });
   var WEIGHED = P.filter(function (p) { return p.g !== null; });
+  var NEW = P.slice(0, 12); // P is newest first
+  var ISNEW = {}; NEW.forEach(function (p) { ISNEW[p.s] = true; });
 
   var CATS = [
     { id: 'necklaces', name: 'Necklaces', img: 'cat-necklaces' },
@@ -57,7 +59,7 @@
   ];
   var BAND = {}; BANDS.forEach(function (b) { BAND[b.id] = b; });
   var SORTS = [['new', 'Newest'], ['light', 'Weight: light to heavy'], ['heavy', 'Weight: heavy to light']];
-  var NAV = [['shop', 'Shop'], ['bridal', 'Bridal'], ['exchange', 'Exchange'], ['story', 'Our story'], ['visit', 'Visit']];
+  var NAV = [['new', 'New in'], ['shop', 'Shop'], ['bridal', 'Bridal'], ['exchange', 'Exchange'], ['story', 'Our story'], ['visit', 'Visit']];
   var PHONES = [['Negombo', '031 223 3857'], ['Negombo', '031 222 2404'], ['Katunayake', '077 777 0203']];
 
   var state = { q: '', sort: 'new', weighed: false };
@@ -84,7 +86,17 @@
   function count(c, b) { return P.filter(function (p) { return inCat(p, c) && inBand(p, b); }).length; }
   function saveBtn(p) { return '<button class="save" type="button" data-save="' + p.s + '" aria-pressed="' + isSaved(p.s) + '" aria-label="Save ' + esc(p.n) + '">' + ico('heart') + '</button>'; }
   function card(p, eager) {
-    return '<article class="card"><a class="card-link" href="#p-' + p.s + '"><div class="card-img"><img src="' + img(p.f) + '" alt="' + esc(p.n) + '" style="--fp:' + p.fp + '"' + (eager ? '' : ' loading="lazy"') + ' width="1080" height="1350"></div><h3>' + esc(p.n) + '</h3><p class="card-kind">' + esc(p.k) + '</p><p class="card-wt num' + (p.w ? '' : ' ask') + '">' + wt(p) + '</p></a>' + saveBtn(p) + '</article>';
+    return '<article class="card"><a class="card-link" href="#p-' + p.s + '"><div class="card-img">' + (ISNEW[p.s] ? '<span class="tag-new">New</span>' : '') + '<img src="' + img(p.f) + '" alt="' + esc(p.n) + '" style="--fp:' + p.fp + '"' + (eager ? '' : ' loading="lazy"') + ' width="1080" height="1350"></div><h3>' + esc(p.n) + '</h3><p class="card-kind">' + esc(p.k) + '</p><p class="card-wt num' + (p.w ? '' : ' ask') + '">' + wt(p) + '</p></a>' + saveBtn(p) + '</article>';
+  }
+  function acard(p, eager) {
+    return '<article class="acard"><a href="#p-' + p.s + '"><div class="acard-frame"><img src="' + img(p.f) + '" alt="' + esc(p.n) + '"' + (eager ? '' : ' loading="lazy"') + ' width="1080" height="1350"></div><h3>' + esc(p.n) + '</h3><p class="acard-kind">' + esc(p.k) + (p.w ? ' · 22KT' : '') + '</p><p class="acard-wt num' + (p.w ? '' : ' ask') + '">' + (p.w || 'Ask for weight') + '</p></a>' + saveBtn(p) + '</article>';
+  }
+  function arrivalsHtml() {
+    return '<section class="sec arrivals" aria-labelledby="t-new"><div class="wrap ar">' +
+      '<a class="ar-look" href="#new"><img src="assets/img/new-arrivals.webp" alt="A red stone fine necklace in 22KT gold, worn" loading="lazy" width="830" height="1037"><div class="ar-look-copy"><p class="label">New in</p><h2 id="t-new">New arrivals</h2><span class="go">View all ' + NEW.length + ' ' + ico('arrow') + '</span></div></a>' +
+      '<div class="ar-rail"><div class="swipe ar-row" id="newRow">' + NEW.map(function (p) { return acard(p); }).join('') + '</div>' +
+        '<div class="ar-foot"><div class="progress" aria-hidden="true"><i data-prog="newRow"></i></div>' + arrows('newRow') + '</div></div>' +
+    '</div></section>';
   }
   function crumbs(items) {
     return '<nav class="crumbs" aria-label="Breadcrumb">' + items.map(function (it, i) {
@@ -133,7 +145,6 @@
 
   // ---------- views ----------
   function viewHome() {
-    var newest = WEIGHED.slice(0, 10);
     var ticks = '';
     for (var t = 5; t <= 30; t += 5) ticks += '<b style="left:' + ((t - 1) * 36) + 'px">' + t + ' g</b>';
     ticks += '<b style="left:0">1 g</b>';
@@ -149,6 +160,8 @@
       '</section>' +
       '<div class="marquee" aria-label="About the shop"><div class="marquee-track">' + [0, 1].map(function (k) { return '<ul' + (k ? ' aria-hidden="true"' : '') + '><li class="q">Excellent craftsmanship for generations</li><li>Est. 1967</li><li>22KT &amp; 18KT gold</li><li>Ceylon gemstones</li><li>Bridal &amp; bespoke</li><li>Money exchange</li><li>Negombo &amp; Katunayake</li></ul>'; }).join('') + '</div></div>' +
 
+      arrivalsHtml() +
+
       '<section class="sec" aria-labelledby="t-cat"><div class="wrap">' + head('Collections', 'Shop by piece', '', '<a class="more" href="#shop">All jewellery ' + ico('arrow') + '</a>', 't-cat') + '</div>' +
         '<div class="swipe tiles" id="tiles">' + CATS.map(function (c) { return '<a class="tile" href="#' + catHref(c.id) + '"><div class="tile-img"><img src="' + img(c.img) + '" alt="" loading="lazy" width="1080" height="1350"></div><div class="tile-cap"><strong>' + c.name + '</strong><span class="num">' + count(c.id) + '</span></div></a>'; }).join('') + '</div>' +
       '</section>' +
@@ -160,8 +173,6 @@
         '<div class="near" id="near" aria-live="polite"></div>' +
         '<div class="scale-cta"><a class="more" id="scaleLink" href="#shop-w2">See all 3 – 10 g pieces ' + ico('arrow') + '</a></div></div>' +
       '</div></section>' +
-
-      '<section class="sec line" aria-labelledby="t-new"><div class="wrap">' + head('New in', 'New pieces in 22KT gold', '', '<div style="display:flex;gap:18px;align-items:center">' + '<a class="more" href="#shop">See all ' + P.length + ' ' + ico('arrow') + '</a>' + arrows('newRow') + '</div>', 't-new') + '</div>' + row('newRow', newest) + '</section>' +
 
       '<section class="sec line" aria-labelledby="t-bridal"><div class="wrap">' + head('Bridal', 'Gold for the wedding day', 'Three bridal pieces, from a 9.100 g branch necklace to a 24.380 g leaf collar.', '', 't-bridal') + stackHtml() +
         '<div class="stack-end"><a class="btn" href="#bridal">See all bridal pieces</a></div></div></section>' +
@@ -323,6 +334,11 @@
     return '<div class="wrap page-head">' + crumbs([['home', 'Home'], ['', 'Visit us']]) + '<h1>Visit the showrooms</h1><p>Two showrooms, open seven days a week. Call ahead if you’re coming to see a particular piece.</p></div>' +
       '<section class="sec" style="padding-top:12px"><div class="wrap">' + storesHtml() + '</div></section>' +
       '<section class="sec line"><div class="wrap split flip"><div class="split-img" data-reveal><img src="assets/img/showroom.webp" alt="The Pushpa Jewellers counter in Negombo" loading="lazy" width="928" height="1152"></div><div class="split-copy" data-reveal><p class="label">Before you come</p><h2>Save the pieces you want to see</h2><p>Tap the heart on any piece. Your saved list stays in this browser, so you can show it at the counter or read it out on the phone.</p><a class="more" href="#saved">Your saved pieces ' + ico('arrow') + '</a></div></div></section>';
+  }
+  function viewNew() {
+    return '<div class="wrap page-head">' + crumbs([['home', 'Home'], ['', 'New arrivals']]) + '<h1>New arrivals</h1><p>The latest ' + NEW.length + ' pieces from the showroom, newest first, each listed with its gold weight.</p></div>' +
+      '<section class="sec" style="padding-top:20px"><div class="wrap"><div class="grid agrid">' + NEW.map(function (p, i) { return acard(p, i < 4); }).join('') + '</div>' +
+      '<div class="stack-end"><a class="btn" href="#shop">Shop all ' + P.length + ' pieces</a></div></div></section>';
   }
   function viewSaved() {
     var list = saved.map(function (s) { return BY[s]; });
@@ -512,14 +528,14 @@
       h.split('-').slice(1).forEach(function (x) { if (CAT[x]) cat = x; if (BAND[x]) band = x; });
       return { v: 'shop', cat: cat, band: band, nav: cat === 'bridal' ? 'bridal' : 'shop' };
     }
-    if (['bridal', 'exchange', 'story', 'visit', 'saved'].indexOf(h) > -1) return { v: h, nav: h };
+    if (['new', 'bridal', 'exchange', 'story', 'visit', 'saved'].indexOf(h) > -1) return { v: h, nav: h };
     return { v: 'home', nav: '' };
   }
   function go(hash, keepScroll, force) { if (location.hash.slice(1) === hash) { if (force) render(); } else { keep = !!keepScroll; location.hash = hash; } }
   var keep = false;
   function navHtml(cur) { return NAV.map(function (n) { return '<a href="#' + n[0] + '"' + (n[0] === cur ? ' aria-current="page"' : '') + '>' + n[1] + '</a>'; }).join(''); }
   function menuHtml(cur) {
-    var L = [['shop', 'Shop all', P.length + ' pieces'], ['bridal', 'Bridal', ''], ['exchange', 'Money exchange', ''], ['story', 'Our story', ''], ['visit', 'Visit us', ''], ['saved', 'Saved', saved.length ? saved.length + ' saved' : '']];
+    var L = [['new', 'New arrivals', NEW.length + ' pieces'], ['shop', 'Shop all', P.length + ' pieces'], ['bridal', 'Bridal', ''], ['exchange', 'Money exchange', ''], ['story', 'Our story', ''], ['visit', 'Visit us', ''], ['saved', 'Saved', saved.length ? saved.length + ' saved' : '']];
     return L.map(function (l, i) { return '<li style="--n:' + i + '"><a href="#' + l[0] + '"' + (l[0] === cur ? ' aria-current="page"' : '') + '>' + l[1] + '<span class="num">' + l[2] + '</span></a></li>'; }).join('');
   }
 
@@ -532,6 +548,7 @@
     var html;
     if (r.v === 'piece') html = viewPiece(r.p);
     else if (r.v === 'shop') html = viewShop(r.cat, r.band);
+    else if (r.v === 'new') html = viewNew();
     else if (r.v === 'bridal') html = viewBridal();
     else if (r.v === 'exchange') html = viewExchange();
     else if (r.v === 'story') html = viewStory();

@@ -2,9 +2,9 @@
 
 The storefront for Pushpa Jewellers (Pvt) Ltd, Negombo — forever trusted jewellers since 1967.
 
-It is a static, mobile-first site: one `index.html` with eight views (home, shop, product, bridal,
-money exchange, our story, visit, saved) switched by the URL hash, e.g. `#shop-bangles-w2` or
-`#p-ballerina-pendant`. There is no build step.
+It is a static, mobile-first site: one `index.html` with nine views (home, new arrivals, shop,
+product, bridal, money exchange, our story, visit, saved) switched by the URL hash, e.g. `#new`,
+`#shop-bangles-w2` or `#p-ballerina-pendant`. There is no build step.
 
 ```
 public/                 the web root
@@ -60,6 +60,10 @@ Pieces live in the `P` array at the top of `assets/js/site.js`, newest first. Ea
 photo file (`f`, without `.webp`), name, type, categories, weight text (`w`), weight in grams for
 sorting and filtering (`g`, or `null` when no weight is printed), the focal point of the photo
 (`fp`, used for the close-up) and its Instagram post id.
+
+The first 12 pieces in `P` are the new arrivals: they fill the New arrivals panel on the home page
+and the `#new` page, and carry a New tag everywhere else. Add a new piece at the top of `P` and the
+oldest of the twelve drops out on its own.
 
 ## Before going live
 
