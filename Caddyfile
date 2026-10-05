@@ -1,0 +1,40 @@
+{
+	admin off
+	persist_config off
+	# Railway terminates HTTPS in front of the container.
+	auto_https off
+	log {
+		format json
+	}
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:{$PORT:3000} {
+	log {
+		format json
+	}
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options SAMEORIGIN
+		-Server
+	}
+
+	handle /health {
+		respond "ok" 200
+	}
+
+	handle {
+		root * /srv
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=604800"
+		@page path / /index.html
+		header @page Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
