@@ -260,6 +260,15 @@ main:focus { outline: none; }
 .acard-wt { font-size: 13px; font-weight: 500; }
 .acard-wt.ask { color: var(--muted); font-weight: 400; }
 .acard .save { top: 14px; right: 14px; }
+/* Phones: no photograph, just the heading and View all, like the other section heads */
+@media (max-width: 639px) {
+  .ar-look { aspect-ratio: auto; overflow: visible; background: none; color: var(--ink); }
+  .ar-look img, .ar-look::after { display: none; }
+  .ar-look-copy { position: static; grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 16px; row-gap: 8px; }
+  .ar-look-copy .label { grid-column: 1 / -1; color: var(--gold-deep); }
+  .ar-look-copy h2 { font-size: clamp(30px, 7.4vw, 46px); line-height: 1.1; color: var(--ink); }
+  .ar-look-copy .go { margin: 0 0 6px; }
+}
 
 /* ---------- Category tiles (home) and thumbs (shop) ---------- */
 .tiles { grid-auto-columns: 40%; }
