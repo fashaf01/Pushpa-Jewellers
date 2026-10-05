@@ -41,12 +41,12 @@
   var WEIGHED = P.filter(function (p) { return p.g !== null; });
 
   var CATS = [
-    { id: 'necklaces', name: 'Necklaces', img: 'product-statement-necklace-on-model' },
-    { id: 'bangles', name: 'Bangles', img: 'product-layered-gold-bangle' },
-    { id: 'rings', name: 'Rings', img: 'product-wedding-ring-pair' },
-    { id: 'pendants', name: 'Pendants', img: 'product-ballerina-pendant' },
-    { id: 'bracelets', name: 'Bracelets', img: 'product-bracelet-on-model' },
-    { id: 'bridal', name: 'Bridal', img: 'product-bridal-necklace-and-cuff-set' }
+    { id: 'necklaces', name: 'Necklaces', img: 'cat-necklaces' },
+    { id: 'bangles', name: 'Bangles', img: 'cat-bangles' },
+    { id: 'rings', name: 'Rings', img: 'cat-rings' },
+    { id: 'pendants', name: 'Pendants', img: 'cat-pendants' },
+    { id: 'bracelets', name: 'Bracelets', img: 'cat-bracelets' },
+    { id: 'bridal', name: 'Bridal', img: 'cat-bridal' }
   ];
   var CAT = {}; CATS.forEach(function (c) { CAT[c.id] = c; });
   var BANDS = [
@@ -139,11 +139,13 @@
     ticks += '<b style="left:0">1 g</b>';
     var dots = WEIGHED.map(function (p) { return '<i style="left:' + ((Math.min(p.g, 31) - 1) * 36) + 'px"></i>'; }).join('');
     return '' +
-      '<section class="hero" aria-label="Welcome">' +
-        '<div class="hero-half"><img src="assets/img/hero-everyday.webp" alt="Fine drop necklace, 1.080 g of 22KT gold" width="1080" height="1010" style="--pos:22% 50%"></div>' +
-        '<div class="hero-half"><img src="assets/img/hero-bridal.webp" alt="Gold leaf bridal necklace, 24.380 g of 22KT gold" width="928" height="982" style="--pos:28% 50%"></div>' +
-        '<div class="hero-copy"><p>Forever trusted since 1967</p><h1>Pride of Negombo</h1><div class="row"><a class="btn light" href="#shop-w1">Everyday gold</a><a class="btn light" href="#bridal">Bridal gold</a></div></div>' +
-        '<span class="cue" aria-hidden="true"></span>' +
+      '<section class="hero" aria-label="Featured">' +
+        '<h1 class="vh">Pushpa Jewellers, forever trusted jewellers since 1967, Negombo</h1>' +
+        '<div class="hero-track" id="heroTrack">' +
+          '<a class="hero-panel" href="#shop-w1"><img src="assets/img/hero-everyday.webp" alt="A fine 22KT gold drop necklace worn with a white silk top" width="1080" height="1250" style="--pos:50% 55%"><div class="hero-copy"><h2>Everyday Gold</h2><p>Light 22KT pieces from 1.080 g</p><span class="go">Shop now ' + ico('arrow') + '</span></div></a>' +
+          '<a class="hero-panel" href="#bridal"><img src="assets/img/hero-bridal.webp" alt="A gold leaf bridal necklace worn with a white silk top" width="928" height="1152" style="--pos:50% 45%"><div class="hero-copy"><h2>Bridal Gold</h2><p>Necklaces &amp; sets for the wedding day</p><span class="go">Shop now ' + ico('arrow') + '</span></div></a>' +
+        '</div>' +
+        '<div class="hero-dots" id="heroDots"><button type="button" aria-label="Everyday Gold" aria-current="true"></button><button type="button" aria-label="Bridal Gold" aria-current="false"></button></div>' +
       '</section>' +
       '<div class="marquee" aria-label="About the shop"><div class="marquee-track">' + [0, 1].map(function (k) { return '<ul' + (k ? ' aria-hidden="true"' : '') + '><li class="q">Excellent craftsmanship for generations</li><li>Est. 1967</li><li>22KT &amp; 18KT gold</li><li>Ceylon gemstones</li><li>Bridal &amp; bespoke</li><li>Money exchange</li><li>Negombo &amp; Katunayake</li></ul>'; }).join('') + '</div></div>' +
 
@@ -384,6 +386,13 @@
     track.addEventListener('pointerup', function () { down = false; });
     window.addEventListener('resize', pad); cleanups.push(function () { window.removeEventListener('resize', pad); });
   }
+  function bindHero() {
+    var tr = document.getElementById('heroTrack'); if (!tr) return;
+    var dots = document.querySelectorAll('#heroDots button');
+    function upd() { var i = Math.round(tr.scrollLeft / (tr.clientWidth || 1)); dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === i)); }); }
+    tr.addEventListener('scroll', function () { requestAnimationFrame(upd); }, { passive: true });
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { tr.scrollTo({ left: k * tr.clientWidth, behavior: reduce ? 'auto' : 'smooth' }); }); });
+  }
   function bindStack() {
     var cards = app.querySelectorAll('.stack-card'); if (!cards.length || reduce) return;
     scrollFns.push(function () {
@@ -543,7 +552,7 @@
       recent = [r.p.s].concat(recent.filter(function (s) { return s !== r.p.s; })).slice(0, 12); store('pj-recent', recent);
       bindGallery();
     }
-    bindRows(); bindScale(); bindStack(); bindReels();
+    bindHero(); bindRows(); bindScale(); bindStack(); bindReels();
     document.getElementById('hdNav').innerHTML = navHtml(r.nav);
     document.getElementById('menuLinks').innerHTML = menuHtml(r.v === 'shop' && !r.cat ? 'shop' : r.nav);
     window.scrollTo(0, stay ? y : 0);
@@ -595,6 +604,49 @@
   });
   window.addEventListener('hashchange', function () { closeSheet(); closeOv(menu, true); closeOv(search, true); render(); });
 
+  // ---------- today's gold rate ----------
+  var gold = null;
+  function money(n) { return Number(n).toLocaleString('en-US'); }
+  function loadGold() {
+    if (!window.fetch) return;
+    fetch('/api/gold', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); }).then(function (d) {
+      if (!d || !d.k24 || !d.k22) return;
+      gold = d;
+      document.getElementById('r24').textContent = money(d.k24.pawn);
+      document.getElementById('r22').textContent = money(d.k22.pawn);
+      document.getElementById('rateBtn').hidden = false;
+      document.getElementById('rateFallback').hidden = true;
+    }).catch(function () {});
+  }
+  document.getElementById('rateBtn').addEventListener('click', function () {
+    if (!gold) return;
+    var when = new Date(gold.updated);
+    var time = isNaN(when) ? '' : when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Colombo' });
+    var note = gold.source === 'showroom'
+      ? '<p>Today\u2019s rate at our counter.</p>'
+      : '<p>The international gold market price, converted to rupees at today\u2019s exchange rate and refreshed every hour. Our counter rate can differ; call to confirm before you visit.</p>';
+    var body = '<table class="rate-table"><thead><tr><th scope="col">Purity</th><th scope="col">Per gram</th><th scope="col">Per pawn (8 g)</th></tr></thead><tbody>' +
+      '<tr><th scope="row">24K</th><td>Rs ' + money(gold.k24.gram) + '</td><td>Rs ' + money(gold.k24.pawn) + '</td></tr>' +
+      '<tr><th scope="row">22K</th><td>Rs ' + money(gold.k22.gram) + '</td><td>Rs ' + money(gold.k22.pawn) + '</td></tr></tbody></table>' +
+      '<div class="rate-note">' + note + (time ? '<p class="num">Updated ' + time + ' (Sri Lanka time)</p>' : '') + '</div>';
+    openSheet('Today\u2019s gold rate', body, '<a class="btn ghost" href="tel:+94312233857">' + ico('phone') + 'Call us</a><a class="btn" href="#shop">Shop now</a>', function (panel) {
+      panel.querySelector('.sheet-foot a.btn:not(.ghost)').addEventListener('click', closeSheet);
+    });
+  });
+  loadGold();
+  setInterval(loadGold, 30 * 60 * 1000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) loadGold(); });
+
+  var hd = document.getElementById('hd');
+  function measureHead() { document.documentElement.style.setProperty('--head-h', hd.offsetHeight + 'px'); }
+  var compact = false;
+  window.addEventListener('scroll', function () {
+    var c = window.scrollY > 40;
+    if (c !== compact) { compact = c; hd.classList.toggle('compact', c); setTimeout(measureHead, 380); }
+  }, { passive: true });
+  window.addEventListener('resize', measureHead);
+
   setCount();
   render();
+  measureHead();
 })();

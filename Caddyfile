@@ -28,6 +28,13 @@
 		respond "ok" 200
 	}
 
+	# Today's gold rate, served by the gold-rate service (services/gold-rate).
+	handle /api/gold {
+		reverse_proxy {$GOLD_API_URL:http://127.0.0.1:9} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
 	handle {
 		root * /srv
 		@assets path /assets/*
