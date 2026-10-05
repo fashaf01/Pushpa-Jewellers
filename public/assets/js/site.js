@@ -43,7 +43,7 @@
   var ISNEW = {}; NEW.forEach(function (p) { ISNEW[p.s] = true; });
 
   var CATS = [
-    { id: 'necklaces', name: 'Necklaces', img: 'cat-necklaces' },
+    { id: 'necklaces', name: 'Necklaces', img: 'cat-necklaces-red-stone' },
     { id: 'bangles', name: 'Bangles', img: 'cat-bangles' },
     { id: 'rings', name: 'Rings', img: 'cat-rings' },
     { id: 'pendants', name: 'Pendants', img: 'cat-pendants' },
@@ -93,7 +93,7 @@
   }
   function arrivalsHtml() {
     return '<section class="sec arrivals" aria-labelledby="t-new"><div class="wrap ar">' +
-      '<a class="ar-look" href="#new"><img src="assets/img/new-arrivals.webp" alt="A red stone fine necklace in 22KT gold, worn" loading="lazy" width="830" height="1037"><div class="ar-look-copy"><p class="label">New in</p><h2 id="t-new">New arrivals</h2><span class="go">View all ' + NEW.length + ' ' + ico('arrow') + '</span></div></a>' +
+      '<a class="ar-look" href="#new"><img src="assets/img/arrivals-leaf-necklace.webp" alt="A gold leaf necklace set with small stones, worn with a matching ring and black velvet" loading="lazy" width="877" height="1096"><div class="ar-look-copy"><p class="label">New in</p><h2 id="t-new">New arrivals</h2><span class="go">View all ' + NEW.length + ' ' + ico('arrow') + '</span></div></a>' +
       '<div class="ar-rail"><div class="swipe ar-row" id="newRow">' + NEW.map(function (p) { return acard(p); }).join('') + '</div>' +
         '<div class="ar-foot"><div class="progress" aria-hidden="true"><i data-prog="newRow"></i></div>' + arrows('newRow') + '</div></div>' +
     '</div></section>';
