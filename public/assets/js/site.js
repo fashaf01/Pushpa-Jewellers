@@ -647,7 +647,6 @@
   window.addEventListener('resize', measureHead);
 
   document.getElementById('year').textContent = new Date().getFullYear();
-  document.getElementById('toTop').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); document.querySelector('.brand').focus({ preventScroll: true }); });
 
   setCount();
   render();
