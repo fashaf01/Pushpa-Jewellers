@@ -130,8 +130,11 @@
   }
   function stackHtml() {
     var S = [BY['gold-leaf-bridal-necklace'], BY['branch-necklace-and-earrings'], BY['bridal-necklace-and-cuff']];
+    function nn(n) { return (n < 10 ? '0' : '') + n; }
     return '<div class="stack" id="stack">' + S.map(function (p, i) {
-      return '<article class="stack-card" style="--i:' + i + '"><a class="stack-in" href="#p-' + p.s + '"><img src="' + img(p.f) + '" alt="' + esc(p.n) + '" loading="lazy" width="1080" height="1350"><div class="stack-cap"><p class="k">' + esc(p.k) + '</p><h3>' + esc(p.n) + '</h3><p class="w"><b class="num">' + p.w + ' · 22KT</b><span>View piece ' + ico('arrow') + '</span></p></div></a></article>';
+      return '<article class="stack-card" style="--i:' + i + '"><a class="stack-in" href="#p-' + p.s + '"><div class="stack-img"><img src="' + img(p.f) + '" alt="' + esc(p.n) + '" loading="lazy" width="1080" height="1350"></div>' +
+        '<div class="stack-cap"><p class="k"><span class="stack-n num">' + nn(i + 1) + '<i> / ' + nn(S.length) + '</i></span>' + esc(p.k) + '</p><h3>' + esc(p.n) + '</h3><p class="w"><b class="num">' + p.w + ' · 22KT</b><span>View piece ' + ico('arrow') + '</span></p></div>' +
+        '<i class="stack-shade" aria-hidden="true"></i></a></article>';
     }).join('') + '</div>';
   }
   function exchangeSplit(tag, id) {
@@ -153,10 +156,10 @@
       '<section class="hero" aria-label="Featured">' +
         '<h1 class="vh">Pushpa Jewellers, forever trusted jewellers since 1967, Negombo</h1>' +
         '<div class="hero-track" id="heroTrack">' +
-          '<a class="hero-panel" href="#shop-w1"><img src="assets/img/hero-everyday.webp" alt="A fine 22KT gold drop necklace worn with a white silk top" width="1080" height="1250" style="--pos:50% 55%"><div class="hero-copy"><h2>Everyday Gold</h2><p>Light 22KT pieces from 1.080 g</p><span class="go">Shop now ' + ico('arrow') + '</span></div></a>' +
           '<a class="hero-panel" href="#bridal"><img src="assets/img/hero-bridal.webp" alt="A gold leaf bridal necklace worn with a white silk top" width="928" height="1152" style="--pos:50% 45%"><div class="hero-copy"><h2>Bridal Gold</h2><p>Necklaces &amp; sets for the wedding day</p><span class="go">Shop now ' + ico('arrow') + '</span></div></a>' +
+          '<a class="hero-panel" href="#shop-w1"><img src="assets/img/hero-everyday.webp" alt="A fine 22KT gold drop necklace worn with a white silk top" width="1080" height="1250" style="--pos:50% 55%"><div class="hero-copy"><h2>Everyday Gold</h2><p>Light 22KT pieces from 1.080 g</p><span class="go">Shop now ' + ico('arrow') + '</span></div></a>' +
         '</div>' +
-        '<div class="hero-dots" id="heroDots"><button type="button" aria-label="Everyday Gold" aria-current="true"></button><button type="button" aria-label="Bridal Gold" aria-current="false"></button></div>' +
+        '<div class="hero-dots" id="heroDots"><button type="button" aria-label="Bridal Gold" aria-current="true"></button><button type="button" aria-label="Everyday Gold" aria-current="false"></button></div>' +
       '</section>' +
       '<div class="marquee" aria-label="About the shop"><div class="marquee-track">' + [0, 1].map(function (k) { return '<ul' + (k ? ' aria-hidden="true"' : '') + '><li class="q">Excellent craftsmanship for generations</li><li>Est. 1967</li><li>22KT &amp; 18KT gold</li><li>Ceylon gemstones</li><li>Bridal &amp; bespoke</li><li>Money exchange</li><li>Negombo &amp; Katunayake</li></ul>'; }).join('') + '</div></div>' +
 
@@ -409,18 +412,43 @@
     tr.addEventListener('scroll', function () { requestAnimationFrame(upd); }, { passive: true });
     dots.forEach(function (d, k) { d.addEventListener('click', function () { tr.scrollTo({ left: k * tr.clientWidth, behavior: reduce ? 'auto' : 'smooth' }); }); });
   }
+  // Bridal stack: each card rises in with a slight tilt, its photo settling from a gentle zoom and
+  // its caption arriving line by line; cards underneath shrink back, dim and fan out left and right
+  // like a pile of photographs. Every card is measured before anything is written, only transform
+  // and opacity change (each on its own layer), and unchanged values are skipped, so scrolling
+  // never triggers layout or repaints.
   function bindStack() {
-    var cards = app.querySelectorAll('.stack-card'); if (!cards.length || reduce) return;
-    scrollFns.push(function () {
-      for (var i = 0; i < cards.length - 1; i++) {
-        var top = parseFloat(getComputedStyle(cards[i]).top) || 0;
-        var nxt = cards[i + 1].getBoundingClientRect().top;
-        var h = cards[i].offsetHeight || 1;
-        var p = Math.max(0, Math.min(1, 1 - (nxt - top) / h));
-        cards[i].style.transform = 'scale(' + (1 - 0.06 * p) + ')';
-        var im = cards[i].querySelector('img'); if (im) im.style.filter = 'brightness(' + (1 - 0.35 * p) + ')';
-      }
+    var stack = document.getElementById('stack'); if (!stack || reduce) return;
+    var cards = [].slice.call(stack.querySelectorAll('.stack-card'));
+    var parts = cards.map(function (c) {
+      var cap = c.querySelector('.stack-cap');
+      return { inner: c.querySelector('.stack-in'), img: c.querySelector('.stack-img img'), shade: c.querySelector('.stack-shade'), lines: [].slice.call(cap.children), last: {} };
     });
+    var tops = [], vh = 0;
+    function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+    function ease(t) { return 1 - Math.pow(1 - t, 3); }
+    function put(q, key, el, prop, val) { if (q.last[key] !== val) { q.last[key] = val; el.style[prop] = val; } }
+    function measure() { vh = window.innerHeight; tops = cards.map(function (c) { return parseFloat(getComputedStyle(c).top) || 0; }); }
+    function frame() {
+      var rects = cards.map(function (c) { return c.getBoundingClientRect(); });
+      for (var i = 0; i < cards.length; i++) {
+        var r = rects[i], side = i % 2 ? 1 : -1, q = parts[i];
+        var e = ease(clamp(1 - (r.top - tops[i]) / (vh * 0.75)));
+        var cov = i < cards.length - 1 ? clamp(1 - (rects[i + 1].top - tops[i + 1]) / (r.height || 1)) : 0;
+        put(q, 't', q.inner, 'transform', 'translate3d(0,' + (-10 * cov).toFixed(1) + 'px,0) rotate(' + (side * (3 * (1 - e) + 1.5 * cov)).toFixed(2) + 'deg) scale(' + (1 - 0.075 * cov).toFixed(3) + ')');
+        if (q.img) put(q, 'i', q.img, 'transform', 'scale(' + (1 + 0.14 * (1 - e)).toFixed(3) + ')');
+        put(q, 's', q.shade, 'opacity', (0.5 * cov).toFixed(2));
+        q.lines.forEach(function (el, k) {
+          var v = clamp((e - 0.3 - 0.12 * k) / 0.35);
+          put(q, 'o' + k, el, 'opacity', v.toFixed(2));
+          put(q, 'y' + k, el, 'transform', 'translate3d(0,' + Math.round((1 - v) * (16 + 2 * k)) + 'px,0)');
+        });
+      }
+    }
+    function resize() { measure(); frame(); }
+    measure(); frame();
+    scrollFns.push(frame);
+    window.addEventListener('resize', resize); cleanups.push(function () { window.removeEventListener('resize', resize); });
   }
   function bindReels() {
     var el = document.getElementById('reels'); if (!el) return;
