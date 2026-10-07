@@ -652,6 +652,266 @@ button { cursor: pointer; }
   .line-in, .journey .track { transform: none; }
   .pre .pur-bar i { width: var(--w); }
 }
+
+/* =====================================================================
+   v2: the procession, the name, the counters, the journey, the case
+   ===================================================================== */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- the procession (home stage) ---------- */
+.stage {
+  --R: clamp(300px, 38vw, 580px);
+  --W: calc(var(--R) * 3.145);
+  --m: clamp(58px, calc(var(--R) * .19), 112px);
+  position: relative; overflow: hidden; isolation: isolate;
+  height: calc(var(--R) + var(--m) * .5 + 160px); min-height: 680px;
+  background:
+    radial-gradient(ellipse 52% 72% at 50% 100%, rgba(211, 175, 95, .22), rgba(211, 175, 95, 0) 70%),
+    radial-gradient(ellipse 90% 70% at 50% 115%, #34102a, rgba(52, 16, 42, 0) 72%),
+    var(--night);
+}
+.ml { position: absolute; left: 50%; bottom: calc(var(--W) / -2); width: var(--W); height: var(--W); margin-left: calc(var(--W) / -2); color: var(--gold); overflow: visible; pointer-events: none; }
+.ml-outer { opacity: .42; animation: spin 340s linear infinite; }
+.ml-mid { opacity: .4; animation: spin 240s linear infinite reverse; }
+.ml-inner { opacity: .22; animation: spin 300s linear infinite; }
+.ml-core { opacity: .34; }
+.orbit { position: absolute; z-index: 4; left: 50%; bottom: calc(var(--R) * -1); width: calc(var(--R) * 2); height: calc(var(--R) * 2); margin-left: calc(var(--R) * -1); transform: rotate(var(--sr, 0deg)); pointer-events: none; }
+.orbit-spin { position: absolute; inset: 0; }
+.orbit.go .orbit-spin { animation: spin 160s linear infinite; }
+.med { position: absolute; left: 50%; top: 50%; width: var(--m); height: var(--m); margin: calc(var(--m) / -2) 0 0 calc(var(--m) / -2); transform: rotate(var(--a)) translateX(var(--R)) rotate(calc(-1 * var(--a))); pointer-events: auto; text-decoration: none; color: var(--ivory); border-radius: 50%; }
+.med-up { display: block; width: 100%; height: 100%; transform: rotate(calc(-1 * var(--sr, 0deg))); }
+.med-in { display: block; width: 100%; height: 100%; position: relative; }
+.orbit.go .med-in { animation: spin 160s linear infinite reverse; }
+.orbit:hover .orbit-spin, .orbit:hover .med-in, .orbit:focus-within .orbit-spin, .orbit:focus-within .med-in { animation-play-state: paused; }
+.med-pop { display: block; width: 100%; height: 100%; animation: medIn 1.2s var(--spring) both; animation-delay: calc(1.2s + var(--k) * 90ms); }
+@keyframes medIn { from { transform: scale(.15); opacity: 0; } }
+.med-face { display: block; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: var(--plum);
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 5px var(--night), 0 0 0 6px rgba(211, 175, 95, .45), 0 16px 34px -10px rgba(0, 0, 0, .75);
+  transition: transform .7s var(--spring), box-shadow .5s var(--ease); }
+.med-face img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.35); transition: transform .9s var(--ease); }
+.med:hover .med-face, .med:focus-visible .med-face { transform: scale(1.24); box-shadow: 0 0 0 1px var(--gold-hi), 0 0 0 5px var(--night), 0 0 0 6px var(--gold), 0 0 50px 6px rgba(211, 175, 95, .35); }
+.med:hover .med-face img { transform: scale(1.15); }
+.med:focus-visible { outline: none; }
+.med-tip { position: absolute; left: 50%; top: calc(100% + 18px); transform: translate(-50%, 8px); white-space: nowrap; text-align: center; opacity: 0; pointer-events: none; display: grid; gap: 2px; padding: 9px 16px; background: rgba(22, 5, 14, .88); border: 1px solid var(--gold-line); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: opacity .4s var(--ease), transform .5s var(--ease); }
+.med-tip b { font-family: var(--f-display); font-weight: 400; font-size: 17px; line-height: 1.2; }
+.med-tip span { font-size: 11.5px; letter-spacing: .1em; color: var(--gold); font-variant-numeric: tabular-nums; }
+.med:hover .med-tip, .med:focus-visible .med-tip { opacity: 1; transform: translate(-50%, 0); }
+.dome { position: absolute; z-index: 3; left: 50%; bottom: calc(var(--R) * .17); width: min(calc(var(--R) * 1.7), calc(100% - 2 * var(--gutter))); transform: translate(-50%, var(--dy, 0px)); opacity: var(--do, 1); display: grid; justify-items: center; text-align: center; gap: 24px; }
+.dome h1 { font-size: calc(var(--R) * .15); line-height: .98; letter-spacing: -.015em; color: var(--ivory); }
+.dome h1 em { font-style: italic; color: var(--gold); }
+.dome .ctas { justify-content: center; padding-top: 10px; }
+.stage-note { position: absolute; z-index: 3; left: calc(var(--edge) - 26px); top: 122px; max-width: 300px; padding: 18px 26px; background: radial-gradient(ellipse at 40% 50%, rgba(22, 5, 14, .92) 30%, rgba(22, 5, 14, 0) 72%); font-size: 13.5px; line-height: 1.75; color: var(--ivory-2); }
+.cue { position: absolute; z-index: 3; right: var(--edge); top: 140px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.cue span { writing-mode: vertical-rl; font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: var(--ivory-2); }
+.cue i { width: 1px; height: 70px; background: linear-gradient(var(--gold), rgba(211, 175, 95, 0)); transform-origin: top; animation: cue 2.6s var(--ease) infinite; }
+@keyframes cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* ticker, set in the display face */
+.ticker { padding-block: 22px; background: var(--night); }
+.ticker span { font-family: var(--f-display); font-style: italic; font-size: clamp(20px, 2vw, 30px); letter-spacing: 0; text-transform: none; color: var(--ivory); gap: 44px; padding-right: 44px; }
+.ticker span::after { width: 7px; height: 7px; }
+
+/* ---------- the name ---------- */
+.name { overflow: hidden; }
+.name-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.name-si {
+  display: inline-block; justify-self: start; white-space: nowrap; font-family: var(--f-si); font-weight: 500; font-size: clamp(120px, 16.5vw, 290px); line-height: 1.1; letter-spacing: 0;
+  color: transparent; -webkit-text-stroke: 1.2px var(--gold-deep); user-select: none;
+  background: linear-gradient(0deg, #5e400f 0%, var(--gold-deep) 22%, #c99f4c 47%, rgba(201, 159, 76, 0) 50%);
+  background-size: 100% 200%; background-position: 0 0;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  transition: background-position 2.8s var(--ease);
+}
+.name-si.seen { background-position: 0 100%; }
+.name-copy { display: grid; gap: 22px; justify-items: start; min-width: 0; }
+.name-copy .say { text-align: left; font-size: clamp(26px, 2.5vw, 38px); }
+.name-copy .vine { width: 240px; margin-left: -8px; }
+.si-sm { font-family: var(--f-si); text-transform: none; letter-spacing: 0; font-size: 15px; color: var(--ink); }
+.name-side { position: absolute; right: calc(var(--gutter) * -.5); top: 0; writing-mode: vertical-rl; font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-2); }
+
+/* ---------- the counters ---------- */
+.counters { position: relative; }
+.rows { list-style: none; border-top: 1px solid var(--rule); position: relative; z-index: 2; }
+.row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 64px; align-items: center; gap: 28px; padding-block: clamp(12px, 1.4vw, 22px); border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); overflow: hidden; }
+.row::before { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(90deg, rgba(211, 175, 95, .2), rgba(211, 175, 95, 0) 75%); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+.row:hover::before, .row:focus-visible::before { transform: none; }
+.row > * { position: relative; z-index: 1; }
+.row-name { display: flex; align-items: center; gap: 18px; font-family: var(--f-display); font-size: clamp(46px, 7.4vw, 116px); line-height: 1.02; letter-spacing: -.02em; transition: transform .8s var(--ease), color .5s; }
+.row-name img { display: none; }
+.row:hover .row-name { transform: translateX(26px); color: var(--gold-deep); }
+.row-meta { text-align: right; font-size: 13px; color: var(--ink-2); line-height: 1.6; font-variant-numeric: tabular-nums; }
+.row-meta b { font-family: var(--f-display); font-weight: 400; font-size: 24px; color: var(--ink); margin-right: 4px; }
+.row-go { justify-self: end; width: 58px; height: 58px; border-radius: 50%; border: 1px solid var(--rule); display: grid; place-items: center; transition: background .5s, color .5s, border-color .5s, transform .7s var(--ease); }
+.row-go svg { width: 22px; height: 10px; }
+.row:hover .row-go { background: var(--ink); color: var(--pearl); border-color: var(--ink); transform: rotate(-45deg); }
+.float-img { position: fixed; left: 0; top: 0; z-index: 30; width: clamp(200px, 17vw, 270px); aspect-ratio: 4 / 5; pointer-events: none; opacity: 0; overflow: hidden; transform: translate3d(-999px, -999px, 0); transition: opacity .45s var(--ease); box-shadow: 0 34px 60px -22px rgba(22, 5, 14, .55); }
+.float-img.on { opacity: 1; }
+.float-img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- the journey ---------- */
+.jr { position: relative; background: var(--night); color: var(--ivory); }
+.jr-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.jr-track { display: flex; height: 100%; width: max-content; will-change: transform; }
+.jp { position: relative; flex: none; width: 100vw; height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 6vw, 110px); padding: 110px var(--edge) 130px; overflow: hidden; }
+.jp + .jp { border-left: 1px solid var(--gold-line); }
+.jp-0 { width: 86vw; grid-template-columns: minmax(0, 1fr); background: radial-gradient(ellipse 60% 80% at 80% 100%, rgba(211, 175, 95, .1), rgba(211, 175, 95, 0) 70%); }
+.jp-2, .jp-4 { background: var(--plum); }
+.jp-5 { width: 94vw; grid-template-columns: minmax(0, 1fr); }
+.jp-txt { position: relative; z-index: 2; display: grid; gap: 22px; justify-items: start; max-width: 560px; min-width: 0; }
+.jp-0 .jp-txt { max-width: 980px; }
+.jp-5 .jp-txt { max-width: none; }
+.jp-h { font-size: clamp(38px, 4.6vw, 74px); line-height: 1.02; letter-spacing: -.01em; }
+.jp-0 .jp-h { font-size: clamp(50px, 6.6vw, 112px); max-width: 13ch; }
+.jp-h em { font-style: italic; color: var(--gold); }
+.jp-n { font-family: var(--f-display); font-style: italic; font-size: clamp(64px, 7vw, 112px); line-height: .8; color: var(--gold); }
+.jp-ghost { position: absolute; right: -1vw; bottom: -7vh; font-family: var(--f-display); font-style: italic; font-size: 46vh; line-height: .8; color: transparent; -webkit-text-stroke: 1px rgba(211, 175, 95, .3); pointer-events: none; user-select: none; }
+.jp-hint { width: 66px; height: 66px; border-radius: 50%; border: 1px solid var(--gold-line); display: grid; place-items: center; color: var(--gold); animation: nudge 2.2s var(--ease) infinite; }
+.jp-hint svg { width: 24px; height: 12px; }
+@keyframes nudge { 50% { transform: translateX(12px); } }
+.jp-img { margin: 0; height: min(64vh, 640px); aspect-ratio: 4 / 5; max-width: 100%; overflow: hidden; justify-self: center; }
+.jp-img.tall { height: min(70vh, 700px); }
+.jp-img img { width: 100%; height: 100%; object-fit: cover; }
+.jp-weigh-wrap { position: relative; justify-self: center; }
+.jp-weigh { position: absolute; z-index: 2; left: -14%; bottom: 12%; display: grid; gap: 6px; padding: 20px 26px; background: rgba(22, 5, 14, .86); border: 1px solid var(--gold-line); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.jp-weigh b { font-family: var(--f-display); font-weight: 400; font-size: clamp(36px, 3.6vw, 58px); line-height: 1; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
+.jp-weigh span:last-child { font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--ivory-2); }
+.jp-co { position: absolute; left: 100%; top: 50%; width: 96px; height: 1px; background: var(--gold); }
+.jp-co::after { content: ""; position: absolute; right: -4px; top: -4px; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(211, 175, 95, .2); }
+.jp-eq { display: flex; align-items: center; gap: clamp(10px, 1.4vw, 22px); justify-self: center; }
+.jp-eq a { display: grid; gap: 12px; justify-items: center; text-decoration: none; color: var(--ivory); }
+.jp-eq .ph { width: clamp(90px, 9.5vw, 156px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px var(--gold), 0 0 0 6px var(--night), 0 0 0 7px var(--gold-line); transition: transform .7s var(--spring); }
+.jp-eq a:hover .ph { transform: scale(1.08); }
+.jp-eq img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.3); }
+.jp-eq b { font-weight: 400; font-size: 13px; color: var(--ivory-2); font-variant-numeric: tabular-nums; }
+.jp-eq .op { padding: 0 0 28px; font-size: clamp(30px, 3vw, 48px); }
+.jp-eq .big { padding-bottom: 28px; white-space: nowrap; }
+.jp-stores { list-style: none; display: grid; gap: 2px; margin-block: 6px 20px; }
+.jp-stores li { display: flex; align-items: baseline; gap: 28px; flex-wrap: wrap; font-family: var(--f-display); font-size: clamp(40px, 5.8vw, 96px); line-height: 1.1; }
+.jp-stores span { min-width: 120px; font-family: var(--f-sans); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.jr-rail { position: absolute; z-index: 5; left: var(--edge); right: var(--edge); bottom: 36px; display: grid; gap: 14px; }
+.jr-rail ol { list-style: none; display: flex; flex-wrap: wrap; gap: 8px clamp(16px, 2.6vw, 44px); font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--ivory-2); }
+.jr-rail li { opacity: .5; transition: opacity .4s, color .4s; }
+.jr-rail li.on { opacity: 1; color: var(--gold); }
+.jr-bar { position: relative; height: 1px; background: var(--gold-line); }
+.jr-bar i { position: absolute; left: 0; right: 0; top: -1px; height: 3px; background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-hi)); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.jr.free { height: auto !important; }
+.jr.free .jr-pin { position: relative; height: auto; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.jr.free .jr-pin::-webkit-scrollbar { display: none; }
+.jr.free .jr-track { height: auto; transform: none !important; }
+.jr.free .jp { width: 86vw; height: auto; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 28px; padding: 88px 24px 72px; scroll-snap-align: start; }
+.jr.free .jp-0 { width: 86vw; }
+.jr.free .jp-img, .jr.free .jp-img.tall { height: auto; width: 100%; max-width: 340px; justify-self: start; }
+.jr.free [data-depth] { transform: none !important; }
+.jr.free .jp-weigh-wrap { justify-self: start; }
+.jr.free .jp-weigh { left: 12px; bottom: 12px; padding: 12px 16px; }
+.jr.free .jp-co, .jr.free .jr-rail { display: none; }
+.jr.free .jp-ghost { font-size: 34vw; bottom: -4vw; }
+.jr.free .jp-eq { justify-self: start; flex-wrap: wrap; }
+.jr.free .jp-eq .ph { width: 72px; }
+.jr.free .jp-stores li { font-size: clamp(30px, 8vw, 44px); gap: 4px 16px; }
+
+/* ---------- the display case ---------- */
+.case { position: relative; overflow: hidden; color: var(--ivory); background: radial-gradient(ellipse 80% 60% at 50% 0%, #3d132b, rgba(61, 19, 43, 0) 70%), var(--plum); }
+.case::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .014) 0 2px, rgba(255, 255, 255, 0) 2px 6px); }
+.case .wrap, .case-glass { position: relative; }
+.case-glass { padding-block: 14px; }
+.case-glass::before { content: ""; position: absolute; left: var(--edge); right: var(--edge); top: 0; height: 1px; background: linear-gradient(90deg, rgba(255, 240, 210, 0), rgba(255, 240, 210, .4), rgba(255, 240, 210, 0)); }
+.spot { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .7s var(--ease); background: radial-gradient(circle 320px at var(--mx, 50%) var(--my, 50%), rgba(255, 236, 190, .12) 0%, rgba(22, 5, 14, 0) 42%, rgba(10, 2, 6, .4) 100%); }
+.case-glass.lit .spot { opacity: 1; }
+.dark .card-a { color: var(--ivory); }
+.dark .card-k { color: var(--gold); }
+.dark .co { color: var(--ivory-2); }
+.dark .co i, .dark .co i::before { background: var(--gold); }
+.dark .co b { color: var(--ivory); }
+.dark .card-ph { background: var(--night); }
+.case .sl-prog { background: var(--gold-line); }
+.case .sl-prog i { background: var(--gold); }
+.case .tlink { color: var(--ivory); }
+.case .rnd { color: var(--ivory); border-color: var(--gold-line); }
+.case .rnd:hover:not(:disabled) { background: var(--gold); color: var(--night); border-color: var(--gold); }
+
+/* ---------- instagram fan ---------- */
+.fan-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+.fan-copy { display: grid; gap: 22px; justify-items: start; }
+.fan { position: relative; height: clamp(460px, 42vw, 600px); }
+.fan-card { position: absolute; left: 50%; top: 2%; width: clamp(190px, 17vw, 250px); display: grid; gap: 14px; text-decoration: none; color: var(--ink); transform-origin: 50% 130%; transform: translateX(-50%) rotate(var(--r)); transition: transform 1s var(--ease); }
+.fan-card .ph { position: relative; aspect-ratio: 9 / 15; overflow: hidden; background: var(--pearl-3); box-shadow: 0 30px 60px -28px rgba(42, 11, 25, .6); }
+.fan-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s var(--ease); }
+.fan-card b { font-family: var(--f-display); font-weight: 400; font-size: 19px; text-align: center; opacity: 0; transition: opacity .6s var(--ease); }
+.fan-card .play { position: absolute; left: 50%; top: 38%; width: 60px; height: 60px; margin-left: -30px; border-radius: 50%; border: 1px solid rgba(255, 248, 236, .8); background: rgba(22, 5, 14, .28); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); display: grid; place-items: center; color: #fff8ef; transition: transform .6s var(--spring); }
+.fan-card .play svg { width: 16px; height: 16px; margin-left: 3px; }
+.fan:hover .fan-card { transform: translateX(calc(-50% + var(--x))) rotate(calc(var(--r) * .2)); }
+.fan:hover .fan-card b { opacity: 1; }
+.fan-card:hover img { transform: scale(1.06); }
+.fan-card:hover .play { transform: scale(1.14); }
+
+/* welcome: the three greetings take turns in gold */
+[data-greet] > span { transition: color 1s var(--ease); }
+[data-greet] .en { color: var(--ink); }
+[data-greet] > span.lit { color: var(--gold-deep); }
+
+/* ---------- inner page heads: the page name, drifting ---------- */
+.phead-word { position: absolute; left: var(--edge); bottom: -.2em; font-family: var(--f-display); font-style: italic; font-size: clamp(120px, 17vw, 300px); line-height: 1; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px rgba(211, 175, 95, .2); pointer-events: none; user-select: none; animation: drift 34s ease-in-out infinite alternate; }
+@keyframes drift { to { transform: translateX(-10%); } }
+
+/* ---------- the loupe ---------- */
+.zoom { cursor: zoom-in; }
+.zoom.z { cursor: none; }
+.zoom.z img { transform: none; }
+.loupe { position: absolute; z-index: 2; left: var(--lx, 50%); top: var(--ly, 50%); width: 210px; height: 210px; margin: -105px 0 0 -105px; border-radius: 50%; pointer-events: none; background-color: var(--pearl-3); background-repeat: no-repeat; opacity: 0; transform: scale(.4);
+  box-shadow: 0 0 0 2px var(--gold), 0 0 0 9px var(--night), 0 0 0 10px var(--gold), 0 26px 50px -12px rgba(0, 0, 0, .6), inset 0 0 34px rgba(0, 0, 0, .28);
+  transition: opacity .35s var(--ease), transform .5s var(--spring); }
+.zoom.z .loupe { opacity: 1; transform: none; }
+
+/* ---------- footer signature ---------- */
+.foot { padding-bottom: 0; }
+.foot-sig {
+  margin: clamp(40px, 5vw, 72px) 0 -4.4vw; text-align: center; white-space: nowrap; user-select: none;
+  font-family: var(--f-display); font-size: 20.5vw; line-height: .8; letter-spacing: -.02em;
+  color: transparent; -webkit-text-stroke: 1px rgba(211, 175, 95, .3);
+  background: radial-gradient(circle 15vw at var(--fx, 50%) var(--fy, 160%), var(--gold) 0%, rgba(211, 175, 95, .4) 45%, rgba(211, 175, 95, 0) 72%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* ---------- curtain, grain, cursor ---------- */
+.curtain { position: fixed; inset: 0; z-index: 90; background: var(--night); display: grid; place-items: center; transform: translateY(100%); pointer-events: none; visibility: hidden; }
+.c-in { position: relative; width: min(560px, 84vw); color: var(--gold); }
+.c-in svg { width: 100%; height: auto; display: block; opacity: .6; }
+.c-in img { position: absolute; left: 50%; bottom: 6%; width: 46px; transform: translateX(-50%); }
+.grain { position: fixed; inset: 0; z-index: 85; pointer-events: none; background-image: var(--grain, none); background-size: 180px; opacity: .5; }
+.cur { position: fixed; left: 0; top: 0; z-index: 96; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 1px solid rgba(211, 175, 95, .8); pointer-events: none; display: grid; place-items: center; opacity: 0; transition: width .45s var(--ease), height .45s var(--ease), margin .45s var(--ease), background .35s, border-color .35s, opacity .3s; }
+.cur.on { opacity: 1; }
+.cur.big { width: 88px; height: 88px; margin: -44px 0 0 -44px; background: rgba(211, 175, 95, .95); border-color: transparent; }
+.cur.down { width: 30px; height: 30px; margin: -15px 0 0 -15px; }
+.cur span { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--night); opacity: 0; transition: opacity .3s; }
+.cur.big span { opacity: 1; }
+@media (hover: none), (pointer: coarse) { .cur { display: none; } }
+
+/* ---------- v2 responsive ---------- */
+@media (max-width: 1100px) {
+  .name-grid, .fan-grid { grid-template-columns: minmax(0, 1fr); }
+  .name-side { display: none; }
+  .fan { justify-self: center; width: 100%; }
+}
+@media (max-width: 760px) {
+  .stage { --R: 45vw; --m: clamp(50px, 13.5vw, 64px); height: auto; min-height: 0; padding-top: 112px; }
+  .dome { position: relative; left: auto; bottom: auto; width: auto; transform: translateY(var(--dy, 0px)); padding-inline: var(--gutter); margin-bottom: calc(var(--R) + var(--m) * .5 + 30px); }
+  .dome h1 { font-size: clamp(44px, 13vw, 66px); }
+  .dome .ctas { flex-direction: column; align-items: stretch; width: 100%; max-width: 360px; }
+  .stage-note, .cue, .med-tip { display: none; }
+  .row { grid-template-columns: minmax(0, 1fr) auto; gap: 16px; }
+  .row-go { display: none; }
+  .row-name { font-size: clamp(32px, 9.5vw, 46px); gap: 14px; }
+  .row-name img { display: block; width: 52px; height: 64px; object-fit: cover; flex: none; }
+  .fan { height: auto; display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  .fan-card, .fan:hover .fan-card { position: static; width: auto; transform: none; scroll-snap-align: start; }
+  .fan-card b { opacity: 1; text-align: left; }
+  .loupe { width: 150px; height: 150px; margin: -75px 0 0 -75px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml, .orbit-spin, .med-in, .phead-word { animation: none !important; }
+  .name-si { background-position: 0 100%; }
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -721,140 +981,173 @@ button { cursor: pointer; }
 
 <!-- ============================ HOME ============================ -->
 <section class="view" data-view="home">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <div class="hero-text">
-        <p class="label fade" style="--d:.1s">Negombo · Since 1967</p>
-        <h1 id="hero-title"><span class="m"><span style="--i:0">Gold</span></span> <span class="m"><span style="--i:1">for</span></span> <span class="m"><span style="--i:2">the</span></span> <span class="m"><span style="--i:3">moments</span></span> <span class="m"><span style="--i:4">that</span></span> <span class="m"><span style="--i:5">become</span></span> <em><span class="m"><span style="--i:6">heirlooms</span></span></em></h1>
-        <p class="lede fade" style="--d:.85s">Bridal sets and fine 22KT gold from a Negombo family of jewellers, trusted for almost sixty years.</p>
-        <div class="ctas fade" style="--d:1s">
-          <a class="btn" href="#appointment">Book a bridal appointment</a>
-          <a class="tlink" href="#collection">View the collection <svg><use href="#arr"/></svg></a>
-        </div>
-      </div>
-      <div class="moonstone" aria-hidden="true"><svg data-moon="draw" viewBox="-500 -500 1000 503"></svg></div>
+
+  <!-- THE PROCESSION: the shop's pieces walk the moonstone, as the animals do on the stone -->
+  <section class="stage" id="stage" aria-labelledby="hero-title">
+    <div class="ml-set" aria-hidden="true">
+      <svg class="ml ml-outer" viewBox="-500 -500 1000 1000" data-moonfull="outer"></svg>
+      <svg class="ml ml-mid" viewBox="-500 -500 1000 1000" data-moonfull="mid"></svg>
+      <svg class="ml ml-inner" viewBox="-500 -500 1000 1000" data-moonfull="inner"></svg>
+      <svg class="ml ml-core" viewBox="-500 -500 1000 1000" data-moonfull="core"></svg>
     </div>
-    <div class="hs" id="hs" role="region" aria-roledescription="carousel" aria-label="Pieces from the showroom">
-      <figure class="hs-slide on"><img src="img/cat-necklaces.webp" alt="A gold leaf vine necklace worn with a black velvet dress" width="880" height="1100" fetchpriority="high"></figure>
-      <figure class="hs-slide"><img src="img/hero-bridal.webp" alt="A gold leaf fringe necklace worn with a white saree" width="900" height="1117"></figure>
-      <figure class="hs-slide"><img src="img/cat-bridal.webp" alt="A bride wearing an open gold collar necklace and a branch earring" width="900" height="1125"></figure>
-      <div class="hs-ui">
-        <a class="hs-cap" id="hs-cap" href="#piece-leaf-vine-necklace"><span class="n">01 / 03</span><span class="t">Leaf vine necklace</span><span class="w">Ask for weight</span></a>
-        <div class="hs-ctrl">
-          <div class="hs-bars" role="group" aria-label="Choose a slide">
-            <button class="hs-bar on" type="button" aria-label="Slide 1"><i></i></button>
-            <button class="hs-bar" type="button" aria-label="Slide 2"><i></i></button>
-            <button class="hs-bar" type="button" aria-label="Slide 3"><i></i></button>
-          </div>
-          <button class="hs-pause" id="hs-pause" type="button" aria-label="Pause slideshow"><svg><use href="#i-pause"/></svg></button>
-        </div>
-      </div>
+    <div class="orbit" id="orbit-wrap"><div class="orbit-spin" id="orbit" role="list" aria-label="Pieces in the procession"></div></div>
+    <div class="dome" id="dome">
+      <p class="label fade" style="--d:.2s">Since 1967 · Negombo</p>
+      <h1 id="hero-title"><span class="m"><span style="--i:0">The</span></span> <span class="m"><span style="--i:1">gold</span></span><br><em><span class="m"><span style="--i:2">Negombo</span></span></em> <span class="m"><span style="--i:3">marries</span></span> <span class="m"><span style="--i:4">in.</span></span></h1>
+      <div class="ctas fade" style="--d:1.05s"><a class="btn" href="#appointment">Book a bridal appointment</a><a class="btn ghost" href="#collection">Enter the collection</a></div>
     </div>
+    <p class="stage-note fade" style="--d:1.5s">Bridal sets and fine 22KT gold from a Negombo family of jewellers. Every piece in the procession shows its weight. Hold your cursor on one to stop it.</p>
+    <p class="cue fade" style="--d:1.7s" aria-hidden="true"><i></i><span>Scroll</span></p>
   </section>
 
   <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"><span>22KT gold</span><span>The weight on every piece</span><span>Bridal appointments</span><span>Made to order</span><span>Gold pawning</span><span>Three showrooms</span><span>Since 1967</span></div></div>
 
-  <section class="on-pearl room" aria-labelledby="name-title">
-    <div class="wrap">
-      <div class="statement">
+  <!-- THE NAME -->
+  <section class="on-pearl room name" aria-labelledby="name-title">
+    <div class="wrap name-grid">
+      <p class="name-si" lang="si" aria-hidden="true" data-seen>පුෂ්ප</p>
+      <div class="name-copy">
         <svg class="vine" data-vine viewBox="0 0 320 28" aria-hidden="true"></svg>
-        <p class="label">Pushpa <span class="si" lang="si">පුෂ්ප</span> flower</p>
+        <p class="label">Pushpa · <span lang="si" class="si-sm">පුෂ්ප</span> · flower</p>
         <h2 class="say" id="name-title">Our name means flower. Since 1967 we have made the gold a family remembers, from a child’s first bangle to the necklace <em>worn on a wedding day.</em></h2>
+        <a class="tlink" href="#story">Read our story <svg><use href="#arr"/></svg></a>
       </div>
-      <div class="tiles" id="tiles"></div>
+      <p class="name-side" aria-hidden="true">Est. 1967 · Greens Road · Negombo</p>
     </div>
   </section>
 
-  <section class="on-pearl room tight" style="padding-top:0" aria-labelledby="new-title">
+  <!-- THE COUNTERS -->
+  <section class="on-pearl p2 room counters" aria-labelledby="counters-title">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="label">New in 22KT gold</p><h2 class="h2" id="new-title">From the showroom, <em>this season</em></h2></div>
+        <div><p class="label">The counters</p><h2 class="h2" id="counters-title">Five counters, <em>one collection</em></h2></div>
+        <a class="tlink" href="#collection">All <span data-total>28</span> pieces <svg><use href="#arr"/></svg></a>
+      </div>
+      <ul class="rows" id="rows"></ul>
+    </div>
+    <div class="float-img" id="float-img" aria-hidden="true"><img src="img/hero-everyday.webp" alt="" width="900" height="1042"></div>
+  </section>
+
+  <!-- THE JOURNEY: scroll down, travel sideways -->
+  <section class="jr" id="jr" aria-labelledby="jr-title">
+    <div class="jr-pin" id="jr-pin">
+      <div class="jr-track" id="jr-track">
+        <article class="jp jp-0">
+          <span class="jp-ghost" aria-hidden="true">1967</span>
+          <div class="jp-txt">
+            <p class="label">A journey through Pushpa</p>
+            <h2 class="jp-h" id="jr-title">From a counter on Greens Road <em>to your family</em></h2>
+            <p class="lede">Five chapters. Keep scrolling and the page walks you through them.</p>
+            <span class="jp-hint" aria-hidden="true"><svg><use href="#arr"/></svg></span>
+          </div>
+        </article>
+        <article class="jp jp-1">
+          <figure class="jp-img tall" data-depth="-.5"><img src="img/showroom.webp" alt="Inside the Pushpa Jewellers showroom: a jeweller at the counter serving a customer" width="900" height="1117"></figure>
+          <div class="jp-txt">
+            <p class="jp-n">I</p>
+            <p class="label">1967 · Greens Road, Negombo</p>
+            <h3 class="jp-h">The first <em>counter</em></h3>
+            <p class="lede">Pushpa Jewellers opened in Negombo in 1967. The counter is still where it happens: you sit down, we set out the gold, and you take your time.</p>
+            <a class="tlink" href="#story">Our story <svg><use href="#arr"/></svg></a>
+          </div>
+        </article>
+        <article class="jp jp-2">
+          <div class="jp-txt">
+            <p class="jp-n">II</p>
+            <p class="label">The weight on every piece</p>
+            <h3 class="jp-h">Gold you can <em>read</em></h3>
+            <p class="lede">Every piece we show carries its weight, printed on its photograph. You know what you are buying before you ask the price.</p>
+            <a class="tlink" href="#gold">How gold is priced <svg><use href="#arr"/></svg></a>
+          </div>
+          <div class="jp-weigh-wrap">
+            <figure class="jp-img" data-depth=".35"><img src="img/p-stacked-bar-bangle.webp" alt="A stacked bar bangle in gold worn with a beige saree, its weight printed beside it" width="900" height="1117"></figure>
+            <div class="jp-weigh" data-depth="-.45"><span class="jp-co" aria-hidden="true"></span><b>12.470 g</b><span>1.56 pawn · 22KT</span></div>
+          </div>
+        </article>
+        <article class="jp jp-3">
+          <div class="jp-txt">
+            <p class="jp-n">III</p>
+            <p class="label">Bridal, counted in pawn</p>
+            <h3 class="jp-h">A wedding set, <em>by weight</em></h3>
+            <p class="lede">Families here plan wedding gold in pawn, eight grams to the pawn. Put a set together and see what it comes to.</p>
+            <a class="btn" href="#bridal-builder">Build your set</a>
+          </div>
+          <div class="jp-eq" data-depth=".25">
+            <a href="#piece-red-stone-chain-necklace"><span class="ph"><img src="img/p-red-stone-chain.webp" alt="Red stone chain necklace" width="900" height="1125"></span><b>12.770 g</b></a>
+            <span class="op" aria-hidden="true">+</span>
+            <a href="#piece-stacked-bar-bangle"><span class="ph"><img src="img/p-stacked-bar-bangle.webp" alt="Stacked bar bangle" width="900" height="1117"></span><b>12.470 g</b></a>
+            <span class="op" aria-hidden="true">+</span>
+            <a href="#piece-five-stone-ring"><span class="ph"><img src="img/p-five-stone-ring.webp" alt="Five-stone ring" width="900" height="1117"></span><b>1.120 g</b></a>
+            <span class="op" aria-hidden="true">=</span>
+            <p class="big">3.30<small>pawn</small></p>
+          </div>
+        </article>
+        <article class="jp jp-4">
+          <figure class="jp-img tall" data-depth="-.4"><img src="img/p-filigree-pendants.webp" alt="Two traditional gold filigree pendants" width="900" height="1125"></figure>
+          <div class="jp-txt">
+            <p class="jp-n">IV</p>
+            <p class="label">Made to order</p>
+            <h3 class="jp-h">Your design, <em>our gold</em></h3>
+            <p class="lede">Bring a sketch, a photograph or an old piece from the family. We make it for you in 22KT or 18KT gold.</p>
+            <a class="tlink" href="#services">How an order works <svg><use href="#arr"/></svg></a>
+          </div>
+        </article>
+        <article class="jp jp-5">
+          <div class="jp-txt">
+            <p class="jp-n">V</p>
+            <p class="label">Three showrooms, one family</p>
+            <ul class="jp-stores">
+              <li><span>Negombo</span>67 Greens Road</li>
+              <li><span>Negombo</span>150A Sea Street</li>
+              <li><span>Katunayake</span>8A Averiwatte</li>
+            </ul>
+            <a class="btn" href="#visit">Plan your visit</a>
+          </div>
+        </article>
+      </div>
+      <div class="jr-rail" aria-hidden="true">
+        <ol id="jr-steps"><li>Begin</li><li>I · 1967</li><li>II · Weight</li><li>III · Pawn</li><li>IV · Made to order</li><li>V · Showrooms</li></ol>
+        <div class="jr-bar"><i id="jr-bar"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE DISPLAY CASE -->
+  <section class="case room tight" id="case" aria-labelledby="new-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="label">New in 22KT gold</p><h2 class="h2" id="new-title">The display <em>case</em></h2></div>
         <div class="nav2"><button class="rnd" type="button" data-sl="home-new" data-dir="-1" aria-label="Previous pieces"><svg><use href="#i-l"/></svg></button><button class="rnd" type="button" data-sl="home-new" data-dir="1" aria-label="Next pieces"><svg><use href="#i-r"/></svg></button></div>
       </div>
     </div>
-    <div class="slider" id="home-new" tabindex="0" aria-label="New pieces, scrollable"><div class="sl-track"></div></div>
+    <div class="case-glass" id="case-glass">
+      <div class="slider dark" id="home-new" tabindex="0" aria-label="New pieces, scrollable" data-cursor="Drag"><div class="sl-track"></div></div>
+      <span class="spot" aria-hidden="true"></span>
+    </div>
     <div class="wrap"><div class="sl-foot"><div class="sl-prog" data-prog="home-new"><i></i></div><a class="tlink" href="#collection">See all <span data-total>28</span> pieces <svg><use href="#arr"/></svg></a></div></div>
   </section>
 
-  <section class="on-plum room" aria-labelledby="hb-title">
-    <div class="wrap">
-      <div class="b-grid">
-        <figure class="b-photo settle" data-seen><img src="img/cat-bridal.webp" alt="A bride wearing an open gold collar necklace and a branch earring" width="900" height="1125"></figure>
-        <div class="b-copy">
-          <p class="label">Bridal</p>
-          <h2 class="h2" id="hb-title">Wedding gold, <em>chosen together</em></h2>
-          <p>Whether you marry on the poruwa or in church, bring the saree, the family and a budget. We will set out necklaces, bangles and rings that suit all three, and build the set with you piece by piece.</p>
-          <div class="ctas"><a class="btn" href="#appointment">Book a bridal appointment</a><a class="tlink" href="#bridal">The bridal room <svg><use href="#arr"/></svg></a></div>
-        </div>
-      </div>
-      <div class="set">
-        <div class="set-head">
-          <div style="display:grid;gap:14px"><p class="label">A set, by weight</p><h2 class="h2">Counted in pawn</h2></div>
-          <p>Families here plan wedding gold in pawn, eight grams to the pawn. Every piece we show carries its weight, so you can see what a set comes to before you visit.</p>
-        </div>
-        <div class="set-row">
-          <a class="pc" href="#piece-red-stone-chain-necklace"><div class="ph"><img src="img/p-red-stone-chain.webp" alt="A gold chain necklace set with oval red stones" width="900" height="1125"></div><h3>Red stone chain necklace</h3><dl class="wt"><dt>Weight</dt><dd>12.770 g</dd><dt>Pawn</dt><dd>1.60</dd></dl></a>
-          <span class="op" aria-hidden="true">+</span>
-          <a class="pc" href="#piece-stacked-bar-bangle"><div class="ph"><img src="img/p-stacked-bar-bangle.webp" alt="A stacked bar bangle in gold worn with a beige saree" width="900" height="1117"></div><h3>Stacked bar bangle</h3><dl class="wt"><dt>Weight</dt><dd>12.470 g</dd><dt>Pawn</dt><dd>1.56</dd></dl></a>
-          <span class="op" aria-hidden="true">+</span>
-          <a class="pc" href="#piece-five-stone-ring"><div class="ph"><img src="img/p-five-stone-ring.webp" alt="A fine gold ring set with five small white stones" width="900" height="1117"></div><h3>Five-stone ring</h3><dl class="wt"><dt>Weight</dt><dd>1.120 g</dd><dt>Pawn</dt><dd>0.14</dd></dl></a>
-          <span class="op" aria-hidden="true">=</span>
-          <div class="total">
-            <p class="label">The set, 22KT</p>
-            <p class="big">3.30<small>pawn</small></p>
-            <p class="grams">26.360 g of gold</p>
-            <p>Priced by weight at the day’s gold rate. Call 031 223 3857 for today’s rate per pawn.</p>
-            <a class="tlink" href="#bridal-builder">Build your own set <svg><use href="#arr"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="on-pearl room" aria-labelledby="hg-title">
-    <div class="wrap g-grid">
-      <figure class="g-photo"><div class="ph settle" data-seen><img src="img/reel-purity.webp" alt="A Pushpa jeweller holding up a large gold sovereign at the counter" width="640" height="1138"></div><figcaption>What 22KT means, explained at our counter.</figcaption></figure>
-      <div>
-        <p class="label">Know your gold</p>
-        <h2 class="h2" id="hg-title" style="margin-top:14px">Read gold <em>like a jeweller</em></h2>
-        <div class="facts3">
-          <div><b>91.6%</b><p><strong>22KT gold</strong>Twenty-two parts gold in twenty-four. Rich in colour and strong enough to wear every day.</p></div>
-          <div><b>8 g</b><p><strong>One pawn</strong>The measure Sri Lankan families use for gold. We show every weight in grams and in pawn.</p></div>
-          <div><b>Daily</b><p><strong>The day’s rate</strong>Gold is priced by weight at the day’s rate. Call us for today’s.</p></div>
-        </div>
-        <a class="tlink" href="#gold" style="margin-top:30px">Open the gold guide <svg><use href="#arr"/></svg></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="on-night room" aria-labelledby="hs-title">
-    <div class="wrap st-grid">
-      <div class="st-copy">
-        <p class="label">Our story</p>
-        <p class="year glint" aria-hidden="true">1967</p>
-        <h2 class="h2" id="hs-title">The Pride of Negombo</h2>
-        <p>Pushpa Jewellers opened in Negombo in 1967. Today we have three showrooms in Negombo and Katunayake. We still sell honest gold, show the weight of every piece, and look after the families who keep coming back to us.</p>
-        <blockquote>Excellent craftsmanship for generations.</blockquote>
-        <a class="tlink" href="#story">Read our story <svg><use href="#arr"/></svg></a>
-      </div>
-      <figure class="st-photo"><div class="ph settle" data-seen><img src="img/showroom.webp" alt="Inside the Pushpa Jewellers showroom: a jeweller at the counter serving a customer, gold sets in the wall cases behind" width="900" height="1117"></div></figure>
-    </div>
-  </section>
-
+  <!-- INSTAGRAM -->
   <section class="on-pearl room tight" aria-labelledby="ig-title">
-    <div class="wrap">
-      <div class="sec-head center"><div><p class="label">@pushpajewellers_official</p><h2 class="h2" id="ig-title">From the counter, <em>on Instagram</em></h2></div></div>
-      <div class="reels">
-        <a class="reel" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-purity.webp" alt="A jeweller holding a gold sovereign" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>What 22KT means</h3><p>Gold purity, explained in a minute.</p></a>
-        <a class="reel" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-colour.webp" alt="A customer trying on gemstone jewellery in the showroom" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>Finding your colour</h3><p>Gemstone pieces, tried on in the showroom.</p></a>
-        <a class="reel" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-collection.webp" alt="A customer showing rings and a gold necklace" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>New in the showroom</h3><p>Rings and necklaces from the latest collection.</p></a>
+    <div class="wrap fan-grid">
+      <div class="fan-copy">
+        <p class="label">@pushpajewellers_official</p>
+        <h2 class="h2" id="ig-title">From the counter, <em>on Instagram</em></h2>
+        <p class="lede">Short films from the showroom: gold purity explained, colours tried on, and what is new in the cases.</p>
+        <a class="tlink" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener">Follow on Instagram <svg><use href="#arr"/></svg></a>
+      </div>
+      <div class="fan">
+        <a class="fan-card" style="--r:-9deg;--x:-112%" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener" data-cursor="Play"><span class="ph"><img src="img/reel-purity.webp" alt="A jeweller holding a gold sovereign" width="640" height="1138"></span><span class="play"><svg><use href="#i-play"/></svg></span><b>What 22KT means</b></a>
+        <a class="fan-card" style="--r:9deg;--x:112%" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener" data-cursor="Play"><span class="ph"><img src="img/reel-collection.webp" alt="A customer showing rings and a gold necklace" width="640" height="1138"></span><span class="play"><svg><use href="#i-play"/></svg></span><b>New in the showroom</b></a>
+        <a class="fan-card" style="--r:0deg;--x:0%" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener" data-cursor="Play"><span class="ph"><img src="img/reel-colour.webp" alt="A customer trying on gemstone jewellery" width="640" height="1138"></span><span class="play"><svg><use href="#i-play"/></svg></span><b>Finding your colour</b></a>
       </div>
     </div>
   </section>
 
+  <!-- WELCOME -->
   <section class="on-pearl p2 room" aria-labelledby="hv-title">
     <div class="wrap">
-      <h2 class="greet" id="hv-title"><span class="si" lang="si">ආයුබෝවන්</span><i aria-hidden="true"></i><span class="ta" lang="ta">வணக்கம்</span><i aria-hidden="true"></i><span class="en">Welcome</span></h2>
+      <h2 class="greet" id="hv-title" data-greet><span class="si" lang="si">ආයුබෝවන්</span><i aria-hidden="true"></i><span class="ta" lang="ta">வணக்கம்</span><i aria-hidden="true"></i><span class="en">Welcome</span></h2>
       <p class="visit-sub">Three showrooms in Negombo and Katunayake. Come in, sit at the counter and take your time.</p>
       <div class="stores" data-stores></div>
       <div style="display:flex;justify-content:center;margin-top:48px"><a class="btn dark" href="#visit">Plan your visit</a></div>
@@ -865,6 +1158,7 @@ button { cursor: pointer; }
 <!-- ============================ COLLECTION ============================ -->
 <section class="view" data-view="collection" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Collection</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Collection</span></nav>
@@ -907,8 +1201,8 @@ button { cursor: pointer; }
   <div class="on-pearl">
     <div class="wrap pd">
       <div>
-        <div class="zoom" id="zoom"><img id="pd-img" src="img/p-stacked-bar-bangle.webp" alt="" width="900" height="1125"></div>
-        <p class="hint" id="pd-hint">Move over the photo to look closer. The weight printed on it is the piece’s own.</p>
+        <div class="zoom" id="zoom" data-cursor="Look"><img id="pd-img" src="img/p-stacked-bar-bangle.webp" alt="" width="900" height="1125"><span class="loupe" id="loupe" aria-hidden="true"></span></div>
+        <p class="hint" id="pd-hint">Move the loupe over the photo to look closer. The weight printed on it is the piece’s own.</p>
       </div>
       <div class="pd-info">
         <p class="label" id="pd-k">Bangle · 22KT</p>
@@ -942,6 +1236,7 @@ button { cursor: pointer; }
 <!-- ============================ BRIDAL ============================ -->
 <section class="view" data-view="bridal" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Bridal</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Bridal</span></nav>
@@ -998,6 +1293,7 @@ button { cursor: pointer; }
 <!-- ============================ STORY ============================ -->
 <section class="view" data-view="story" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Since 1967</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Our story</span></nav>
@@ -1048,6 +1344,7 @@ button { cursor: pointer; }
 <!-- ============================ GOLD GUIDE ============================ -->
 <section class="view" data-view="gold" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Karat</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Gold guide</span></nav>
@@ -1113,6 +1410,7 @@ button { cursor: pointer; }
 <!-- ============================ SERVICES ============================ -->
 <section class="view" data-view="services" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Counter</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Services</span></nav>
@@ -1165,6 +1463,7 @@ button { cursor: pointer; }
 <!-- ============================ VISIT ============================ -->
 <section class="view" data-view="visit" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Welcome</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Visit us</span></nav>
@@ -1226,6 +1525,7 @@ button { cursor: pointer; }
 <!-- ============================ SAVED ============================ -->
 <section class="view" data-view="saved" hidden>
   <header class="phead">
+    <span class="phead-word" aria-hidden="true">Saved</span>
     <div class="ms-bg" aria-hidden="true"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Home</a><span aria-hidden="true">/</span><span>Saved pieces</span></nav>
@@ -1257,10 +1557,14 @@ button { cursor: pointer; }
     </div>
     <div class="legal"><span>© <span id="yr">2026</span> Pushpa Jewellers (Pvt) Ltd</span><span>Forever trusted jewellers since 1967</span></div>
   </div>
+  <p class="foot-sig" aria-hidden="true">PUSHPA</p>
 </footer>
 
 <a class="wa" id="wa" href="https://wa.me/94777770203" target="_blank" rel="noopener" aria-label="Message us on WhatsApp"><svg><use href="#i-chat"/></svg><span>WhatsApp us</span></a>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="curtain" id="curtain" aria-hidden="true"><div class="c-in"><svg data-moon="still" viewBox="-500 -500 1000 503"></svg><img src="img/crest.webp" alt="" width="200" height="345"></div></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" id="cur" aria-hidden="true"><span></span></div>
 
 <script>
 (function () {
@@ -1353,7 +1657,7 @@ button { cursor: pointer; }
   function card(p, i) {
     var pt = pawnText(p);
     return '<article class="card" style="--i:' + (i || 0) + '">' +
-      '<a class="card-a" href="#piece-' + p.s + '">' +
+      '<a class="card-a" href="#piece-' + p.s + '" data-cursor="View">' +
         '<div class="card-ph"><img src="img/' + p.img + '.webp" alt="' + esc(p.alt) + '" width="900" height="1125" draggable="false"></div>' +
         '<div class="card-b"><p class="card-k">' + CAT[p.c].one + (p.g.length ? ' · 22KT' : '') + '</p><h3>' + esc(p.n) + '</h3>' +
         '<p class="co"><i></i><span>' + weightText(p) + '</span>' + (pt ? '<b>' + pt + '</b>' : '') + '</p></div>' +
@@ -1404,63 +1708,59 @@ button { cursor: pointer; }
     s.scrollBy({ left: dir * step * (innerWidth > 900 ? 2 : 1), behavior: reduce ? 'auto' : 'smooth' });
   }
   $$('[data-sl]').forEach(function (b) { b.addEventListener('click', function () { slide(b.dataset.sl, +b.dataset.dir); }); });
-  window.addEventListener('resize', function () { $$('.slider').forEach(function (s) { updateProg(s.id); }); });
+  window.addEventListener('resize', function () { $$('.slider').forEach(function (s) { updateProg(s.id); }); if (typeof layoutJourney === 'function') layoutJourney(); });
 
   /* ================= the moonstone (sandakada pahana) ================= */
   var NS = 'http://www.w3.org/2000/svg';
   function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
   function f1(n) { return n.toFixed(1); }
   function Pt(r, t) { return f1(r * Math.cos(t)) + ' ' + f1(-r * Math.sin(t)); }
-  function moonstone(svg, animate) {
-    var g = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': animate ? '1.3' : '1.6', 'stroke-linecap': 'round' });
+  function drawMoon(svg, o) {
+    var full = !!o.full, span = full ? Math.PI * 2 : Math.PI, mult = full ? 2 : 1, band = o.band || 'all', all = band === 'all';
+    var g = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': o.sw || '1.3', 'stroke-linecap': 'round' });
     svg.appendChild(g);
-    function delay(r) { return (0.2 + (r / 480) * 1.6).toFixed(2) + 's'; }
-    function add(node, r, dot) {
-      if (animate) { node.setAttribute('class', dot ? 'ms-dot' : 'ms'); if (!dot) node.setAttribute('pathLength', 1); node.style.setProperty('--d', delay(r)); }
+    function delay(r) { return ((o.d0 || .2) + (r / 480) * 1.5).toFixed(2) + 's'; }
+    function add(node, r, isDot) {
+      if (o.animate) { node.setAttribute('class', isDot ? 'ms-dot' : 'ms'); if (!isDot) node.setAttribute('pathLength', 1); node.style.setProperty('--d', delay(r)); }
       g.appendChild(node);
     }
     function line(d, r) { add(el('path', { d: d }), r); }
     function dot(r, t, size) { add(el('circle', { cx: f1(r * Math.cos(t)), cy: f1(-r * Math.sin(t)), r: size, fill: 'currentColor', stroke: 'none' }), r, true); }
-    function arc(r) { line('M' + f1(-r) + ' 0 A' + r + ' ' + r + ' 0 0 1 ' + f1(r) + ' 0', r); }
-    function petals(n, r0, r1, wide, lean, belly) {
+    function arc(r, half) { if (full && !half) add(el('circle', { cx: 0, cy: 0, r: r }), r); else line('M' + f1(-r) + ' 0 A' + r + ' ' + r + ' 0 0 1 ' + f1(r) + ' 0', r); }
+    function petals(n, r0, r1, wide, lean, belly, sp) {
+      sp = sp || span; n = Math.round(n * sp / Math.PI);
       for (var i = 0; i < n; i++) {
-        var t = (i + .5) / n * Math.PI, s = Math.PI / n * wide, rm = r0 + (r1 - r0) * (belly || .6);
+        var t = (i + .5) / n * sp, s = sp / n * wide, rm = r0 + (r1 - r0) * (belly || .6);
         line('M' + Pt(r0, t - s) + ' Q' + Pt(rm, t - s * 1.15) + ' ' + Pt(r1, t + s * (lean || 0)) + ' Q' + Pt(rm, t + s * 1.15) + ' ' + Pt(r0, t + s), r1);
       }
     }
     function procession(n, r, len, dir) {
+      n = n * mult;
       for (var i = 0; i < n; i++) {
-        var t = (i + .5) / n * Math.PI, x = r * Math.cos(t), y = -r * Math.sin(t);
+        var t = (i + .5) / n * span, x = r * Math.cos(t), y = -r * Math.sin(t);
         var ang = Math.atan2(Math.cos(t), Math.sin(t)) * 180 / Math.PI + (dir < 0 ? 180 : 0);
         add(el('path', { d: 'M' + (-len) + ' 0 C' + (-len * .5) + ' ' + (-len * .62) + ' ' + (len * .45) + ' ' + (-len * .6) + ' ' + len + ' 0 C' + (len * .45) + ' ' + (len * .6) + ' ' + (-len * .5) + ' ' + (len * .62) + ' ' + (-len) + ' 0 M' + (-len * .4) + ' 0 L' + (len * .55) + ' 0', transform: 'translate(' + f1(x) + ' ' + f1(y) + ') rotate(' + f1(ang) + ')' }), r);
-        dot(r, (i + 1) / n * Math.PI, 2.2);
+        dot(r, (i + 1) / n * span, 2.2);
       }
     }
     function creeper(rc, amp, waves) {
-      var d = '';
-      for (var k = 0; k <= 360; k++) { var t = k / 360 * Math.PI; d += (k ? ' L' : 'M') + Pt(rc + amp * Math.sin(t * waves * 2), t); }
+      var steps = 360 * mult, d = '';
+      for (var k = 0; k <= steps; k++) { var t = k / steps * span; d += (k ? ' L' : 'M') + Pt(rc + amp * Math.sin(t * waves * 2), t); }
       line(d, rc);
-      for (var j = 0; j < waves * 2; j++) dot(rc + (j % 2 ? -1 : 1) * (amp + 7), (j + .25) / (waves * 2) * Math.PI + .012, 2.4);
+      var nd = waves * 2 * mult;
+      for (var j = 0; j < nd; j++) dot(rc + (j % 2 ? -1 : 1) * (amp + 7), (j + .25) / nd * span + .012, 2.4);
     }
-    arc(34); arc(18);
-    for (var i = 1; i < 6; i++) dot(26, i / 6 * Math.PI, 2);
-    petals(7, 34, 118, .92, 0, .7);
-    petals(8, 34, 92, .55, 0, .7);
-    arc(128);
-    petals(26, 132, 168, .9, 0, .6);
-    arc(176);
-    procession(20, 202, 15, 1);
-    arc(228); arc(236);
-    creeper(262, 13, 14);
-    arc(290);
-    procession(24, 318, 17, -1);
-    arc(346); arc(354);
-    petals(40, 360, 404, .95, .55, .55);
-    petals(40, 360, 384, .45, .3, .55);
-    arc(410);
-    line('M-492 0 L492 0', 480);
+    if (all || band === 'core') { arc(34, true); arc(18, true); for (var i = 1; i < 6; i++) dot(26, i / 6 * Math.PI, 2); petals(7, 34, 118, .92, 0, .7, Math.PI); petals(8, 34, 92, .55, 0, .7, Math.PI); }
+    if (all || band === 'inner') { arc(128); petals(26, 132, 168, .9, 0, .6); arc(176); procession(20, 202, 15, 1); arc(228); arc(236); }
+    if (all || band === 'mid') { creeper(262, 13, 14); arc(290); if (all) procession(24, 318, 17, -1); arc(346); arc(354); }
+    if (all || band === 'outer') {
+      petals(40, 360, 404, .95, .55, .55); petals(40, 360, 384, .45, .3, .55); arc(410);
+      if (!all) { arc(452); for (var q = 0; q < 160; q++) dot(436, (q + .5) / 160 * span, 1.5); }
+    }
+    if (all) line('M-492 0 L492 0', 480);
   }
-  $$('[data-moon]').forEach(function (svg) { moonstone(svg, svg.dataset.moon === 'draw'); });
+  $$('[data-moon]').forEach(function (svg) { drawMoon(svg, { animate: svg.dataset.moon === 'draw' && !reduce }); });
+  $$('[data-moonfull]').forEach(function (svg) { drawMoon(svg, { full: true, band: svg.dataset.moonfull, sw: '.8', animate: !reduce, d0: .1 }); });
 
   // the small creeper divider
   $$('[data-vine]').forEach(function (svg) {
@@ -1480,10 +1780,6 @@ button { cursor: pointer; }
   });
 
   /* ================= home ================= */
-  $('#tiles').innerHTML = CATS.map(function (c) {
-    var n = P.filter(function (p) { return p.c === c.id; }).length;
-    return '<a class="tile" href="#collection-' + c.id + '"><div class="ph"><img src="img/' + c.img + '.webp" alt="" width="900" height="1125"></div><div class="cap"><h3>' + c.name + '</h3><span>' + n + ' pieces</span></div></a>';
-  }).join('');
   fillSlider('home-new', NEW_IN.map(function (s) { return BY[s]; }));
   $$('[data-total]').forEach(function (n) { n.textContent = P.length; });
 
@@ -1498,39 +1794,135 @@ button { cursor: pointer; }
     }).join('');
   });
 
-  // ticker: two copies so the loop is seamless
   var tk = $('#ticker'); tk.innerHTML += tk.innerHTML;
 
-  // hero slideshow
-  var HS = [
-    { s: 'leaf-vine-necklace', t: 'Leaf vine necklace' },
-    { s: 'leaf-fringe-necklace', t: 'Leaf fringe necklace' },
-    { s: 'open-collar-necklace', t: 'Open collar necklace' }
+  // the procession: pieces placed round the moonstone's animal band, walking clockwise
+  var ORBIT = [
+    ['stacked-bar-bangle', '45% 45%'], ['red-stone-circle-pendant', '58% 48%'], ['anchor-and-helm-pendant', '58% 58%'],
+    ['ballerina-pendant', '48% 50%'], ['lattice-cuff', '50% 46%'], ['leaf-fringe-necklace', '50% 48%'],
+    ['five-row-bangle', '50% 58%'], ['infinity-ring', '50% 68%'], ['filigree-pendants', '52% 52%'],
+    ['red-stone-chain-necklace', '50% 55%'], ['enamel-flower-bracelet', '62% 64%'], ['five-stone-ring', '52% 70%'],
+    ['cross-pendant', '50% 60%'], ['blue-stone-pendant', '50% 66%']
   ];
-  var hs = $('#hs'), slides = $$('.hs-slide', hs), bars = $$('.hs-bar', hs), cap = $('#hs-cap'), hsI = 0, hsTimer = null, hsPaused = reduce, DUR = 6500;
-  function hsShow(i) {
-    hsI = (i + slides.length) % slides.length;
-    slides.forEach(function (s, k) { s.classList.toggle('on', k === hsI); });
-    bars.forEach(function (b, k) { b.classList.remove('on'); b.classList.toggle('done', k < hsI); b.setAttribute('aria-current', k === hsI ? 'true' : 'false'); });
-    void bars[hsI].offsetWidth; bars[hsI].classList.add('on');
-    var p = BY[HS[hsI].s];
-    cap.href = '#piece-' + p.s;
-    cap.innerHTML = '<span class="n">0' + (hsI + 1) + ' / 0' + slides.length + '</span><span class="t">' + p.n + '</span><span class="w">' + (p.g.length ? weightText(p) + ' · ' + pawnText(p) : 'Ask for weight') + '</span>';
-    cap.classList.remove('swap'); void cap.offsetWidth; cap.classList.add('swap');
-    hsArm();
+  $('#orbit').innerHTML = ORBIT.map(function (o, k) {
+    var p = BY[o[0]], a = (180 + k / ORBIT.length * 360).toFixed(2), w = p.g.length ? weightText(p) + ' · ' + pawnText(p) : 'Ask for weight';
+    return '<a class="med" role="listitem" href="#piece-' + p.s + '" style="--a:' + a + 'deg;--k:' + k + '" aria-label="' + esc(p.n + ', ' + w) + '">' +
+      '<span class="med-up"><span class="med-in"><span class="med-pop"><span class="med-face"><img src="img/' + p.img + '.webp" alt="" width="900" height="1125" style="object-position:' + o[1] + '"></span></span>' +
+      '<span class="med-tip"><b>' + esc(p.n) + '</b><span>' + w + '</span></span></span></span></a>';
+  }).join('');
+  var orbitEl = $('#orbit-wrap'); void orbitEl.offsetWidth; orbitEl.classList.add('go');
+
+  // the counters
+  $('#rows').innerHTML = CATS.map(function (c) {
+    var list = P.filter(function (p) { return p.c === c.id; }), ws = [].concat.apply([], list.map(function (p) { return p.g; }));
+    return '<li><a class="row" href="#collection-' + c.id + '" data-img="img/' + c.img + '.webp" data-cursor="Open">' +
+      '<span class="row-name"><img src="img/' + c.img + '.webp" alt="" width="900" height="1125">' + c.name + '</span>' +
+      '<span class="row-meta"><b>' + list.length + '</b>pieces<br>' + f3(Math.min.apply(null, ws)) + ' – ' + f3(Math.max.apply(null, ws)) + ' g</span>' +
+      '<span class="row-go" aria-hidden="true"><svg><use href="#arr"/></svg></span></a></li>';
+  }).join('');
+  var fl = $('#float-img'), flImg = fl.querySelector('img'), flOn = false, mx = -999, my = -999, fx = -999, fy = -999;
+  $('#rows').addEventListener('pointerover', function (e) {
+    var r = e.target.closest('.row');
+    if (!r || e.pointerType !== 'mouse') return;
+    if (flImg.getAttribute('src') !== r.dataset.img) flImg.src = r.dataset.img;
+    if (!flOn) { fx = mx; fy = my; }
+    flOn = true; fl.classList.add('on'); kick();
+  });
+  $('#rows').addEventListener('pointerleave', function () { flOn = false; fl.classList.remove('on'); });
+
+  // the journey: vertical scroll drives the track sideways
+  var jr = $('#jr'), jrTrack = $('#jr-track'), jrPanels = $$('.jp', jrTrack), jrSteps = $$('#jr-steps li'), jrBar = $('#jr-bar'), jrFree = true, jrMax = 0;
+  var jrDepth = jrPanels.map(function (p) { return $$('[data-depth]', p); });
+  function layoutJourney() {
+    if (current.v !== 'home') return;
+    jrFree = innerWidth <= 900 || reduce;
+    jr.classList.toggle('free', jrFree);
+    if (jrFree) { jr.style.height = ''; jrTrack.style.transform = ''; return; }
+    jrMax = Math.max(0, jrTrack.scrollWidth - innerWidth);
+    jr.style.height = (jrMax + innerHeight) + 'px';
+    moveJourney();
   }
-  function hsArm() { clearTimeout(hsTimer); if (!hsPaused && current.v === 'home') hsTimer = setTimeout(function () { hsShow(hsI + 1); }, DUR); }
-  bars.forEach(function (b, k) { b.addEventListener('click', function () { hsShow(k); }); });
-  var pauseBtn = $('#hs-pause');
-  function setPaused(p) {
-    hsPaused = p; hs.classList.toggle('paused', p);
-    pauseBtn.setAttribute('aria-label', p ? 'Play slideshow' : 'Pause slideshow');
-    pauseBtn.innerHTML = '<svg><use href="#' + (p ? 'i-play' : 'i-pause') + '"/></svg>';
-    if (p) clearTimeout(hsTimer); else hsShow(hsI + 1);
+  function moveJourney() {
+    if (jrFree || current.v !== 'home') return;
+    var span = jr.offsetHeight - innerHeight, p = span > 0 ? Math.min(1, Math.max(0, -jr.getBoundingClientRect().top / span)) : 0, x = -p * jrMax;
+    jrTrack.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+    jrBar.style.setProperty('--p', p.toFixed(4));
+    var mid = innerWidth / 2, best = 0, bestD = Infinity;
+    jrPanels.forEach(function (pan, i) {
+      var c = pan.offsetLeft + x + pan.offsetWidth / 2, d = Math.abs(c - mid), off = (c - mid) / innerWidth;
+      if (d < bestD) { bestD = d; best = i; }
+      if (Math.abs(off) < 1.5) jrDepth[i].forEach(function (n) { n.style.transform = 'translate3d(' + (off * parseFloat(n.dataset.depth) * 180).toFixed(1) + 'px,0,0)'; });
+    });
+    jrSteps.forEach(function (s, i) { s.classList.toggle('on', i === best); });
   }
-  pauseBtn.addEventListener('click', function () { setPaused(!hsPaused); });
-  hs.style.setProperty('--dur', DUR + 'ms');
-  if (reduce) setPaused(true);
+
+  // the display case: a spotlight follows the pointer over the glass
+  var glass = $('#case-glass');
+  glass.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    var r = glass.getBoundingClientRect();
+    glass.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    glass.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    glass.classList.add('lit');
+  });
+  glass.addEventListener('pointerleave', function () { glass.classList.remove('lit'); });
+
+  // the welcome: the three greetings take turns in gold
+  $$('[data-greet]').forEach(function (g) {
+    var sp = $$('.si, .ta, .en', g), k = 0;
+    sp[0].classList.add('lit');
+    if (!reduce) setInterval(function () { sp[k].classList.remove('lit'); k = (k + 1) % sp.length; sp[k].classList.add('lit'); }, 2600);
+  });
+
+  // the footer signature catches the light under the pointer
+  var sig = $('.foot-sig');
+  $('.foot').addEventListener('pointermove', function (e) {
+    var r = sig.getBoundingClientRect();
+    sig.style.setProperty('--fx', (e.clientX - r.left) + 'px');
+    sig.style.setProperty('--fy', (e.clientY - r.top) + 'px');
+  });
+
+  // film grain, drawn once
+  try {
+    var gc = document.createElement('canvas'), gx; gc.width = gc.height = 180; gx = gc.getContext('2d');
+    var gd = gx.createImageData(180, 180);
+    for (var gi = 0; gi < gd.data.length; gi += 4) { var gv = Math.random() * 255 | 0; gd.data[gi] = gd.data[gi + 1] = gd.data[gi + 2] = gv; gd.data[gi + 3] = 14; }
+    gx.putImageData(gd, 0, 0);
+    document.documentElement.style.setProperty('--grain', 'url(' + gc.toDataURL() + ')');
+  } catch (e) {}
+
+  // the gold ring that follows the pointer, and the frame loop it shares with the floating photo
+  var cur = $('#cur'), curLab = null, cOn = false, cx = -100, cy = -100, raf = 0;
+  var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  document.addEventListener('pointermove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    if (!fine || e.pointerType !== 'mouse') return;
+    if (!cOn) { cOn = true; cx = mx; cy = my; cur.classList.add('on'); }
+    var t = e.target.closest ? e.target.closest('[data-cursor]') : null, lab = t ? t.dataset.cursor : '';
+    if (e.target.closest && e.target.closest('input, select, textarea, .zoom.z')) lab = 'hide';
+    if (lab !== curLab) { curLab = lab; cur.classList.toggle('big', !!lab && lab !== 'hide'); cur.style.opacity = lab === 'hide' ? '0' : ''; cur.firstElementChild.textContent = lab === 'hide' ? '' : lab; }
+    kick();
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', function () { cOn = false; cur.classList.remove('on'); });
+  document.addEventListener('pointerdown', function () { cur.classList.add('down'); });
+  document.addEventListener('pointerup', function () { cur.classList.remove('down'); });
+  function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+  function tick() {
+    raf = 0;
+    var again = false;
+    if (cOn) {
+      cx += (mx - cx) * .22; cy += (my - cy) * .22;
+      cur.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+      again = Math.abs(mx - cx) + Math.abs(my - cy) > .4;
+    }
+    if (flOn) {
+      var px = fx; fx += (mx - fx) * .12; fy += (my - fy) * .12;
+      var tilt = Math.max(-12, Math.min(12, (fx - px) * .7));
+      fl.style.transform = 'translate3d(' + (fx + 36).toFixed(1) + 'px,' + fy.toFixed(1) + 'px,0) translateY(-50%) rotate(' + tilt.toFixed(2) + 'deg)';
+      again = again || Math.abs(mx - fx) + Math.abs(my - fy) > .4;
+    }
+    if (again) kick();
+  }
 
   /* ================= collection ================= */
   var filt = { cat: 'all', weight: 'all', sort: 'featured' };
@@ -1561,16 +1953,17 @@ button { cursor: pointer; }
   }
 
   /* ================= piece page ================= */
-  var zoom = $('#zoom');
-  zoom.addEventListener('pointermove', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    var r = zoom.getBoundingClientRect();
-    zoom.style.setProperty('--zx', ((e.clientX - r.left) / r.width * 100) + '%');
-    zoom.style.setProperty('--zy', ((e.clientY - r.top) / r.height * 100) + '%');
-    zoom.classList.add('z');
-  });
-  zoom.addEventListener('pointerleave', function () { zoom.classList.remove('z'); });
-  zoom.addEventListener('click', function () { zoom.classList.toggle('z'); });
+  var zoom = $('#zoom'), loupe = $('#loupe'), LZ = 2.6;
+  function loupeAt(x, y) {
+    var img = $('#pd-img'), w = zoom.clientWidth, h = zoom.clientHeight, half = loupe.offsetWidth / 2 || 105;
+    zoom.style.setProperty('--lx', x + 'px'); zoom.style.setProperty('--ly', y + 'px');
+    loupe.style.backgroundImage = 'url("' + (img.currentSrc || img.src) + '")';
+    loupe.style.backgroundSize = (w * LZ) + 'px ' + (h * LZ) + 'px';
+    loupe.style.backgroundPosition = (half - x * LZ) + 'px ' + (half - y * LZ) + 'px';
+  }
+  zoom.addEventListener('pointermove', function (e) { if (e.pointerType !== 'mouse') return; var r = zoom.getBoundingClientRect(); loupeAt(e.clientX - r.left, e.clientY - r.top); zoom.classList.add('z'); });
+  zoom.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') zoom.classList.remove('z'); });
+  zoom.addEventListener('pointerup', function (e) { if (e.pointerType === 'mouse') return; var r = zoom.getBoundingClientRect(); loupeAt(e.clientX - r.left, e.clientY - r.top); zoom.classList.toggle('z'); });
   function renderPiece(slug) {
     var p = BY[slug] || BY['stacked-bar-bangle'], c = CAT[p.c];
     $('#pd-img').src = 'img/' + p.img + '.webp'; $('#pd-img').alt = p.alt;
@@ -1583,7 +1976,7 @@ button { cursor: pointer; }
     $('#pd-about').textContent = !p.g.length ? 'This piece’s weight is not printed on its photograph yet. Ask us and we will weigh it for you.' :
       p.g.length > 1 ? 'This piece comes in two designs, weighing ' + f3(p.g[0]) + ' g and ' + f3(p.g[1]) + ' g (' + pawnText(p) + '). Gold is priced by weight, so the price follows the day’s rate for 22KT.' :
       'This piece weighs ' + weightText(p) + ', or ' + pawnText(p) + '. Gold is priced by weight, so the price follows the day’s gold rate for 22KT.';
-    $('#pd-hint').textContent = p.g.length ? 'Move over the photo to look closer. The weight printed on it is the piece’s own.' : 'Move over the photo to look closer.';
+    $('#pd-hint').textContent = p.g.length ? 'Move the loupe over the photo to look closer. The weight printed on it is the piece’s own.' : 'Move the loupe over the photo to look closer.';
     $('#pd-ask').href = waLink('Hello Pushpa Jewellers, I’d like to ask about the ' + p.n.toLowerCase() + (p.g.length ? ' (' + weightText(p) + ', 22KT)' : '') + ' I saw on your website.');
     var ps = $('#pd-save'); ps.dataset.s = p.s;
     $('#pd-more').textContent = c.name.toLowerCase();
@@ -1727,7 +2120,7 @@ button { cursor: pointer; }
     if (r.v === 'piece') renderPiece(r.slug);
     if (r.v === 'saved') renderSaved();
     if (r.why) { $('#v-why').value = r.why; ready.hidden = true; form.hidden = false; }
-    if (r.v === 'home') hsArm(); else clearTimeout(hsTimer);
+    if (r.v === 'home') layoutJourney();
     var target = r.to && document.getElementById(r.to);
     if (target) setTimeout(function () { window.scrollTo({ top: target.getBoundingClientRect().top + scrollY - 70, behavior: reduce ? 'auto' : 'smooth' }); }, animate ? 60 : 0);
     else if (animate && (!same || r.v === 'piece')) window.scrollTo(0, 0);
@@ -1735,9 +2128,20 @@ button { cursor: pointer; }
     $$('.slider').forEach(function (s) { updateProg(s.id); });
     onScroll();
   }
+  var curtain = $('#curtain'), busy = false;
+  function navigate(r) {
+    if ((r.v === current.v && r.v !== 'piece') || reduce) { render(r, true); return; }
+    if (busy) return; busy = true;
+    curtain.style.transition = 'none'; curtain.style.transform = 'translateY(100%)'; curtain.style.visibility = 'visible'; void curtain.offsetWidth;
+    curtain.style.transition = 'transform .55s cubic-bezier(.76,0,.24,1)'; curtain.style.transform = 'translateY(0)';
+    setTimeout(function () {
+      render(r, true);
+      requestAnimationFrame(function () { curtain.style.transform = 'translateY(-100%)'; setTimeout(function () { busy = false; curtain.style.visibility = 'hidden'; }, 620); });
+    }, 580);
+  }
   function go(h) {
     try { if (location.hash !== '#' + h) history.pushState(null, '', '#' + h); } catch (e) {}
-    render(parse(h), true);
+    navigate(parse(h));
   }
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[href^="#"]');
@@ -1746,24 +2150,31 @@ button { cursor: pointer; }
     closeSheet();
     go(a.getAttribute('href').slice(1) || 'home');
   });
-  window.addEventListener('popstate', function () { render(parse(location.hash), true); });
-  window.addEventListener('hashchange', function () { if (parse(location.hash).v !== current.v || location.hash.indexOf('piece-') === 1) render(parse(location.hash), true); });
+  window.addEventListener('popstate', function () { navigate(parse(location.hash)); });
+  window.addEventListener('hashchange', function () { if (!busy && (parse(location.hash).v !== current.v || location.hash.indexOf('piece-') === 1)) navigate(parse(location.hash)); });
 
   /* ================= header, sheet, whatsapp button ================= */
-  var hdr = $('#hdr'), wa = $('#wa');
+  var hdr = $('#hdr'), wa = $('#wa'), orbitWrap = $('#orbit-wrap'), dome = $('#dome'), sTick = false;
   function onScroll() {
     var y = window.scrollY;
     hdr.classList.toggle('solid', y > 40);
     wa.classList.toggle('show', y > 560);
+    if (current.v === 'home' && !reduce) {
+      if (y < 1600) {
+        orbitWrap.style.setProperty('--sr', (y * .045).toFixed(2) + 'deg');
+        dome.style.setProperty('--dy', (y * .3).toFixed(1) + 'px');
+        dome.style.setProperty('--do', Math.max(0, 1 - y / 560).toFixed(3));
+      }
+      moveJourney();
+    }
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', function () { if (sTick) return; sTick = true; requestAnimationFrame(function () { sTick = false; onScroll(); }); }, { passive: true });
   var sheet = $('#sheet'), menuBtn = $('#menu');
   function openSheet() { sheet.hidden = false; document.body.classList.add('locked'); menuBtn.setAttribute('aria-expanded', 'true'); $('#sheet-x').focus(); }
   function closeSheet() { if (sheet.hidden) return; sheet.hidden = true; document.body.classList.remove('locked'); menuBtn.setAttribute('aria-expanded', 'false'); }
   menuBtn.addEventListener('click', openSheet);
   $('#sheet-x').addEventListener('click', closeSheet);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
-  document.addEventListener('visibilitychange', function () { if (document.hidden) clearTimeout(hsTimer); else hsArm(); });
 
   /* ================= copy + toast ================= */
   var toast = $('#toast'), tt;
@@ -1779,6 +2190,6 @@ button { cursor: pointer; }
   $('#yr').textContent = new Date().getFullYear();
   syncSaved(false);
   render(parse(location.hash), false);
-  if (!reduce) hsShow(0);
+  window.addEventListener('load', layoutJourney);
 })();
 </script>
