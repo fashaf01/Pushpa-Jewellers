@@ -1,0 +1,638 @@
+<title>Pushpa Jewellers Negombo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Tenor+Sans&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;500&family=Noto+Serif+Tamil:wght@400;500&display=swap">
+<style>
+/* Layout: a threshold. The page opens on night plum with one photograph and a
+   Sri Lankan moonstone (sandakada pahana) drawn in gold at the doorstep, then
+   steps into pearl rooms: the collection, the bridal set counted in pawn,
+   the 1967 counter, and a trilingual welcome. One look, set deliberately. */
+:root {
+  color-scheme: dark;
+  --night:     #16050e;   /* hero, footer */
+  --plum:      #2a0a1a;   /* bridal room */
+  --ivory:     #f4e9df;   /* text on night and plum */
+  --ivory-2:   #c9b3b9;   /* secondary text on night and plum */
+  --gold:      #d3af5f;   /* metal, rules, labels on dark */
+  --gold-hi:   #ecd497;
+  --gold-line: rgba(211, 175, 95, .28);
+  --pearl:     #f3eae5;   /* the light rooms */
+  --pearl-2:   #ebdfd8;
+  --ink:       #2a0b19;   /* text on pearl */
+  --ink-2:     #6a505a;
+  --gold-deep: #85601f;   /* gold you can read on pearl, 4.8:1 */
+  --rule:      #dccac2;
+  --scrim:     rgba(22, 5, 14, .92);
+
+  --f-display: "Bodoni Moda", "Bodoni 72", Didot, "Didot LT STD", Georgia, serif;
+  --f-sans:    "Tenor Sans", Optima, "Gill Sans", "Segoe UI", sans-serif;
+  --f-si:      "Noto Serif Sinhala", "Iskoola Pota", serif;
+  --f-ta:      "Noto Serif Tamil", "Latha", serif;
+
+  --gutter: clamp(20px, 5vw, 72px);
+  --maxw: 1280px;
+  --room: clamp(80px, 11vw, 168px);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--ivory);
+  font-family: var(--f-sans);
+  font-size: 16.5px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+p, h1, h2, h3, figure, blockquote, dl, dd { margin: 0; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+
+.label {
+  font-family: var(--f-sans);
+  font-size: 11.5px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.5;
+}
+.on-pearl .label { color: var(--gold-deep); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-height: 52px; padding: 0 30px;
+  font-family: var(--f-sans); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; background: var(--gold); color: var(--night); border: 1px solid var(--gold);
+  transition: background .4s var(--ease), border-color .4s var(--ease);
+}
+.btn:hover { background: var(--gold-hi); border-color: var(--gold-hi); }
+.tlink {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--f-sans); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; padding-block: 8px; position: relative;
+}
+.tlink::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: currentColor; opacity: .45; transform-origin: left; transition: opacity .4s var(--ease); }
+.tlink:hover::after { opacity: 1; }
+.tlink svg { width: 22px; height: 10px; transition: transform .4s var(--ease); }
+.tlink:hover svg { transform: translateX(4px); }
+
+/* ---------- header ---------- */
+.hdr {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  padding-top: env(safe-area-inset-top, 0px);
+  transition: background .5s var(--ease), border-color .5s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.hdr.solid { background: var(--scrim); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom-color: var(--gold-line); }
+.hdr-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; min-height: 84px; padding-inline: var(--gutter); max-width: 1440px; margin-inline: auto; }
+.hnav { display: flex; gap: clamp(20px, 2.6vw, 40px); align-items: center; }
+.hnav.right { justify-content: flex-end; }
+.hnav a, .hnav span { font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); }
+.hnav a { opacity: .82; transition: opacity .3s; }
+.hnav a:hover { opacity: 1; }
+.hnav .tel { color: var(--gold); letter-spacing: .14em; font-variant-numeric: tabular-nums; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand .crest { height: 46px; width: auto; }
+.brand .word { height: 34px; width: auto; }
+.menu { display: none; justify-self: end; width: 46px; height: 46px; border: 1px solid var(--gold-line); background: transparent; align-items: center; justify-content: center; }
+.menu svg { width: 20px; height: 20px; color: var(--ivory); }
+.sheet { position: fixed; inset: 0; z-index: 50; background: var(--night); display: grid; align-content: center; justify-items: center; gap: 8px; padding: calc(80px + env(safe-area-inset-top, 0px)) var(--gutter) 40px; }
+.sheet a { font-family: var(--f-display); font-size: 34px; text-decoration: none; color: var(--ivory); padding: 6px 0; }
+.sheet a:hover { color: var(--gold); }
+.sheet .close { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: var(--gutter); width: 46px; height: 46px; background: transparent; border: 1px solid var(--gold-line); display: grid; place-items: center; }
+.sheet .close svg { width: 18px; height: 18px; color: var(--ivory); }
+.sheet .label { margin-top: 24px; }
+
+/* ---------- hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); background: var(--night); position: relative; }
+.hero-copy {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 64px; min-width: 0;
+  padding-top: clamp(140px, 14vw, 196px);
+  padding-left: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  padding-right: clamp(24px, 5vw, 80px);
+}
+.hero-text { display: grid; gap: 28px; max-width: 580px; }
+.hero h1 {
+  font-size: clamp(44px, 5.9vw, 90px);
+  line-height: 1.02;
+  letter-spacing: -.012em;
+  color: var(--ivory);
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero .lede { color: var(--ivory-2); font-size: clamp(16.5px, 1.3vw, 18px); max-width: 44ch; }
+.ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; padding-top: 6px; }
+.moonstone { width: 100%; max-width: 580px; color: var(--gold); }
+.moonstone svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ms { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.2s var(--ease) forwards; animation-delay: var(--d, 0s); }
+.ms-dot { opacity: 0; animation: appear 1s var(--ease) forwards; animation-delay: var(--d, 0s); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes appear { to { opacity: 1; } }
+
+.hero-photo { position: relative; min-height: 600px; overflow: hidden; background: var(--plum); }
+.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; animation: settle 2.6s var(--ease) both; }
+@keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
+.hero-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, var(--night) 0%, rgba(22, 5, 14, 0) 22%), linear-gradient(180deg, rgba(22, 5, 14, .55) 0%, rgba(22, 5, 14, 0) 22%); }
+.hero-photo figcaption { position: absolute; z-index: 2; right: var(--gutter); bottom: 28px; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--ivory); opacity: .8; }
+
+/* ---------- pearl rooms ---------- */
+.on-pearl { background: var(--pearl); color: var(--ink); }
+.room { padding-block: var(--room); }
+
+.statement { display: grid; justify-items: center; text-align: center; gap: 28px; max-width: 900px; margin-inline: auto; }
+.vine { width: min(320px, 80%); height: auto; color: var(--gold-deep); overflow: visible; }
+.statement .label .si { font-family: var(--f-si); letter-spacing: .02em; text-transform: none; font-size: 15px; color: var(--ink); margin-inline: 10px; }
+.say { font-family: var(--f-display); font-size: clamp(26px, 3.1vw, 44px); line-height: 1.3; color: var(--ink); text-wrap: balance; }
+.say em { font-style: italic; color: var(--gold-deep); }
+
+.coll-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 40px; flex-wrap: wrap; margin: clamp(88px, 10vw, 150px) 0 clamp(32px, 4vw, 52px); }
+.coll-head > div { display: grid; gap: 14px; }
+.h2 { font-size: clamp(34px, 4.1vw, 58px); line-height: 1.06; letter-spacing: -.01em; }
+.h2 em { font-style: italic; }
+.on-pearl .h2 em { color: var(--gold-deep); }
+.on-pearl .tlink { color: var(--ink); }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 24px); }
+.tile { display: grid; gap: 18px; align-content: start; text-decoration: none; color: var(--ink); min-width: 0; }
+.tile .ph { aspect-ratio: 3 / 4.3; overflow: hidden; background: var(--pearl-2); }
+.tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease); }
+.tile:hover img { transform: scale(1.045); }
+.tile .cap { display: grid; gap: 4px; }
+.tile h3 { font-size: clamp(22px, 1.9vw, 28px); line-height: 1.1; }
+.tile span { font-size: 14px; color: var(--ink-2); }
+
+/* ---------- bridal room ---------- */
+.bridal { background: var(--plum); color: var(--ivory); }
+.b-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(36px, 7vw, 120px); align-items: center; }
+.b-photo { aspect-ratio: 4 / 5; overflow: hidden; }
+.b-photo img { width: 100%; height: 100%; object-fit: cover; }
+.b-copy { display: grid; gap: 26px; justify-items: start; max-width: 520px; }
+.b-copy .h2 em { color: var(--gold); }
+.b-copy p { color: var(--ivory-2); }
+
+.set { margin-top: clamp(80px, 9vw, 140px); padding-top: clamp(40px, 4vw, 56px); border-top: 1px solid var(--gold-line); }
+.set-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px 60px; align-items: end; margin-bottom: clamp(32px, 4vw, 48px); }
+.set-head .h2 { font-size: clamp(30px, 3.2vw, 44px); }
+.set-head p:not(.label) { color: var(--ivory-2); max-width: 52ch; }
+.set-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(10px, 1.6vw, 22px); align-items: start; }
+.op { font-family: var(--f-display); font-size: clamp(36px, 3.4vw, 54px); color: var(--gold); line-height: 1; padding-top: clamp(80px, 10vw, 132px); }
+.pc { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.pc .ph { aspect-ratio: 4 / 5; overflow: hidden; background: var(--night); }
+.pc img { width: 100%; height: 100%; object-fit: cover; }
+.pc h3 { font-size: 20px; line-height: 1.2; color: var(--ivory); }
+.wt { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.wt dt { color: var(--ivory-2); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding-top: 3px; }
+.wt dd { color: var(--ivory); }
+.total { border: 1px solid var(--gold-line); padding: clamp(20px, 2vw, 28px); display: grid; gap: 14px; align-content: start; aspect-ratio: auto; position: relative; }
+.total::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(211, 175, 95, .14); pointer-events: none; }
+.total .big { font-family: var(--f-display); font-size: clamp(40px, 4vw, 60px); line-height: 1; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
+.total .big small { font-size: .42em; color: var(--ivory); margin-left: 6px; font-style: italic; }
+.total .grams { font-size: 15px; color: var(--ivory); font-variant-numeric: tabular-nums; }
+.total p { font-size: 13.5px; color: var(--ivory-2); line-height: 1.6; }
+.total .tlink { color: var(--gold); justify-self: start; }
+
+/* ---------- 1967 ---------- */
+.h-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(36px, 7vw, 120px); align-items: center; }
+.h-photo { margin: 0; }
+.h-photo .ph { aspect-ratio: 4 / 5; overflow: hidden; background: var(--pearl-2); }
+.h-photo img { width: 100%; height: 100%; object-fit: cover; }
+.h-photo figcaption { margin-top: 14px; font-size: 13.5px; color: var(--ink-2); }
+.h-copy { display: grid; gap: 26px; min-width: 0; }
+.year { font-family: var(--f-display); font-style: italic; font-weight: 400; font-size: clamp(96px, 13vw, 200px); line-height: .82; color: var(--gold-deep); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
+.h-copy p:not(.label):not(.year) { color: var(--ink-2); max-width: 54ch; }
+.h-copy blockquote { font-family: var(--f-display); font-style: italic; font-size: clamp(22px, 2.1vw, 28px); line-height: 1.35; color: var(--ink); padding-top: 24px; border-top: 1px solid var(--rule); }
+.h-copy blockquote span { display: block; margin-top: 8px; font-family: var(--f-sans); font-style: normal; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-deep); }
+
+/* ---------- visit ---------- */
+.visit { background: var(--pearl-2); color: var(--ink); }
+.greet { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 10px clamp(18px, 3vw, 44px); text-align: center; color: var(--ink); }
+.greet .si { font-family: var(--f-si); font-size: clamp(34px, 4.4vw, 62px); line-height: 1.3; }
+.greet .ta { font-family: var(--f-ta); font-size: clamp(30px, 3.8vw, 54px); line-height: 1.3; }
+.greet .en { font-family: var(--f-display); font-style: italic; font-size: clamp(36px, 4.6vw, 66px); line-height: 1.3; color: var(--gold-deep); }
+.greet i { width: 7px; height: 7px; background: var(--gold-deep); transform: rotate(45deg) translateY(-6px); display: inline-block; align-self: center; }
+.visit-sub { text-align: center; color: var(--ink-2); margin: 18px auto 0; max-width: 46ch; }
+.stores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(56px, 7vw, 96px); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.store { display: grid; gap: 10px; padding: clamp(28px, 3vw, 40px) clamp(20px, 2.6vw, 40px); align-content: start; min-width: 0; }
+.store + .store { border-left: 1px solid var(--rule); }
+.store h3 { font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; }
+.store p:not(.label) { color: var(--ink-2); font-size: 15px; }
+.store .tlink { justify-self: start; color: var(--ink); margin-top: 6px; }
+.info { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: clamp(32px, 4vw, 48px); }
+.info > div { display: grid; gap: 8px; align-content: start; padding-inline: clamp(20px, 2.6vw, 40px); }
+.info p:not(.label) { font-size: 15.5px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.info .muted { color: var(--ink-2) !important; font-size: 14px !important; }
+.num { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.nw { white-space: nowrap; }
+.copy { border: 0; background: none; padding: 2px 0; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-deep); border-bottom: 1px solid currentColor; }
+
+/* ---------- footer ---------- */
+.foot { background: var(--night); color: var(--ivory-2); padding-block: clamp(72px, 8vw, 112px) 28px; text-align: center; }
+.foot .lockup { width: 168px; margin-inline: auto; }
+.foot .motto { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--ivory); margin-top: 22px; }
+.fnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 36px; margin-top: 40px; }
+.fnav a { font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); }
+.fnav a:hover { color: var(--gold); }
+.also { margin-top: 28px; font-size: 14px; }
+.legal { margin-top: clamp(56px, 6vw, 80px); padding-top: 22px; border-top: 1px solid var(--gold-line); display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; font-size: 12.5px; letter-spacing: .04em; }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 16px); background: var(--ink); color: var(--pearl); padding: 12px 22px; font-size: 13.5px; letter-spacing: .04em; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), transform .35s var(--ease); z-index: 60; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  .hnav { display: none; }
+  .menu { display: inline-flex; }
+  .hdr-in { grid-template-columns: 1fr auto; }
+  .set-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .op { display: none; }
+  .total { grid-column: 1 / -1; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px 28px; }
+}
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero-photo { order: -1; min-height: 0; aspect-ratio: 4 / 4.6; }
+  .hero-photo::before { background: linear-gradient(0deg, var(--night) 0%, rgba(22, 5, 14, 0) 26%), linear-gradient(180deg, rgba(22, 5, 14, .6) 0%, rgba(22, 5, 14, 0) 26%); }
+  .hero-photo figcaption { bottom: 18px; }
+  .hero-copy { padding: 28px var(--gutter) 0; gap: 48px; }
+  .moonstone { align-self: center; }
+  .b-grid, .h-grid, .set-head { grid-template-columns: minmax(0, 1fr); }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
+  .stores, .info { grid-template-columns: minmax(0, 1fr); }
+  .store + .store { border-left: 0; border-top: 1px solid var(--rule); }
+  .store, .info > div { padding-inline: 0; }
+  .total { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .brand .crest { height: 38px; }
+  .brand .word { height: 27px; }
+  .set-row { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .pc { grid-template-columns: 104px minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 6px 18px; align-items: start; }
+  .pc .ph { grid-row: 1 / 3; }
+  .pc h3 { font-size: 19px; }
+  .greet { flex-direction: column; align-items: center; gap: 0; }
+  .greet i { display: none; }
+  .legal { justify-content: center; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ms { stroke-dashoffset: 0; animation: none; }
+  .ms-dot { opacity: 1; animation: none; }
+  .hero-photo img { animation: none; }
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="arr" viewBox="0 0 22 10"><path d="M0 5h20M16 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 8h18M3 16h18" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+  </defs>
+</svg>
+
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <nav class="hnav" aria-label="Main">
+      <a href="#collection">Collection</a>
+      <a href="#bridal">Bridal</a>
+      <a href="#story">Our story</a>
+    </nav>
+    <a class="brand" href="#top" aria-label="Pushpa Jewellers, home">
+      <img class="crest" src="img/crest.webp" alt="" width="200" height="345">
+      <img class="word" src="img/wordmark.webp" alt="Pushpa Jewellers" width="688" height="240">
+    </a>
+    <div class="hnav right">
+      <a href="#visit">Visit us</a>
+      <span class="tel">031 223 3857</span>
+    </div>
+    <button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<div class="sheet" id="sheet" hidden>
+  <button class="close" id="close" type="button" aria-label="Close menu"><svg><use href="#i-close"/></svg></button>
+  <a href="#collection">Collection</a>
+  <a href="#bridal">Bridal</a>
+  <a href="#story">Our story</a>
+  <a href="#visit">Visit us</a>
+  <p class="label">031 223 3857</p>
+</div>
+
+<main>
+  <!-- HERO: the threshold -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <div class="hero-text">
+        <p class="label">Negombo · Since 1967</p>
+        <h1 id="hero-title">Gold for the moments that become <em>heirlooms</em></h1>
+        <p class="lede">Bridal sets and fine 22KT gold from a Negombo family of jewellers, trusted for almost sixty years.</p>
+        <div class="ctas">
+          <a class="btn" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20a%20bridal%20appointment." target="_blank" rel="noopener">Book a bridal appointment</a>
+          <a class="tlink" href="#collection">View the collection <svg><use href="#arr"/></svg></a>
+        </div>
+      </div>
+      <div class="moonstone" aria-hidden="true"><svg id="moonstone" viewBox="-500 -500 1000 503"></svg></div>
+    </div>
+    <figure class="hero-photo">
+      <img src="img/cat-necklaces.webp" alt="A gold leaf vine necklace worn with a black velvet dress" width="880" height="1100" fetchpriority="high">
+      <figcaption>Leaf vine necklace</figcaption>
+    </figure>
+  </section>
+
+  <!-- THE NAME + THE COLLECTION -->
+  <section class="on-pearl room" id="collection" aria-labelledby="coll-title">
+    <div class="wrap">
+      <div class="statement">
+        <svg class="vine" data-vine viewBox="0 0 320 28" aria-hidden="true"></svg>
+        <p class="label">Pushpa <span class="si" lang="si">පුෂ්ප</span> flower</p>
+        <p class="say">Our name means flower. Since 1967 we have made the gold a family remembers, from a child’s first bangle to the necklace <em>worn on a wedding day.</em></p>
+      </div>
+
+      <div class="coll-head">
+        <div>
+          <p class="label">The collection</p>
+          <h2 class="h2" id="coll-title">Fine gold, <em>piece by piece</em></h2>
+        </div>
+        <a class="tlink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20a%20piece." target="_blank" rel="noopener">Ask about any piece <svg><use href="#arr"/></svg></a>
+      </div>
+      <div class="tiles">
+        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20necklaces." target="_blank" rel="noopener">
+          <div class="ph"><img src="img/hero-bridal.webp" alt="A gold leaf fringe necklace worn with a white saree" width="900" height="1117"></div>
+          <div class="cap"><h3>Necklaces</h3><span>Chains, collars and bridal sets</span></div>
+        </a>
+        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20bangles." target="_blank" rel="noopener">
+          <div class="ph"><img src="img/cat-bangles.webp" alt="A stacked gold bangle set with fine stones" width="900" height="1125"></div>
+          <div class="cap"><h3>Bangles</h3><span>For every day and the wedding day</span></div>
+        </a>
+        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20rings." target="_blank" rel="noopener">
+          <div class="ph"><img src="img/cat-rings.webp" alt="A pair of gold wedding bands on a white stand" width="800" height="1000"></div>
+          <div class="cap"><h3>Rings</h3><span>Wedding, engagement and gifts</span></div>
+        </a>
+        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20pendants." target="_blank" rel="noopener">
+          <div class="ph"><img src="img/cat-pendants.webp" alt="A gold ballerina pendant set with blue stones" width="900" height="1125"></div>
+          <div class="cap"><h3>Pendants</h3><span>Keepsakes to wear close</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIDAL: the set, counted in pawn -->
+  <section class="bridal room" id="bridal" aria-labelledby="bridal-title">
+    <div class="wrap">
+      <div class="b-grid">
+        <figure class="b-photo"><img src="img/cat-bridal.webp" alt="A bride wearing an open gold collar necklace and a branch earring" width="900" height="1125"></figure>
+        <div class="b-copy">
+          <p class="label">Bridal</p>
+          <h2 class="h2" id="bridal-title">Wedding gold, <em>chosen together</em></h2>
+          <p>Whether you marry on the poruwa or in church, bring the saree, the family and a budget. We will set out necklaces, bangles and rings that suit all three, and build the set with you piece by piece.</p>
+          <a class="btn" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20a%20bridal%20appointment." target="_blank" rel="noopener">Book a bridal appointment</a>
+        </div>
+      </div>
+
+      <div class="set">
+        <div class="set-head">
+          <div style="display:grid;gap:14px">
+            <p class="label">A set, by weight</p>
+            <h2 class="h2">Counted in pawn</h2>
+          </div>
+          <p>Families here plan wedding gold in pawn, eight grams to the pawn. Every piece we show carries its weight, so you can see what a set comes to before you visit.</p>
+        </div>
+        <div class="set-row">
+          <article class="pc">
+            <div class="ph"><img src="img/p-red-stone-chain.webp" alt="A gold chain necklace set with oval red stones" width="900" height="1125"></div>
+            <h3>Red stone chain necklace</h3>
+            <dl class="wt"><dt>Weight</dt><dd>12.770 g</dd><dt>Pawn</dt><dd>1.60</dd></dl>
+          </article>
+          <span class="op" aria-hidden="true">+</span>
+          <article class="pc">
+            <div class="ph"><img src="img/p-stacked-bar-bangle.webp" alt="A stacked bar bangle in gold worn with a beige saree" width="900" height="1117"></div>
+            <h3>Stacked bar bangle</h3>
+            <dl class="wt"><dt>Weight</dt><dd>12.470 g</dd><dt>Pawn</dt><dd>1.56</dd></dl>
+          </article>
+          <span class="op" aria-hidden="true">+</span>
+          <article class="pc">
+            <div class="ph"><img src="img/p-five-stone-ring.webp" alt="A fine gold ring set with five small white stones" width="900" height="1117"></div>
+            <h3>Five-stone ring</h3>
+            <dl class="wt"><dt>Weight</dt><dd>1.120 g</dd><dt>Pawn</dt><dd>0.14</dd></dl>
+          </article>
+          <span class="op" aria-hidden="true">=</span>
+          <div class="total">
+            <p class="label">The set, 22KT</p>
+            <p class="big">3.30<small>pawn</small></p>
+            <div style="display:grid;gap:10px">
+              <p class="grams">26.360 g of gold</p>
+              <p>Priced by weight at the day’s gold rate. Call 031 223 3857 for today’s rate per pawn.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1967 -->
+  <section class="on-pearl room" id="story" aria-labelledby="story-title">
+    <div class="wrap h-grid">
+      <figure class="h-photo">
+        <div class="ph"><img src="img/showroom.webp" alt="Inside the Pushpa Jewellers showroom: a jeweller at the counter serving a customer, gold sets in the wall cases behind" width="900" height="1117"></div>
+        <figcaption>At the counter, Pushpa Jewellers, Negombo.</figcaption>
+      </figure>
+      <div class="h-copy">
+        <p class="label">Our story</p>
+        <p class="year" aria-hidden="true">1967</p>
+        <h2 class="h2" id="story-title">The Pride of Negombo</h2>
+        <p>Pushpa Jewellers opened in Negombo in 1967. Today we have three showrooms in Negombo and Katunayake. We still sell honest gold, show the weight of every piece, and look after the families who keep coming back to us.</p>
+        <blockquote>Excellent craftsmanship for generations.<span>Pushpa Jewellers</span></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT: a trilingual welcome -->
+  <section class="visit on-pearl room" id="visit" aria-labelledby="visit-title">
+    <div class="wrap">
+      <h2 class="greet" id="visit-title">
+        <span class="si" lang="si">ආයුබෝවන්</span><i aria-hidden="true"></i>
+        <span class="ta" lang="ta">வணக்கம்</span><i aria-hidden="true"></i>
+        <span class="en">Welcome</span>
+      </h2>
+      <p class="visit-sub">Three showrooms in Negombo and Katunayake. Come in, sit at the counter and take your time.</p>
+
+      <div class="stores">
+        <div class="store">
+          <p class="label">Negombo</p>
+          <h3>67 Greens Road</h3>
+          <p>Our flagship, and the home of Pushpa since 1967.</p>
+          <a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=Pushpa+Jewellers+67+Greens+Road+Negombo" target="_blank" rel="noopener">Directions <svg><use href="#arr"/></svg></a>
+        </div>
+        <div class="store">
+          <p class="label">Negombo</p>
+          <h3>150A Sea Street</h3>
+          <p>Our second showroom in Negombo town.</p>
+          <a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=150A+Sea+Street+Negombo" target="_blank" rel="noopener">Directions <svg><use href="#arr"/></svg></a>
+        </div>
+        <div class="store">
+          <p class="label">Katunayake</p>
+          <h3>8A Averiwatte</h3>
+          <p>Our showroom for Katunayake and the airport area.</p>
+          <a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=8A+Averiwatte+Road+Katunayake" target="_blank" rel="noopener">Directions <svg><use href="#arr"/></svg></a>
+        </div>
+      </div>
+
+      <div class="info">
+        <div>
+          <p class="label">Hours</p>
+          <p>Mon – Sat, <span class="nw">9.15 am – 7.30 pm</span></p>
+          <p>Sunday, <span class="nw">9.15 am – 2.00 pm</span></p>
+          <p class="muted">On Poya days, please call before you come.</p>
+        </div>
+        <div>
+          <p class="label">Call</p>
+          <p class="num"><span>031 223 3857</span><button class="copy" type="button" data-copy="031 223 3857">Copy</button></p>
+          <p class="num"><span>031 222 2404</span><button class="copy" type="button" data-copy="031 222 2404">Copy</button></p>
+        </div>
+        <div>
+          <p class="label">WhatsApp</p>
+          <p class="num"><span>077 777 0203</span><button class="copy" type="button" data-copy="077 777 0203">Copy</button></p>
+          <p><a class="tlink" href="https://wa.me/94777770203" target="_blank" rel="noopener" style="color:var(--ink)">Message us <svg><use href="#arr"/></svg></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <img class="lockup" src="img/lockup.webp" alt="Pushpa Jewellers, since 1967" width="688" height="603">
+    <p class="motto">Forever Quality &amp; Trust</p>
+    <nav class="fnav" aria-label="Footer">
+      <a href="#collection">Collection</a>
+      <a href="#bridal">Bridal</a>
+      <a href="#story">Our story</a>
+      <a href="#visit">Visit us</a>
+      <a href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/pushpajewellerspvtltd/" target="_blank" rel="noopener">Facebook</a>
+    </nav>
+    <p class="also">Also at Pushpa: gold pawning and airline ticketing.</p>
+    <div class="legal"><span>© <span id="yr">2026</span> Pushpa Jewellers (Pvt) Ltd</span><span>67 Greens Road · 150A Sea Street, Negombo · 8A Averiwatte, Katunayake</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function f(n) { return n.toFixed(1); }
+  // a point on the upper half-circle; t runs 0 (right) to PI (left)
+  function P(r, t) { return f(r * Math.cos(t)) + ' ' + f(-r * Math.sin(t)); }
+
+  /* ---------- the moonstone (sandakada pahana), drawn from the centre out ---------- */
+  var ms = document.getElementById('moonstone');
+  var g = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': '1.3', 'stroke-linecap': 'round' });
+  ms.appendChild(g);
+  function delay(r) { return (0.15 + (r / 480) * 1.5).toFixed(2) + 's'; }
+  function line(d, r) { var p = el('path', { d: d, pathLength: 1, class: 'ms' }); p.style.setProperty('--d', delay(r)); g.appendChild(p); }
+  function dot(r, t, size) { var c = el('circle', { cx: f(r * Math.cos(t)), cy: f(-r * Math.sin(t)), r: size, fill: 'currentColor', stroke: 'none', class: 'ms-dot' }); c.style.setProperty('--d', delay(r)); g.appendChild(c); }
+  function arc(r) { line('M' + f(-r) + ' 0 A' + r + ' ' + r + ' 0 0 1 ' + f(r) + ' 0', r); }
+  // petals or flames pointing outward, spread across the half-circle
+  function petals(n, r0, r1, wide, lean, belly) {
+    for (var i = 0; i < n; i++) {
+      var t = (i + .5) / n * Math.PI, s = Math.PI / n * wide, rm = r0 + (r1 - r0) * (belly || .6);
+      line('M' + P(r0, t - s) + ' Q' + P(rm, t - s * 1.15) + ' ' + P(r1, t + s * (lean || 0)) + ' Q' + P(rm, t + s * 1.15) + ' ' + P(r0, t + s), r1);
+    }
+  }
+  // a procession: teardrop figures walking along the arc, as the animals and geese do on the stone
+  function procession(n, r, len, dir) {
+    for (var i = 0; i < n; i++) {
+      var t = (i + .5) / n * Math.PI, x = r * Math.cos(t), y = -r * Math.sin(t);
+      var ang = Math.atan2(Math.cos(t), Math.sin(t)) * 180 / Math.PI + (dir < 0 ? 180 : 0);
+      var p = el('path', { d: 'M' + (-len) + ' 0 C' + (-len * .5) + ' ' + (-len * .62) + ' ' + (len * .45) + ' ' + (-len * .6) + ' ' + len + ' 0 C' + (len * .45) + ' ' + (len * .6) + ' ' + (-len * .5) + ' ' + (len * .62) + ' ' + (-len) + ' 0 M' + (-len * .4) + ' 0 L' + (len * .55) + ' 0', pathLength: 1, class: 'ms', transform: 'translate(' + f(x) + ' ' + f(y) + ') rotate(' + f(ang) + ')' });
+      p.style.setProperty('--d', delay(r));
+      g.appendChild(p);
+      dot(r, (i + 1) / n * Math.PI, 2.2);
+    }
+  }
+  // the creeper (liyavela): a wave around the arc with a curl at each crest
+  function creeper(rc, amp, waves) {
+    var d = '', steps = 360;
+    for (var k = 0; k <= steps; k++) {
+      var t = k / steps * Math.PI, r = rc + amp * Math.sin(t * waves * 2);
+      d += (k ? ' L' : 'M') + P(r, t);
+    }
+    line(d, rc);
+    for (var j = 0; j < waves * 2; j++) {
+      var tc = (j + .25) / (waves * 2) * Math.PI, out = j % 2 === 0 ? 1 : -1;
+      dot(rc + out * (amp + 7), tc + .012, 2.4);
+    }
+  }
+  // centre: the half lotus
+  arc(34); arc(18);
+  for (var i = 1; i < 6; i++) dot(26, i / 6 * Math.PI, 2);
+  petals(7, 34, 118, .92, 0, .7);
+  petals(8, 34, 92, .55, 0, .7);
+  arc(128);
+  petals(26, 132, 168, .9, 0, .6);              // lotus petal band (palapethi)
+  arc(176);
+  procession(20, 202, 15, 1);                   // geese (hansa)
+  arc(228); arc(236);
+  creeper(262, 13, 14);                         // the creeper
+  arc(290);
+  procession(24, 318, 17, -1);                  // the procession of animals
+  arc(346); arc(354);
+  petals(40, 360, 404, .95, .55, .55);          // the flame ring, leaning
+  petals(40, 360, 384, .45, .3, .55);
+  arc(410);
+  line('M-492 0 L492 0', 480);                  // the step it lies before
+
+  /* ---------- small creeper divider ---------- */
+  document.querySelectorAll('[data-vine]').forEach(function (svg) {
+    var vg = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': '1', 'stroke-linecap': 'round' });
+    function side(dir) {
+      var d = 'M' + (160 + dir * 18) + ' 14';
+      for (var x = 18; x <= 150; x += 2) d += ' L' + f(160 + dir * x) + ' ' + f(14 + 5 * Math.sin((x - 18) / 22 * Math.PI) * Math.max(0, 1 - (x - 18) / 150));
+      vg.appendChild(el('path', { d: d }));
+      for (var k = 0; k < 5; k++) {
+        var cx = 160 + dir * (29 + k * 22), up = k % 2 === 0 ? -1 : 1, s = 1 - k * .14;
+        vg.appendChild(el('path', { d: 'M' + f(cx) + ' ' + f(14 + up * 4 * s) + ' q' + f(dir * 4 * s) + ' ' + f(up * 6 * s) + ' ' + f(dir * 9 * s) + ' ' + f(up * 3 * s) + ' q' + f(-dir * 2 * s) + ' ' + f(-up * 3 * s) + ' ' + f(-dir * 4 * s) + ' ' + f(-up * 1 * s) }));
+      }
+    }
+    side(1); side(-1);
+    // half lotus at the centre
+    vg.appendChild(el('path', { d: 'M152 19 Q160 2 168 19 M146 19 Q150 9 158 17 M174 19 Q170 9 162 17 M144 19 L176 19' }));
+    svg.appendChild(vg);
+  });
+
+  /* ---------- header ---------- */
+  var hdr = document.getElementById('hdr');
+  function onScroll() { hdr.classList.toggle('solid', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var menu = document.getElementById('menu'), sheet = document.getElementById('sheet');
+  function setSheet(open) { sheet.hidden = !open; menu.setAttribute('aria-expanded', String(open)); document.body.style.overflow = open ? 'hidden' : ''; }
+  menu.addEventListener('click', function () { setSheet(true); });
+  document.getElementById('close').addEventListener('click', function () { setSheet(false); });
+  sheet.addEventListener('click', function (e) { if (e.target.tagName === 'A') setSheet(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sheet.hidden) setSheet(false); });
+
+  /* ---------- copy a number ---------- */
+  var toast = document.getElementById('toast'), timer;
+  function say(m) { toast.textContent = m; toast.classList.add('show'); clearTimeout(timer); timer = setTimeout(function () { toast.classList.remove('show'); }, 2200); }
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var num = b.dataset.copy;
+      function fallback() { var r = document.createRange(); r.selectNodeContents(b.previousElementSibling); var s = getSelection(); s.removeAllRanges(); s.addRange(r); say('Number selected: ' + num); }
+      try { navigator.clipboard.writeText(num).then(function () { say('Copied ' + num); }, fallback); } catch (e) { fallback(); }
+    });
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
