@@ -4,26 +4,30 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Tenor+Sans&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;500&family=Noto+Serif+Tamil:wght@400;500&display=swap">
 <style>
-/* Layout: a threshold. The page opens on night plum with one photograph and a
+/* Layout: a threshold. The page opens on night plum with the photograph and a
    Sri Lankan moonstone (sandakada pahana) drawn in gold at the doorstep, then
    steps into pearl rooms: the collection, the bridal set counted in pawn,
-   the 1967 counter, and a trilingual welcome. One look, set deliberately. */
+   the 1967 counter, the services and a trilingual welcome.
+   One look, set deliberately; gold is the only accent. */
 :root {
   color-scheme: dark;
-  --night:     #16050e;   /* hero, footer */
-  --plum:      #2a0a1a;   /* bridal room */
-  --ivory:     #f4e9df;   /* text on night and plum */
-  --ivory-2:   #c9b3b9;   /* secondary text on night and plum */
-  --gold:      #d3af5f;   /* metal, rules, labels on dark */
+  --night:     #16050e;
+  --night-2:   #1d0814;
+  --plum:      #2a0a1a;
+  --ivory:     #f4e9df;
+  --ivory-2:   #c9b3b9;
+  --gold:      #d3af5f;
   --gold-hi:   #ecd497;
   --gold-line: rgba(211, 175, 95, .28);
-  --pearl:     #f3eae5;   /* the light rooms */
+  --gold-grad: linear-gradient(120deg, #f2dc9c 0%, #d6b264 34%, #b98c3c 58%, #e8cd86 100%);
+  --pearl:     #f3eae5;
   --pearl-2:   #ebdfd8;
-  --ink:       #2a0b19;   /* text on pearl */
+  --pearl-3:   #e2d3cb;
+  --ink:       #2a0b19;
   --ink-2:     #6a505a;
-  --gold-deep: #85601f;   /* gold you can read on pearl, 4.8:1 */
+  --gold-deep: #85601f;
   --rule:      #dccac2;
-  --scrim:     rgba(22, 5, 14, .92);
+  --scrim:     rgba(22, 5, 14, .93);
 
   --f-display: "Bodoni Moda", "Bodoni 72", Didot, "Didot LT STD", Georgia, serif;
   --f-sans:    "Tenor Sans", Optima, "Gill Sans", "Segoe UI", sans-serif;
@@ -32,194 +36,312 @@
 
   --gutter: clamp(20px, 5vw, 72px);
   --maxw: 1280px;
-  --room: clamp(80px, 11vw, 168px);
+  --edge: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  --room: clamp(88px, 11vw, 168px);
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--night);
-  color: var(--ivory);
-  font-family: var(--f-sans);
-  font-size: 16.5px;
-  line-height: 1.75;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+body { margin: 0; background: var(--night); color: var(--ivory); font-family: var(--f-sans); font-size: 16.5px; line-height: 1.75; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body.locked { overflow: hidden; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
-p, h1, h2, h3, figure, blockquote, dl, dd { margin: 0; }
+p, h1, h2, h3, figure, blockquote, dl, dd, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
 h1, h2, h3 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; }
 button { font: inherit; color: inherit; cursor: pointer; }
 :focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+.on-pearl :focus-visible { outline-color: var(--gold-deep); }
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.nw { white-space: nowrap; }
 
-.label {
-  font-family: var(--f-sans);
-  font-size: 11.5px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  line-height: 1.5;
-}
+/* ---------- type ---------- */
+.label { display: inline-flex; align-items: center; gap: 14px; font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); line-height: 1.5; }
+.label.rule::before { content: ""; width: 34px; height: 1px; background: currentColor; opacity: .7; }
 .on-pearl .label { color: var(--gold-deep); }
+.h2 { font-size: clamp(34px, 4.1vw, 60px); line-height: 1.05; letter-spacing: -.012em; }
+.h2 em { font-style: italic; color: var(--gold); }
+.on-pearl .h2 em { color: var(--gold-deep); }
+.lede { color: var(--ivory-2); max-width: 50ch; }
+.on-pearl .lede { color: var(--ink-2); }
 
+/* ---------- buttons ---------- */
 .btn {
+  position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  min-height: 52px; padding: 0 30px;
-  font-family: var(--f-sans); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
-  text-decoration: none; background: var(--gold); color: var(--night); border: 1px solid var(--gold);
-  transition: background .4s var(--ease), border-color .4s var(--ease);
+  min-height: 54px; padding: 0 32px; border: 0;
+  font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
+  background: var(--gold-grad); background-size: 140% 100%; background-position: 0 0; color: var(--night);
+  box-shadow: inset 0 0 0 1px rgba(255, 244, 214, .35), 0 14px 30px -18px rgba(211, 175, 95, .55);
+  transition: background-position .8s var(--ease), box-shadow .5s var(--ease);
 }
-.btn:hover { background: var(--gold-hi); border-color: var(--gold-hi); }
-.tlink {
-  display: inline-flex; align-items: center; gap: 12px;
-  font-family: var(--f-sans); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
-  text-decoration: none; padding-block: 8px; position: relative;
-}
-.tlink::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: currentColor; opacity: .45; transform-origin: left; transition: opacity .4s var(--ease); }
-.tlink:hover::after { opacity: 1; }
-.tlink svg { width: 22px; height: 10px; transition: transform .4s var(--ease); }
-.tlink:hover svg { transform: translateX(4px); }
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, transparent 30%, rgba(255, 252, 240, .75) 50%, transparent 70%); transform: translateX(-120%); transition: transform 1.1s var(--ease); }
+.btn:hover::before { transform: translateX(120%); }
+.btn:hover { background-position: 100% 0; box-shadow: inset 0 0 0 1px rgba(255, 244, 214, .5), 0 18px 36px -16px rgba(211, 175, 95, .7); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn.line { background: transparent; color: var(--ivory); box-shadow: inset 0 0 0 1px var(--gold-line); }
+.btn.line:hover { box-shadow: inset 0 0 0 1px var(--gold); color: var(--gold-hi); }
+.on-pearl .btn.line { color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+.on-pearl .btn.line:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.tlink { display: inline-flex; align-items: center; gap: 12px; position: relative; font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; padding-block: 8px; white-space: nowrap; background: none; border: 0; }
+.tlink::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: currentColor; opacity: .35; transform-origin: right; transition: transform .6s var(--ease), opacity .4s; }
+.tlink:hover::after { opacity: 1; animation: underline .8s var(--ease); }
+@keyframes underline { 0% { transform: scaleX(1); transform-origin: right; } 45% { transform: scaleX(0); transform-origin: right; } 46% { transform-origin: left; } 100% { transform: scaleX(1); transform-origin: left; } }
+.tlink svg { width: 22px; height: 10px; transition: transform .45s var(--ease); }
+.tlink:hover svg { transform: translateX(5px); }
+.on-pearl .tlink { color: var(--ink); }
+.rnd { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--rule); background: transparent; color: var(--ink); display: grid; place-items: center; transition: background .4s, color .4s, border-color .4s, opacity .4s; }
+.rnd:hover:not(:disabled) { background: var(--ink); color: var(--pearl); border-color: var(--ink); }
+.rnd:disabled { opacity: .3; cursor: default; }
+.rnd svg { width: 16px; height: 16px; }
 
 /* ---------- header ---------- */
-.hdr {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
-  padding-top: env(safe-area-inset-top, 0px);
-  transition: background .5s var(--ease), border-color .5s var(--ease);
-  border-bottom: 1px solid transparent;
-}
-.hdr.solid { background: var(--scrim); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom-color: var(--gold-line); }
-.hdr-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; min-height: 84px; padding-inline: var(--gutter); max-width: 1440px; margin-inline: auto; }
-.hnav { display: flex; gap: clamp(20px, 2.6vw, 40px); align-items: center; }
+.hdr { position: fixed; top: 0; left: 0; right: 0; z-index: 40; padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid transparent; transition: background .6s var(--ease), border-color .6s var(--ease); animation: hdrIn 1.2s var(--ease) .1s both; }
+@keyframes hdrIn { from { opacity: 0; transform: translateY(-12px); } }
+.hdr.solid { background: var(--scrim); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom-color: var(--gold-line); }
+.hdr-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; min-height: 88px; max-width: 1480px; margin-inline: auto; padding-inline: var(--gutter); transition: min-height .5s var(--ease); }
+.hdr.solid .hdr-in { min-height: 70px; }
+.hnav { display: flex; align-items: center; gap: clamp(20px, 2.4vw, 38px); }
 .hnav.right { justify-content: flex-end; }
-.hnav a, .hnav span { font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); }
-.hnav a { opacity: .82; transition: opacity .3s; }
-.hnav a:hover { opacity: 1; }
-.hnav .tel { color: var(--gold); letter-spacing: .14em; font-variant-numeric: tabular-nums; }
+.hnav a.nl { position: relative; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); opacity: .82; padding-block: 8px; transition: opacity .3s; }
+.hnav a.nl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
+.hnav a.nl:hover { opacity: 1; }
+.hnav a.nl:hover::after { transform: scaleX(1); transform-origin: left; }
+.hcta { min-height: 42px; padding: 0 20px; font-size: 10.5px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.brand .crest { height: 46px; width: auto; }
-.brand .word { height: 34px; width: auto; }
+.brand .crest { height: 48px; width: auto; transition: height .5s var(--ease); }
+.brand .word { height: 35px; width: auto; transition: height .5s var(--ease); }
+.hdr.solid .brand .crest { height: 40px; }
+.hdr.solid .brand .word { height: 29px; }
 .menu { display: none; justify-self: end; width: 46px; height: 46px; border: 1px solid var(--gold-line); background: transparent; align-items: center; justify-content: center; }
 .menu svg { width: 20px; height: 20px; color: var(--ivory); }
-.sheet { position: fixed; inset: 0; z-index: 50; background: var(--night); display: grid; align-content: center; justify-items: center; gap: 8px; padding: calc(80px + env(safe-area-inset-top, 0px)) var(--gutter) 40px; }
-.sheet a { font-family: var(--f-display); font-size: 34px; text-decoration: none; color: var(--ivory); padding: 6px 0; }
-.sheet a:hover { color: var(--gold); }
+.sheet { position: fixed; inset: 0; z-index: 60; background: var(--night); display: grid; align-content: center; justify-items: center; gap: 6px; padding: calc(80px + env(safe-area-inset-top, 0px)) var(--gutter) 40px; text-align: center; }
+.sheet nav { display: grid; gap: 4px; justify-items: center; }
+.sheet nav a { font-family: var(--f-display); font-size: clamp(32px, 9vw, 42px); text-decoration: none; color: var(--ivory); animation: fadeUp .7s var(--ease) both; animation-delay: calc(var(--i) * 60ms); }
+.sheet nav a:hover { color: var(--gold); }
 .sheet .close { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: var(--gutter); width: 46px; height: 46px; background: transparent; border: 1px solid var(--gold-line); display: grid; place-items: center; }
 .sheet .close svg { width: 18px; height: 18px; color: var(--ivory); }
-.sheet .label { margin-top: 24px; }
+.sheet .label { margin-top: 28px; }
 
 /* ---------- hero ---------- */
-.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); background: var(--night); position: relative; }
-.hero-copy {
-  display: flex; flex-direction: column; justify-content: space-between; gap: 64px; min-width: 0;
-  padding-top: clamp(140px, 14vw, 196px);
-  padding-left: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
-  padding-right: clamp(24px, 5vw, 80px);
-}
-.hero-text { display: grid; gap: 28px; max-width: 580px; }
-.hero h1 {
-  font-size: clamp(44px, 5.9vw, 90px);
-  line-height: 1.02;
-  letter-spacing: -.012em;
-  color: var(--ivory);
-}
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); background: radial-gradient(ellipse 70% 60% at 20% 100%, rgba(211, 175, 95, .09), rgba(211, 175, 95, 0) 70%), var(--night); }
+.hero-copy { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 64px; min-width: 0; padding-top: clamp(150px, 14vw, 200px); padding-left: var(--edge); padding-right: clamp(24px, 5vw, 80px); }
+.hero-side { position: absolute; left: calc(var(--edge) / 2 - 8px); top: 50%; transform: translate(-50%, -50%) rotate(180deg); writing-mode: vertical-rl; font-size: 10px; letter-spacing: .38em; text-transform: uppercase; color: var(--ivory-2); opacity: .6; white-space: nowrap; }
+.hero-text { display: grid; gap: 30px; max-width: 590px; }
+.hero h1 { font-size: clamp(46px, 6vw, 92px); line-height: 1.01; letter-spacing: -.014em; color: var(--ivory); }
 .hero h1 em { font-style: italic; color: var(--gold); }
-.hero .lede { color: var(--ivory-2); font-size: clamp(16.5px, 1.3vw, 18px); max-width: 44ch; }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1 em .m > span { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-right: .06em; }
+}
+.m { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .08em .14em 0; margin: 0 -.08em -.14em 0; }
+.m > span { display: inline-block; animation: wordUp 1.3s var(--ease) both; animation-delay: calc(.3s + var(--i) * 80ms); }
+@keyframes wordUp { from { transform: translateY(112%); } }
+.fade { animation: fadeUp 1.1s var(--ease) both; animation-delay: var(--d, 0s); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } }
+.hero .lede { font-size: clamp(16.5px, 1.3vw, 18px); max-width: 44ch; }
 .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; padding-top: 6px; }
-.moonstone { width: 100%; max-width: 580px; color: var(--gold); }
+.moonstone { width: 100%; max-width: 590px; color: var(--gold); }
 .moonstone svg { width: 100%; height: auto; display: block; overflow: visible; }
-.ms { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.2s var(--ease) forwards; animation-delay: var(--d, 0s); }
+.ms { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.4s var(--ease) forwards; animation-delay: var(--d, 0s); }
 .ms-dot { opacity: 0; animation: appear 1s var(--ease) forwards; animation-delay: var(--d, 0s); }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes appear { to { opacity: 1; } }
 
-.hero-photo { position: relative; min-height: 600px; overflow: hidden; background: var(--plum); }
-.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; animation: settle 2.6s var(--ease) both; }
-@keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
-.hero-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(90deg, var(--night) 0%, rgba(22, 5, 14, 0) 22%), linear-gradient(180deg, rgba(22, 5, 14, .55) 0%, rgba(22, 5, 14, 0) 22%); }
-.hero-photo figcaption { position: absolute; z-index: 2; right: var(--gutter); bottom: 28px; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--ivory); opacity: .8; }
+.hs { position: relative; min-height: 660px; overflow: hidden; background: var(--plum); }
+.hs-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.8s var(--ease); }
+.hs-slide.on { opacity: 1; }
+.hs-slide img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; transform: scale(1.08); transition: transform 9s cubic-bezier(.25, .1, .25, 1); }
+.hs-slide.on img { transform: scale(1); }
+.hs::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, var(--night) 0%, rgba(22, 5, 14, 0) 20%), linear-gradient(180deg, rgba(22, 5, 14, .55) 0%, rgba(22, 5, 14, 0) 20%), linear-gradient(0deg, rgba(22, 5, 14, .5) 0%, rgba(22, 5, 14, 0) 34%); }
+.corner { position: absolute; z-index: 2; width: 28px; height: 28px; border: 0 solid var(--gold); opacity: .8; pointer-events: none; animation: appear 1.2s var(--ease) 1.4s both; }
+.corner.tl { top: 112px; left: 40px; border-top-width: 1px; border-left-width: 1px; }
+.corner.tr { top: 112px; right: var(--gutter); border-top-width: 1px; border-right-width: 1px; }
+.corner.bl { bottom: 32px; left: 40px; border-bottom-width: 1px; border-left-width: 1px; }
+.corner.br { bottom: 32px; right: var(--gutter); border-bottom-width: 1px; border-right-width: 1px; }
+.hs-card { position: absolute; z-index: 3; left: 64px; top: clamp(420px, calc(100vh - 300px), 820px); width: min(330px, calc(100% - 88px)); padding: 22px 24px 20px; background: rgba(22, 5, 14, .72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--gold-line); display: grid; gap: 6px; animation: fadeUp 1.2s var(--ease) 1.2s both; }
+.hs-card .n { display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; }
+.hs-card .t { font-family: var(--f-display); font-size: 25px; line-height: 1.15; }
+.hs-card .w { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ivory-2); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.hs-card .w i { position: relative; width: 22px; height: 1px; background: var(--gold); flex: none; }
+.hs-card .w i::before { content: ""; position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+.hs-card .tlink { justify-self: start; color: var(--ivory); margin-top: 6px; }
+.hs-card.swap .t, .hs-card.swap .w { animation: fadeUp .9s var(--ease) both; }
+.hs-bars { display: flex; gap: 6px; margin-top: 10px; }
+.hs-bar { flex: 1; height: 18px; border: 0; padding: 0; background: none; position: relative; }
+.hs-bar::before, .hs-bar i { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 1px; background: rgba(244, 233, 223, .25); }
+.hs-bar i { right: auto; width: 0; background: var(--gold); }
+.hs-bar.on i { animation: fill var(--dur, 7s) linear forwards; }
+.hs-bar.done i { width: 100%; }
+.hs:hover .hs-bar.on i { animation-play-state: paused; }
+@keyframes fill { to { width: 100%; } }
+
+.promise { grid-column: 1 / -1; position: relative; z-index: 3; border-top: 1px solid var(--gold-line); background: var(--night); }
+.promise ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1480px; margin-inline: auto; }
+.promise li { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 24px 18px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--ivory-2); text-align: left; }
+.promise li + li { border-left: 1px solid var(--gold-line); }
+.promise svg { width: 28px; height: 28px; color: var(--gold); flex: none; }
 
 /* ---------- pearl rooms ---------- */
-.on-pearl { background: var(--pearl); color: var(--ink); }
+.on-pearl { background: var(--pearl); color: var(--ink); color-scheme: light; }
+.on-pearl.p2 { background: var(--pearl-2); }
 .room { padding-block: var(--room); }
+.room.tight { padding-block: clamp(72px, 8vw, 120px); }
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 40px; flex-wrap: wrap; margin-bottom: clamp(36px, 4vw, 56px); }
+.sec-head > div:first-child { display: grid; gap: 16px; max-width: 760px; }
+.sec-head.center { flex-direction: column; align-items: center; text-align: center; }
+.sec-head.center > div:first-child { justify-items: center; }
+.nav2 { display: flex; gap: 10px; }
 
-.statement { display: grid; justify-items: center; text-align: center; gap: 28px; max-width: 900px; margin-inline: auto; }
+.statement { display: grid; justify-items: center; text-align: center; gap: 28px; max-width: 940px; margin-inline: auto; }
 .vine { width: min(320px, 80%); height: auto; color: var(--gold-deep); overflow: visible; }
-.statement .label .si { font-family: var(--f-si); letter-spacing: .02em; text-transform: none; font-size: 15px; color: var(--ink); margin-inline: 10px; }
-.say { font-family: var(--f-display); font-size: clamp(26px, 3.1vw, 44px); line-height: 1.3; color: var(--ink); text-wrap: balance; }
+.vine path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.vine.pre path { stroke-dashoffset: 1; }
+.vine path { transition: stroke-dashoffset 2.4s var(--ease); }
+.statement .si { font-family: var(--f-si); letter-spacing: .02em; text-transform: none; font-size: 15px; color: var(--ink); margin-inline: 6px; }
+.say { font-family: var(--f-display); font-size: clamp(27px, 3.1vw, 46px); line-height: 1.3; color: var(--ink); text-wrap: balance; }
 .say em { font-style: italic; color: var(--gold-deep); }
+.sign { display: flex; align-items: center; gap: 16px; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--ink-2); }
+.sign img { height: 44px; width: auto; }
 
-.coll-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 40px; flex-wrap: wrap; margin: clamp(88px, 10vw, 150px) 0 clamp(32px, 4vw, 52px); }
-.coll-head > div { display: grid; gap: 14px; }
-.h2 { font-size: clamp(34px, 4.1vw, 58px); line-height: 1.06; letter-spacing: -.01em; }
-.h2 em { font-style: italic; }
-.on-pearl .h2 em { color: var(--gold-deep); }
-.on-pearl .tlink { color: var(--ink); }
-.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 24px); }
+/* scroll-in: content is always visible; it only rises into place */
+.rv { transition: transform 1.3s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); }
+.rv.pre { transform: translateY(34px); }
+.ph { position: relative; overflow: hidden; }
+.ph img { transition: transform 1.4s var(--ease); }
+.rv-img img { transition: transform 2s var(--ease), clip-path 1.6s var(--ease); clip-path: inset(0); }
+.rv-img.pre img { transform: scale(1.1); clip-path: inset(5% 5% 5% 5%); }
+
+/* collection tiles */
+.coll-head { margin-top: clamp(96px, 11vw, 160px); }
+.tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(12px, 1.5vw, 22px); }
 .tile { display: grid; gap: 18px; align-content: start; text-decoration: none; color: var(--ink); min-width: 0; }
-.tile .ph { aspect-ratio: 3 / 4.3; overflow: hidden; background: var(--pearl-2); }
-.tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease); }
-.tile:hover img { transform: scale(1.045); }
+.tile .ph { aspect-ratio: 3 / 4.4; background: var(--pearl-3); }
+.tile img { width: 100%; height: 100%; object-fit: cover; }
+.tile:hover img { transform: scale(1.06); }
+.tile .ph::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(22, 5, 14, .5), rgba(22, 5, 14, 0) 45%); opacity: 0; transition: opacity .7s var(--ease); }
+.tile .ph::after { content: ""; position: absolute; inset: 12px; z-index: 2; border: 1px solid rgba(255, 244, 222, .75); opacity: 0; transform: scale(1.04); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.tile .go { position: absolute; z-index: 3; left: 0; right: 0; bottom: 26px; text-align: center; font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: #fff8ef; opacity: 0; transform: translateY(8px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.tile:hover .ph::before, .tile:hover .ph::after, .tile:hover .go { opacity: 1; transform: none; }
 .tile .cap { display: grid; gap: 4px; }
-.tile h3 { font-size: clamp(22px, 1.9vw, 28px); line-height: 1.1; }
-.tile span { font-size: 14px; color: var(--ink-2); }
+.tile h3 { font-size: clamp(22px, 1.8vw, 27px); line-height: 1.1; }
+.tile .cap span { font-size: 13.5px; color: var(--ink-2); }
+
+/* new in: the slider */
+.slider { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge); scrollbar-width: none; cursor: grab; }
+.slider::-webkit-scrollbar { display: none; }
+.slider.drag { cursor: grabbing; scroll-snap-type: none; }
+.slider.drag a { pointer-events: none; }
+.sl-track { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(236px, 21vw, 300px); gap: clamp(14px, 1.6vw, 24px); width: max-content; padding-inline: var(--edge); }
+.sl-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 40px; }
+.sl-prog { position: relative; height: 1px; background: var(--rule); flex: 1; max-width: 460px; }
+.sl-prog i { position: absolute; left: 0; top: -1px; height: 3px; background: var(--gold-grad); width: var(--p, 25%); transition: width .4s var(--ease), left .4s var(--ease); }
+.card { display: grid; gap: 18px; align-content: start; min-width: 0; scroll-snap-align: start; text-decoration: none; color: var(--ink); }
+.card .ph { aspect-ratio: 4 / 5; background: var(--pearl-3); }
+.card img { width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; user-select: none; }
+.card:hover img { transform: scale(1.06); }
+.card .ph::after { content: "Ask about this piece"; position: absolute; left: 50%; bottom: 18px; transform: translate(-50%, 10px); white-space: nowrap; padding: 10px 18px; background: rgba(252, 248, 244, .94); color: var(--ink); font-size: 10px; letter-spacing: .26em; text-transform: uppercase; opacity: 0; transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.card:hover .ph::after { opacity: 1; transform: translate(-50%, 0); }
+.card-b { display: grid; gap: 6px; }
+.card-k { font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-deep); }
+.card h3 { font-size: 21px; line-height: 1.18; }
+.co { display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+.co i { position: relative; width: 18px; height: 1px; background: var(--gold-deep); flex: none; transition: width .6s var(--ease); }
+.co i::before { content: ""; position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--gold-deep); }
+.card:hover .co i { width: 32px; }
+.co b { font-weight: 400; color: var(--ink); }
 
 /* ---------- bridal room ---------- */
-.bridal { background: var(--plum); color: var(--ivory); }
-.b-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(36px, 7vw, 120px); align-items: center; }
-.b-photo { aspect-ratio: 4 / 5; overflow: hidden; }
+.bridal { position: relative; background: radial-gradient(ellipse 60% 50% at 85% 0%, rgba(211, 175, 95, .1), rgba(211, 175, 95, 0) 70%), var(--plum); color: var(--ivory); overflow: hidden; }
+.b-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
+.framed { position: relative; }
+.framed::before { content: ""; position: absolute; inset: -16px 16px 16px -16px; border: 1px solid var(--gold-line); pointer-events: none; }
+.b-photo { aspect-ratio: 4 / 5; }
 .b-photo img { width: 100%; height: 100%; object-fit: cover; }
-.b-copy { display: grid; gap: 26px; justify-items: start; max-width: 520px; }
-.b-copy .h2 em { color: var(--gold); }
-.b-copy p { color: var(--ivory-2); }
-
-.set { margin-top: clamp(80px, 9vw, 140px); padding-top: clamp(40px, 4vw, 56px); border-top: 1px solid var(--gold-line); }
-.set-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px 60px; align-items: end; margin-bottom: clamp(32px, 4vw, 48px); }
-.set-head .h2 { font-size: clamp(30px, 3.2vw, 44px); }
+.b-copy { display: grid; gap: 28px; justify-items: start; max-width: 520px; }
+.b-copy p:not(.label) { color: var(--ivory-2); }
+.b-steps { display: grid; width: 100%; border-top: 1px solid var(--gold-line); }
+.b-steps li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding-block: 16px; border-bottom: 1px solid var(--gold-line); font-size: 15px; color: var(--ivory-2); }
+.b-steps b { font-family: var(--f-display); font-style: italic; font-weight: 400; color: var(--gold); font-size: 19px; line-height: 1.4; }
+.b-steps strong { display: block; font-family: var(--f-display); font-weight: 400; font-size: 20px; color: var(--ivory); line-height: 1.3; }
+.set { margin-top: clamp(88px, 9vw, 140px); padding-top: clamp(44px, 4vw, 60px); border-top: 1px solid var(--gold-line); }
+.set-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px 60px; align-items: end; margin-bottom: clamp(36px, 4vw, 52px); }
 .set-head p:not(.label) { color: var(--ivory-2); max-width: 52ch; }
 .set-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(10px, 1.6vw, 22px); align-items: start; }
 .op { font-family: var(--f-display); font-size: clamp(36px, 3.4vw, 54px); color: var(--gold); line-height: 1; padding-top: clamp(80px, 10vw, 132px); }
-.pc { display: grid; gap: 14px; align-content: start; min-width: 0; }
-.pc .ph { aspect-ratio: 4 / 5; overflow: hidden; background: var(--night); }
+.pc { display: grid; gap: 14px; align-content: start; min-width: 0; text-decoration: none; color: var(--ivory); }
+.pc .ph { aspect-ratio: 4 / 5; background: var(--night); }
 .pc img { width: 100%; height: 100%; object-fit: cover; }
-.pc h3 { font-size: 20px; line-height: 1.2; color: var(--ivory); }
+.pc:hover img { transform: scale(1.05); }
+.pc h3 { font-size: 20px; line-height: 1.2; }
 .wt { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; font-size: 14px; font-variant-numeric: tabular-nums; }
 .wt dt { color: var(--ivory-2); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding-top: 3px; }
-.wt dd { color: var(--ivory); }
-.total { border: 1px solid var(--gold-line); padding: clamp(20px, 2vw, 28px); display: grid; gap: 14px; align-content: start; aspect-ratio: auto; position: relative; }
-.total::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(211, 175, 95, .14); pointer-events: none; }
-.total .big { font-family: var(--f-display); font-size: clamp(40px, 4vw, 60px); line-height: 1; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
-.total .big small { font-size: .42em; color: var(--ivory); margin-left: 6px; font-style: italic; }
-.total .grams { font-size: 15px; color: var(--ivory); font-variant-numeric: tabular-nums; }
-.total p { font-size: 13.5px; color: var(--ivory-2); line-height: 1.6; }
-.total .tlink { color: var(--gold); justify-self: start; }
+.total { position: relative; border: 1px solid var(--gold-line); padding: clamp(22px, 2.2vw, 30px); display: grid; gap: 14px; align-content: start; background: rgba(22, 5, 14, .35); }
+.total::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(211, 175, 95, .14); pointer-events: none; }
+.big { font-family: var(--f-display); font-size: clamp(46px, 4.4vw, 66px); line-height: 1; background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; font-variant-numeric: lining-nums tabular-nums; }
+.big small { font-size: .42em; margin-left: 6px; font-style: italic; color: var(--ivory); -webkit-text-fill-color: var(--ivory); }
+.total .grams { font-size: 15px; font-variant-numeric: tabular-nums; }
+.total p.fine { font-size: 13.5px; color: var(--ivory-2); line-height: 1.6; }
 
 /* ---------- 1967 ---------- */
-.h-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(36px, 7vw, 120px); align-items: center; }
+.h-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
 .h-photo { margin: 0; }
-.h-photo .ph { aspect-ratio: 4 / 5; overflow: hidden; background: var(--pearl-2); }
+.h-photo .ph { aspect-ratio: 4 / 5; background: var(--pearl-3); }
 .h-photo img { width: 100%; height: 100%; object-fit: cover; }
-.h-photo figcaption { margin-top: 14px; font-size: 13.5px; color: var(--ink-2); }
-.h-copy { display: grid; gap: 26px; min-width: 0; }
-.year { font-family: var(--f-display); font-style: italic; font-weight: 400; font-size: clamp(96px, 13vw, 200px); line-height: .82; color: var(--gold-deep); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
+.h-photo figcaption { margin-top: 26px; font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 12px; }
+.h-photo figcaption::before { content: ""; width: 24px; height: 1px; background: var(--gold-deep); }
+.on-pearl .framed::before { border-color: rgba(133, 96, 31, .35); }
+.h-copy { display: grid; gap: 26px; min-width: 0; justify-items: start; }
+.year { font-family: var(--f-display); font-style: italic; font-size: clamp(110px, 14vw, 216px); line-height: .8; letter-spacing: -.02em; padding-right: .08em; font-variant-numeric: lining-nums;
+  background: linear-gradient(110deg, #6b4a14 0%, var(--gold-deep) 36%, #d0a856 50%, var(--gold-deep) 64%, #6b4a14 100%); background-size: 260% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: glint 8s ease-in-out infinite; }
+@keyframes glint { 0%, 30% { background-position: 100% 0; } 70%, 100% { background-position: 0 0; } }
 .h-copy p:not(.label):not(.year) { color: var(--ink-2); max-width: 54ch; }
-.h-copy blockquote { font-family: var(--f-display); font-style: italic; font-size: clamp(22px, 2.1vw, 28px); line-height: 1.35; color: var(--ink); padding-top: 24px; border-top: 1px solid var(--rule); }
+.h-copy blockquote { font-family: var(--f-display); font-style: italic; font-size: clamp(22px, 2.1vw, 28px); line-height: 1.35; color: var(--ink); padding-top: 24px; border-top: 1px solid var(--rule); width: 100%; }
 .h-copy blockquote span { display: block; margin-top: 8px; font-family: var(--f-sans); font-style: normal; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-deep); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; border-top: 1px solid var(--rule); }
+.facts > div { padding: 20px 16px 0 0; display: grid; gap: 4px; }
+.facts > div + div { padding-left: 20px; border-left: 1px solid var(--rule); }
+.facts b { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 2.6vw, 38px); line-height: 1; color: var(--ink); font-variant-numeric: lining-nums; }
+.facts span { font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+
+/* ---------- at the counter ---------- */
+.counter { background: var(--night); }
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--gold-line); border-bottom: 1px solid var(--gold-line); }
+.trio > div { position: relative; display: grid; gap: 16px; justify-items: start; align-content: start; padding: clamp(32px, 3.4vw, 52px) clamp(22px, 2.8vw, 44px); transition: background .6s var(--ease); }
+.trio > div + div { border-left: 1px solid var(--gold-line); }
+.trio > div:hover { background: rgba(211, 175, 95, .05); }
+.trio svg { width: 44px; height: 44px; color: var(--gold); }
+.trio h3 { font-size: clamp(26px, 2.2vw, 32px); line-height: 1.1; }
+.trio p { color: var(--ivory-2); font-size: 15px; }
+.trio .tlink { color: var(--gold); margin-top: 4px; }
+
+/* ---------- instagram ---------- */
+.reels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); max-width: 1020px; margin-inline: auto; }
+.reel { display: grid; gap: 16px; text-decoration: none; color: var(--ink); min-width: 0; text-align: center; }
+.reel .ph { aspect-ratio: 9 / 14; background: var(--pearl-3); }
+.reel img { width: 100%; height: 100%; object-fit: cover; }
+.reel:hover img { transform: scale(1.05); }
+.reel .play { position: absolute; z-index: 2; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%; border: 1px solid rgba(255, 248, 236, .85); background: rgba(22, 5, 14, .25); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); display: grid; place-items: center; color: #fff8ef; transition: transform .6s var(--ease), background .4s; }
+.reel:hover .play { transform: scale(1.1); background: rgba(22, 5, 14, .45); }
+.reel .play svg { width: 16px; height: 16px; margin-left: 3px; }
+.reel h3 { font-size: 21px; }
 
 /* ---------- visit ---------- */
 .visit { background: var(--pearl-2); color: var(--ink); }
 .greet { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 10px clamp(18px, 3vw, 44px); text-align: center; color: var(--ink); }
+.greet > span { transition: color 1.2s var(--ease); }
 .greet .si { font-family: var(--f-si); font-size: clamp(34px, 4.4vw, 62px); line-height: 1.3; }
 .greet .ta { font-family: var(--f-ta); font-size: clamp(30px, 3.8vw, 54px); line-height: 1.3; }
-.greet .en { font-family: var(--f-display); font-style: italic; font-size: clamp(36px, 4.6vw, 66px); line-height: 1.3; color: var(--gold-deep); }
+.greet .en { font-family: var(--f-display); font-style: italic; font-size: clamp(36px, 4.6vw, 66px); line-height: 1.3; }
+.greet > span.lit { color: var(--gold-deep); }
 .greet i { width: 7px; height: 7px; background: var(--gold-deep); transform: rotate(45deg) translateY(-6px); display: inline-block; align-self: center; }
 .visit-sub { text-align: center; color: var(--ink-2); margin: 18px auto 0; max-width: 46ch; }
 .stores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(56px, 7vw, 96px); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.store { display: grid; gap: 10px; padding: clamp(28px, 3vw, 40px) clamp(20px, 2.6vw, 40px); align-content: start; min-width: 0; }
+.store { position: relative; display: grid; gap: 10px; padding: clamp(28px, 3vw, 42px) clamp(20px, 2.6vw, 40px); align-content: start; min-width: 0; transition: background .6s var(--ease); }
+.store::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--gold-deep); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+.store:hover { background: rgba(255, 251, 247, .5); }
+.store:hover::after { transform: scaleX(1); }
 .store + .store { border-left: 1px solid var(--rule); }
 .store h3 { font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; }
 .store p:not(.label) { color: var(--ink-2); font-size: 15px; }
@@ -229,88 +351,125 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .info p:not(.label) { font-size: 15.5px; color: var(--ink); font-variant-numeric: tabular-nums; }
 .info .muted { color: var(--ink-2) !important; font-size: 14px !important; }
 .num { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.nw { white-space: nowrap; }
 .copy { border: 0; background: none; padding: 2px 0; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-deep); border-bottom: 1px solid currentColor; }
+.visit-cta { display: flex; justify-content: center; gap: 16px 28px; flex-wrap: wrap; align-items: center; margin-top: clamp(48px, 5vw, 64px); }
 
 /* ---------- footer ---------- */
-.foot { background: var(--night); color: var(--ivory-2); padding-block: clamp(72px, 8vw, 112px) 28px; text-align: center; }
-.foot .lockup { width: 168px; margin-inline: auto; }
-.foot .motto { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--ivory); margin-top: 22px; }
-.fnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 36px; margin-top: 40px; }
-.fnav a { font-size: 11.5px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); }
+.foot { position: relative; overflow: hidden; background: var(--night); color: var(--ivory-2); padding-top: clamp(80px, 9vw, 120px); text-align: center; }
+.foot .lockup { width: 170px; margin-inline: auto; }
+.foot .motto { font-family: var(--f-display); font-style: italic; font-size: 23px; color: var(--ivory); margin-top: 22px; }
+.fnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 36px; margin-top: 44px; }
+.fnav a { position: relative; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; text-decoration: none; color: var(--ivory); transition: color .3s; }
 .fnav a:hover { color: var(--gold); }
-.also { margin-top: 28px; font-size: 14px; }
-.legal { margin-top: clamp(56px, 6vw, 80px); padding-top: 22px; border-top: 1px solid var(--gold-line); display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; font-size: 12.5px; letter-spacing: .04em; }
+.also { margin-top: 30px; font-size: 14px; }
+.legal { margin-top: clamp(56px, 6vw, 80px); padding-block: 22px; border-top: 1px solid var(--gold-line); display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; font-size: 12.5px; letter-spacing: .04em; }
+.foot-sig { margin: 0 0 -4.6vw; font-family: var(--f-display); font-size: 20vw; line-height: .8; letter-spacing: -.02em; white-space: nowrap; user-select: none; color: transparent; -webkit-text-stroke: 1px rgba(211, 175, 95, .2); }
 
-.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 16px); background: var(--ink); color: var(--pearl); padding: 12px 22px; font-size: 13.5px; letter-spacing: .04em; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), transform .35s var(--ease); z-index: 60; }
+.wa { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 35; display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 22px 0 18px; border-radius: 26px; background: var(--gold-grad); color: var(--night); text-decoration: none; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; box-shadow: 0 16px 34px -14px rgba(0, 0, 0, .55); transform: translateY(130px); transition: transform .8s var(--ease); }
+.wa.show { transform: none; }
+.wa svg { width: 20px; height: 20px; }
+.toast { position: fixed; left: 50%; bottom: calc(88px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 16px); background: var(--ink); color: var(--pearl); padding: 12px 22px; font-size: 13.5px; letter-spacing: .04em; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), transform .35s var(--ease); z-index: 70; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- responsive ---------- */
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .hnav { display: none; }
   .menu { display: inline-flex; }
   .hdr-in { grid-template-columns: 1fr auto; }
+  .tiles { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(200px, 30%); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); }
+  .tiles .tile { scroll-snap-align: start; }
   .set-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .op { display: none; }
   .total { grid-column: 1 / -1; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px 28px; }
+  .promise ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .promise li:nth-child(3) { border-left: 0; }
+  .promise li:nth-child(n + 3) { border-top: 1px solid var(--gold-line); }
+  .hero-side { display: none; }
 }
 @media (max-width: 900px) {
   .hero { grid-template-columns: minmax(0, 1fr); }
-  .hero-photo { order: -1; min-height: 0; aspect-ratio: 4 / 4.6; }
-  .hero-photo::before { background: linear-gradient(0deg, var(--night) 0%, rgba(22, 5, 14, 0) 26%), linear-gradient(180deg, rgba(22, 5, 14, .6) 0%, rgba(22, 5, 14, 0) 26%); }
-  .hero-photo figcaption { bottom: 18px; }
-  .hero-copy { padding: 28px var(--gutter) 0; gap: 48px; }
+  .hs { order: -1; min-height: 0; aspect-ratio: 4 / 4.9; }
+  .hs::before { background: linear-gradient(0deg, var(--night) 0%, rgba(22, 5, 14, 0) 30%), linear-gradient(180deg, rgba(22, 5, 14, .6) 0%, rgba(22, 5, 14, 0) 24%); }
+  .corner { display: none; }
+  .hs-card { left: var(--gutter); right: var(--gutter); width: auto; top: auto; bottom: 20px; padding: 16px 18px; }
+  .hs-card .t { font-size: 21px; }
+  .hs-card .tlink { display: none; }
+  .hero-copy { padding: 34px var(--gutter) 0; gap: 48px; }
   .moonstone { align-self: center; }
   .b-grid, .h-grid, .set-head { grid-template-columns: minmax(0, 1fr); }
-  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
-  .stores, .info { grid-template-columns: minmax(0, 1fr); }
-  .store + .store { border-left: 0; border-top: 1px solid var(--rule); }
+  .framed::before { inset: -10px 10px 10px -10px; }
+  .stores, .info, .trio { grid-template-columns: minmax(0, 1fr); }
+  .store + .store, .trio > div + div { border-left: 0; border-top: 1px solid var(--rule); }
+  .trio > div + div { border-top-color: var(--gold-line); }
   .store, .info > div { padding-inline: 0; }
   .total { grid-template-columns: minmax(0, 1fr); }
+  .reels { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 64%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  .reel { scroll-snap-align: start; }
 }
 @media (max-width: 560px) {
   body { font-size: 16px; }
-  .brand .crest { height: 38px; }
-  .brand .word { height: 27px; }
+  .brand .crest, .hdr.solid .brand .crest { height: 36px; }
+  .brand .word, .hdr.solid .brand .word { height: 26px; }
+  .promise li { justify-content: flex-start; padding: 18px 14px; font-size: 10px; letter-spacing: .18em; gap: 10px; }
+  .promise svg { width: 22px; height: 22px; }
+  .tiles { grid-auto-columns: 62%; }
   .set-row { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .pc { grid-template-columns: 104px minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 6px 18px; align-items: start; }
   .pc .ph { grid-row: 1 / 3; }
   .pc h3 { font-size: 19px; }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .facts > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); padding-top: 16px; }
+  .facts > div { padding-bottom: 16px; }
   .greet { flex-direction: column; align-items: center; gap: 0; }
   .greet i { display: none; }
   .legal { justify-content: center; text-align: center; }
+  .wa span { display: none; }
+  .wa { padding: 0; width: 52px; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .ms { stroke-dashoffset: 0; animation: none; }
-  .ms-dot { opacity: 1; animation: none; }
-  .hero-photo img { animation: none; }
-  *, *::before, *::after { transition: none !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .ms { stroke-dashoffset: 0; }
+  .ms-dot { opacity: 1; }
+  .rv.pre, .rv-img.pre img, .hs-slide img { transform: none; clip-path: none; }
+  .vine.pre path { stroke-dashoffset: 0; }
 }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <symbol id="arr" viewBox="0 0 22 10"><path d="M0 5h20M16 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+    <symbol id="i-l" viewBox="0 0 16 16"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-r" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 8h18M3 16h18" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 16 16"><path d="M3 2l11 6-11 6z" fill="currentColor"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1 1 8.6 19z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 10.5c.5 1.6 1.9 3 3.5 3.5l1.2-1 1.8.8v1.4c-3.3.3-7-3.4-6.7-6.7h1.4l.8 1.8z" fill="currentColor"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 48 48"><path d="M24 8v32M14 40h20M8 14h32M24 8l-1.5 6h3zM8 14l-5 12h10zM40 14l-5 12h10zM3 26a5 4 0 0 0 10 0M35 26a5 4 0 0 0 10 0" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lotus" viewBox="0 0 48 48"><path d="M24 12c-4 6-4 14 0 22 4-8 4-16 0-22zM24 34c-6-2-12-8-13-16 7 1 12 6 13 16zM24 34c6-2 12-8 13-16-7 1-12 6-13 16zM6 34h36" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-door" viewBox="0 0 48 48"><path d="M12 42V12a12 12 0 0 1 24 0v30M6 42h36M24 22v4" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 48 48"><rect x="8" y="11" width="32" height="29" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 20h32M17 6v9M31 6v9M18 30l4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 48 48"><path d="M10 38l4-12 18-18 8 8-18 18zM14 26l8 8M28 12l8 8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 48 48"><path d="M6 28l36-14-3 7-13 4-6 11-4-1 2-9-8 3-2 4-3-1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-vault" viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="28" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M24 17v3M24 28v3M17 24h3M28 24h3M12 38v4M36 38v4" stroke="currentColor" stroke-width="1.2"/></symbol>
   </defs>
 </svg>
 
 <header class="hdr" id="hdr">
   <div class="hdr-in">
     <nav class="hnav" aria-label="Main">
-      <a href="#collection">Collection</a>
-      <a href="#bridal">Bridal</a>
-      <a href="#story">Our story</a>
+      <a class="nl" href="#collection">Collection</a>
+      <a class="nl" href="#bridal">Bridal</a>
+      <a class="nl" href="#story">Our story</a>
+      <a class="nl" href="#counter">Services</a>
     </nav>
     <a class="brand" href="#top" aria-label="Pushpa Jewellers, home">
       <img class="crest" src="img/crest.webp" alt="" width="200" height="345">
       <img class="word" src="img/wordmark.webp" alt="Pushpa Jewellers" width="688" height="240">
     </a>
     <div class="hnav right">
-      <a href="#visit">Visit us</a>
-      <span class="tel">031 223 3857</span>
+      <a class="nl" href="#visit">Visit us</a>
+      <a class="btn line hcta" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book a visit</a>
     </div>
     <button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
   </div>
@@ -318,10 +477,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 <div class="sheet" id="sheet" hidden>
   <button class="close" id="close" type="button" aria-label="Close menu"><svg><use href="#i-close"/></svg></button>
-  <a href="#collection">Collection</a>
-  <a href="#bridal">Bridal</a>
-  <a href="#story">Our story</a>
-  <a href="#visit">Visit us</a>
+  <nav aria-label="Menu">
+    <a href="#collection" style="--i:0">Collection</a>
+    <a href="#bridal" style="--i:1">Bridal</a>
+    <a href="#story" style="--i:2">Our story</a>
+    <a href="#counter" style="--i:3">Services</a>
+    <a href="#visit" style="--i:4">Visit us</a>
+  </nav>
   <p class="label">031 223 3857</p>
 </div>
 
@@ -329,21 +491,43 @@ button { font: inherit; color: inherit; cursor: pointer; }
   <!-- HERO: the threshold -->
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="hero-copy">
+      <p class="hero-side" aria-hidden="true">Pushpa Jewellers · Negombo · Sri Lanka</p>
       <div class="hero-text">
-        <p class="label">Negombo · Since 1967</p>
-        <h1 id="hero-title">Gold for the moments that become <em>heirlooms</em></h1>
-        <p class="lede">Bridal sets and fine 22KT gold from a Negombo family of jewellers, trusted for almost sixty years.</p>
-        <div class="ctas">
+        <p class="label rule fade" style="--d:.15s">Negombo · Since 1967</p>
+        <h1 id="hero-title"><span class="m"><span style="--i:0">Gold</span></span> <span class="m"><span style="--i:1">for</span></span> <span class="m"><span style="--i:2">the</span></span> <span class="m"><span style="--i:3">moments</span></span> <span class="m"><span style="--i:4">that</span></span> <span class="m"><span style="--i:5">become</span></span> <em><span class="m"><span style="--i:6">heirlooms</span></span></em></h1>
+        <p class="lede fade" style="--d:.95s">Bridal sets and fine 22KT gold from a Negombo family of jewellers, trusted for almost sixty years.</p>
+        <div class="ctas fade" style="--d:1.1s">
           <a class="btn" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20a%20bridal%20appointment." target="_blank" rel="noopener">Book a bridal appointment</a>
           <a class="tlink" href="#collection">View the collection <svg><use href="#arr"/></svg></a>
         </div>
       </div>
       <div class="moonstone" aria-hidden="true"><svg id="moonstone" viewBox="-500 -500 1000 503"></svg></div>
     </div>
-    <figure class="hero-photo">
-      <img src="img/cat-necklaces.webp" alt="A gold leaf vine necklace worn with a black velvet dress" width="880" height="1100" fetchpriority="high">
-      <figcaption>Leaf vine necklace</figcaption>
-    </figure>
+    <div class="hs" id="hs" role="region" aria-roledescription="carousel" aria-label="Pieces from the showroom">
+      <figure class="hs-slide on"><img src="img/cat-necklaces.webp" alt="A gold leaf vine necklace worn with a black velvet dress" width="880" height="1100" fetchpriority="high"></figure>
+      <figure class="hs-slide"><img src="img/hero-bridal.webp" alt="A gold leaf fringe necklace worn with a white saree" width="900" height="1117"></figure>
+      <figure class="hs-slide"><img src="img/hero-everyday.webp" alt="A fine gold drop pendant worn with a white top" width="900" height="1042"></figure>
+      <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span><span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+      <div class="hs-card" id="hs-card">
+        <p class="n"><span id="hs-n">01 / 03</span><span>22KT</span></p>
+        <p class="t" id="hs-t">Leaf vine necklace</p>
+        <p class="w" id="hs-w"><i></i><span>Ask us for the weight</span></p>
+        <a class="tlink" id="hs-ask" href="https://wa.me/94777770203" target="_blank" rel="noopener">Ask about this piece <svg><use href="#arr"/></svg></a>
+        <div class="hs-bars" role="group" aria-label="Choose a piece">
+          <button class="hs-bar on" type="button" aria-label="Piece 1"><i></i></button>
+          <button class="hs-bar" type="button" aria-label="Piece 2"><i></i></button>
+          <button class="hs-bar" type="button" aria-label="Piece 3"><i></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="promise">
+      <ul>
+        <li><svg><use href="#i-scale"/></svg>The weight on every piece</li>
+        <li><svg><use href="#i-lotus"/></svg>22KT and 18KT gold</li>
+        <li><svg><use href="#i-cal"/></svg>Bridal appointments</li>
+        <li><svg><use href="#i-door"/></svg>Three showrooms since 1967</li>
+      </ul>
+    </div>
   </section>
 
   <!-- THE NAME + THE COLLECTION -->
@@ -352,83 +536,66 @@ button { font: inherit; color: inherit; cursor: pointer; }
       <div class="statement">
         <svg class="vine" data-vine viewBox="0 0 320 28" aria-hidden="true"></svg>
         <p class="label">Pushpa <span class="si" lang="si">පුෂ්ප</span> flower</p>
-        <p class="say">Our name means flower. Since 1967 we have made the gold a family remembers, from a child’s first bangle to the necklace <em>worn on a wedding day.</em></p>
+        <p class="say rv">Our name means flower. Since 1967 we have made the gold a family remembers, from a child’s first bangle to the necklace <em>worn on a wedding day.</em></p>
+        <p class="sign rv" style="--i:1"><img src="img/crest.webp" alt="" width="200" height="345">The Pushpa family, Negombo</p>
       </div>
 
-      <div class="coll-head">
-        <div>
-          <p class="label">The collection</p>
-          <h2 class="h2" id="coll-title">Fine gold, <em>piece by piece</em></h2>
-        </div>
+      <div class="sec-head coll-head">
+        <div><p class="label rule">The collection</p><h2 class="h2" id="coll-title">Fine gold, <em>piece by piece</em></h2></div>
         <a class="tlink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20a%20piece." target="_blank" rel="noopener">Ask about any piece <svg><use href="#arr"/></svg></a>
       </div>
-      <div class="tiles">
-        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20necklaces." target="_blank" rel="noopener">
-          <div class="ph"><img src="img/hero-bridal.webp" alt="A gold leaf fringe necklace worn with a white saree" width="900" height="1117"></div>
-          <div class="cap"><h3>Necklaces</h3><span>Chains, collars and bridal sets</span></div>
-        </a>
-        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20bangles." target="_blank" rel="noopener">
-          <div class="ph"><img src="img/cat-bangles.webp" alt="A stacked gold bangle set with fine stones" width="900" height="1125"></div>
-          <div class="cap"><h3>Bangles</h3><span>For every day and the wedding day</span></div>
-        </a>
-        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20rings." target="_blank" rel="noopener">
-          <div class="ph"><img src="img/cat-rings.webp" alt="A pair of gold wedding bands on a white stand" width="800" height="1000"></div>
-          <div class="cap"><h3>Rings</h3><span>Wedding, engagement and gifts</span></div>
-        </a>
-        <a class="tile" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20see%20your%20pendants." target="_blank" rel="noopener">
-          <div class="ph"><img src="img/cat-pendants.webp" alt="A gold ballerina pendant set with blue stones" width="900" height="1125"></div>
-          <div class="cap"><h3>Pendants</h3><span>Keepsakes to wear close</span></div>
-        </a>
+      <div class="tiles" id="tiles"></div>
+    </div>
+  </section>
+
+  <!-- NEW IN -->
+  <section class="on-pearl p2 room tight" aria-labelledby="new-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="label rule">New in 22KT gold</p><h2 class="h2" id="new-title">From the showroom, <em>this season</em></h2></div>
+        <div class="nav2"><button class="rnd" type="button" data-dir="-1" aria-label="Previous pieces"><svg><use href="#i-l"/></svg></button><button class="rnd" type="button" data-dir="1" aria-label="Next pieces"><svg><use href="#i-r"/></svg></button></div>
       </div>
     </div>
+    <div class="slider" id="slider" tabindex="0" aria-label="New pieces, scrollable"><div class="sl-track" id="track"></div></div>
+    <div class="wrap"><div class="sl-foot"><div class="sl-prog"><i id="prog"></i></div><p class="label" style="color:var(--ink-2)">Every piece shows its weight in grams and pawn</p></div></div>
   </section>
 
   <!-- BRIDAL: the set, counted in pawn -->
   <section class="bridal room" id="bridal" aria-labelledby="bridal-title">
     <div class="wrap">
       <div class="b-grid">
-        <figure class="b-photo"><img src="img/cat-bridal.webp" alt="A bride wearing an open gold collar necklace and a branch earring" width="900" height="1125"></figure>
+        <div class="framed"><figure class="b-photo ph rv-img"><img src="img/cat-bridal.webp" alt="A bride wearing an open gold collar necklace and a branch earring" width="900" height="1125"></figure></div>
         <div class="b-copy">
-          <p class="label">Bridal</p>
+          <p class="label rule">Bridal</p>
           <h2 class="h2" id="bridal-title">Wedding gold, <em>chosen together</em></h2>
           <p>Whether you marry on the poruwa or in church, bring the saree, the family and a budget. We will set out necklaces, bangles and rings that suit all three, and build the set with you piece by piece.</p>
+          <ol class="b-steps" style="list-style:none;padding:0;margin:0">
+            <li><b>i.</b><span><strong>Book a time</strong>Tell us the date and how many of you are coming.</span></li>
+            <li><b>ii.</b><span><strong>Try the sets</strong>Necklace, earrings and bangles together, each with its weight shown.</span></li>
+            <li><b>iii.</b><span><strong>Make it yours</strong>Change a length, add a pendant or have a piece made to your design.</span></li>
+          </ol>
           <a class="btn" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20a%20bridal%20appointment." target="_blank" rel="noopener">Book a bridal appointment</a>
         </div>
       </div>
 
       <div class="set">
         <div class="set-head">
-          <div style="display:grid;gap:14px">
-            <p class="label">A set, by weight</p>
-            <h2 class="h2">Counted in pawn</h2>
-          </div>
+          <div style="display:grid;gap:16px"><p class="label rule">A set, by weight</p><h2 class="h2">Counted in <em>pawn</em></h2></div>
           <p>Families here plan wedding gold in pawn, eight grams to the pawn. Every piece we show carries its weight, so you can see what a set comes to before you visit.</p>
         </div>
         <div class="set-row">
-          <article class="pc">
-            <div class="ph"><img src="img/p-red-stone-chain.webp" alt="A gold chain necklace set with oval red stones" width="900" height="1125"></div>
-            <h3>Red stone chain necklace</h3>
-            <dl class="wt"><dt>Weight</dt><dd>12.770 g</dd><dt>Pawn</dt><dd>1.60</dd></dl>
-          </article>
+          <a class="pc rv" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20the%20red%20stone%20chain%20necklace%20(12.770%20g)." target="_blank" rel="noopener"><div class="ph"><img src="img/p-red-stone-chain.webp" alt="A gold chain necklace set with oval red stones" width="900" height="1125"></div><h3>Red stone chain necklace</h3><dl class="wt"><dt>Weight</dt><dd>12.770 g</dd><dt>Pawn</dt><dd>1.60</dd></dl></a>
           <span class="op" aria-hidden="true">+</span>
-          <article class="pc">
-            <div class="ph"><img src="img/p-stacked-bar-bangle.webp" alt="A stacked bar bangle in gold worn with a beige saree" width="900" height="1117"></div>
-            <h3>Stacked bar bangle</h3>
-            <dl class="wt"><dt>Weight</dt><dd>12.470 g</dd><dt>Pawn</dt><dd>1.56</dd></dl>
-          </article>
+          <a class="pc rv" style="--i:1" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20the%20stacked%20bar%20bangle%20(12.470%20g)." target="_blank" rel="noopener"><div class="ph"><img src="img/p-stacked-bar-bangle.webp" alt="A stacked bar bangle in gold worn with a beige saree" width="900" height="1117"></div><h3>Stacked bar bangle</h3><dl class="wt"><dt>Weight</dt><dd>12.470 g</dd><dt>Pawn</dt><dd>1.56</dd></dl></a>
           <span class="op" aria-hidden="true">+</span>
-          <article class="pc">
-            <div class="ph"><img src="img/p-five-stone-ring.webp" alt="A fine gold ring set with five small white stones" width="900" height="1117"></div>
-            <h3>Five-stone ring</h3>
-            <dl class="wt"><dt>Weight</dt><dd>1.120 g</dd><dt>Pawn</dt><dd>0.14</dd></dl>
-          </article>
+          <a class="pc rv" style="--i:2" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20the%20five-stone%20ring%20(1.120%20g)." target="_blank" rel="noopener"><div class="ph"><img src="img/p-five-stone-ring.webp" alt="A fine gold ring set with five small white stones" width="900" height="1117"></div><h3>Five-stone ring</h3><dl class="wt"><dt>Weight</dt><dd>1.120 g</dd><dt>Pawn</dt><dd>0.14</dd></dl></a>
           <span class="op" aria-hidden="true">=</span>
-          <div class="total">
+          <div class="total rv" style="--i:3">
             <p class="label">The set, 22KT</p>
-            <p class="big">3.30<small>pawn</small></p>
+            <p class="big"><span data-count="3.30" data-dp="2">3.30</span><small>pawn</small></p>
             <div style="display:grid;gap:10px">
-              <p class="grams">26.360 g of gold</p>
-              <p>Priced by weight at the day’s gold rate. Call 031 223 3857 for today’s rate per pawn.</p>
+              <p class="grams"><span data-count="26.360" data-dp="3">26.360</span> g of gold</p>
+              <p class="fine">Priced by weight at the day’s gold rate. Call 031 223 3857 for today’s rate per pawn.</p>
             </div>
           </div>
         </div>
@@ -440,15 +607,47 @@ button { font: inherit; color: inherit; cursor: pointer; }
   <section class="on-pearl room" id="story" aria-labelledby="story-title">
     <div class="wrap h-grid">
       <figure class="h-photo">
-        <div class="ph"><img src="img/showroom.webp" alt="Inside the Pushpa Jewellers showroom: a jeweller at the counter serving a customer, gold sets in the wall cases behind" width="900" height="1117"></div>
+        <div class="framed"><div class="ph rv-img"><img src="img/showroom.webp" alt="Inside the Pushpa Jewellers showroom: a jeweller at the counter serving a customer, gold sets in the wall cases behind" width="900" height="1117"></div></div>
         <figcaption>At the counter, Pushpa Jewellers, Negombo.</figcaption>
       </figure>
       <div class="h-copy">
-        <p class="label">Our story</p>
+        <p class="label rule">Our story</p>
         <p class="year" aria-hidden="true">1967</p>
-        <h2 class="h2" id="story-title">The Pride of Negombo</h2>
-        <p>Pushpa Jewellers opened in Negombo in 1967. Today we have three showrooms in Negombo and Katunayake. We still sell honest gold, show the weight of every piece, and look after the families who keep coming back to us.</p>
-        <blockquote>Excellent craftsmanship for generations.<span>Pushpa Jewellers</span></blockquote>
+        <h2 class="h2 rv" id="story-title">The Pride <em>of Negombo</em></h2>
+        <p class="rv" style="--i:1">Pushpa Jewellers opened in Negombo in 1967. Today we have three showrooms in Negombo and Katunayake. We still sell honest gold, show the weight of every piece, and look after the families who keep coming back to us.</p>
+        <blockquote class="rv" style="--i:2">Excellent craftsmanship for generations.<span>Pushpa Jewellers</span></blockquote>
+        <div class="facts rv" style="--i:3">
+          <div><b>1967</b><span>Our first counter opens in Negombo</span></div>
+          <div><b>3</b><span>Showrooms in Negombo and Katunayake</span></div>
+          <div><b>22KT</b><span>Gold for bridal and everyday pieces</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AT THE COUNTER -->
+  <section class="counter room" id="counter" aria-labelledby="counter-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="label rule">At the counter</p><h2 class="h2" id="counter-title">More than <em>a jewellery shop</em></h2></div>
+        <p class="lede" style="max-width:40ch">Everything is arranged at the counter, with the people you buy your gold from.</p>
+      </div>
+      <div class="trio">
+        <div class="rv"><svg><use href="#i-pen"/></svg><h3>Made to order</h3><p>Bring a sketch, a photograph or an old piece you love, and we will make it for you in 22KT or 18KT gold.</p><a class="tlink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20a%20made-to-order%20piece." target="_blank" rel="noopener">Start an order <svg><use href="#arr"/></svg></a></div>
+        <div class="rv" style="--i:1"><svg><use href="#i-vault"/></svg><h3>Gold pawning</h3><p>Pawn your gold with a jeweller who knows its worth, and take it home again when you redeem it. Bring the gold and your national identity card.</p><a class="tlink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20gold%20pawning." target="_blank" rel="noopener">Ask about pawning <svg><use href="#arr"/></svg></a></div>
+        <div class="rv" style="--i:2"><svg><use href="#i-plane"/></svg><h3>Airline ticketing</h3><p>Flying for work, to see family or for a wedding abroad? Book your tickets at Pushpa.</p><a class="tlink" href="#visit">Visit a showroom <svg><use href="#arr"/></svg></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section class="on-pearl room tight" aria-labelledby="ig-title">
+    <div class="wrap">
+      <div class="sec-head center"><div><p class="label">@pushpajewellers_official</p><h2 class="h2" id="ig-title">From the counter, <em>on Instagram</em></h2></div></div>
+      <div class="reels">
+        <a class="reel rv" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-purity.webp" alt="A jeweller holding a gold sovereign" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>What 22KT means</h3></a>
+        <a class="reel rv" style="--i:1" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-colour.webp" alt="A customer trying on gemstone jewellery in the showroom" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>Finding your colour</h3></a>
+        <a class="reel rv" style="--i:2" href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener"><div class="ph"><img src="img/reel-collection.webp" alt="A customer showing rings and a gold necklace" width="640" height="1138"><span class="play"><svg><use href="#i-play"/></svg></span></div><h3>New in the showroom</h3></a>
       </div>
     </div>
   </section>
@@ -456,27 +655,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
   <!-- VISIT: a trilingual welcome -->
   <section class="visit on-pearl room" id="visit" aria-labelledby="visit-title">
     <div class="wrap">
-      <h2 class="greet" id="visit-title">
-        <span class="si" lang="si">ආයුබෝවන්</span><i aria-hidden="true"></i>
-        <span class="ta" lang="ta">வணக்கம்</span><i aria-hidden="true"></i>
-        <span class="en">Welcome</span>
-      </h2>
+      <h2 class="greet" id="visit-title"><span class="si" lang="si">ආයුබෝවන්</span><i aria-hidden="true"></i><span class="ta" lang="ta">வணக்கம்</span><i aria-hidden="true"></i><span class="en">Welcome</span></h2>
       <p class="visit-sub">Three showrooms in Negombo and Katunayake. Come in, sit at the counter and take your time.</p>
 
       <div class="stores">
-        <div class="store">
+        <div class="store rv">
           <p class="label">Negombo</p>
           <h3>67 Greens Road</h3>
           <p>Our flagship, and the home of Pushpa since 1967.</p>
           <a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=Pushpa+Jewellers+67+Greens+Road+Negombo" target="_blank" rel="noopener">Directions <svg><use href="#arr"/></svg></a>
         </div>
-        <div class="store">
+        <div class="store rv" style="--i:1">
           <p class="label">Negombo</p>
           <h3>150A Sea Street</h3>
           <p>Our second showroom in Negombo town.</p>
           <a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=150A+Sea+Street+Negombo" target="_blank" rel="noopener">Directions <svg><use href="#arr"/></svg></a>
         </div>
-        <div class="store">
+        <div class="store rv" style="--i:2">
           <p class="label">Katunayake</p>
           <h3>8A Averiwatte</h3>
           <p>Our showroom for Katunayake and the airport area.</p>
@@ -499,8 +694,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
         <div>
           <p class="label">WhatsApp</p>
           <p class="num"><span>077 777 0203</span><button class="copy" type="button" data-copy="077 777 0203">Copy</button></p>
-          <p><a class="tlink" href="https://wa.me/94777770203" target="_blank" rel="noopener" style="color:var(--ink)">Message us <svg><use href="#arr"/></svg></a></p>
+          <p><a class="tlink" href="https://wa.me/94777770203" target="_blank" rel="noopener">Message us <svg><use href="#arr"/></svg></a></p>
         </div>
+      </div>
+      <div class="visit-cta">
+        <a class="btn" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener"><svg><use href="#i-chat"/></svg>Book a visit on WhatsApp</a>
       </div>
     </div>
   </section>
@@ -514,65 +712,154 @@ button { font: inherit; color: inherit; cursor: pointer; }
       <a href="#collection">Collection</a>
       <a href="#bridal">Bridal</a>
       <a href="#story">Our story</a>
+      <a href="#counter">Services</a>
       <a href="#visit">Visit us</a>
       <a href="https://www.instagram.com/pushpajewellers_official/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.facebook.com/pushpajewellerspvtltd/" target="_blank" rel="noopener">Facebook</a>
     </nav>
-    <p class="also">Also at Pushpa: gold pawning and airline ticketing.</p>
+    <p class="also">Gold pawning and airline ticketing at our counters.</p>
     <div class="legal"><span>© <span id="yr">2026</span> Pushpa Jewellers (Pvt) Ltd</span><span>67 Greens Road · 150A Sea Street, Negombo · 8A Averiwatte, Katunayake</span></div>
   </div>
+  <p class="foot-sig" aria-hidden="true">PUSHPA</p>
 </footer>
 
+<a class="wa" id="wa" href="https://wa.me/94777770203" target="_blank" rel="noopener" aria-label="Message us on WhatsApp"><svg><use href="#i-chat"/></svg><span>WhatsApp us</span></a>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var WA = 'https://wa.me/94777770203?text=';
+  function ask(text) { return WA + encodeURIComponent('Hello Pushpa Jewellers, I’d like to ask about ' + text + '.'); }
+  function pawn(g) { return (Math.round(g / 8 * 100 + 1e-6) / 100).toFixed(2); }
+
+  /* ---------- the collection: counters and new pieces, weights read from the shop's photographs ---------- */
+  var TILES = [
+    ['Necklaces', 'Chains, collars and bridal sets', 'p-bead-chain'],
+    ['Bangles', 'For every day and the wedding day', 'cat-bangles'],
+    ['Rings', 'Wedding, engagement and gifts', 'cat-rings'],
+    ['Pendants', 'Keepsakes to wear close', 'cat-pendants'],
+    ['Bracelets', 'Fine links and flowers', 'cat-bracelets']
+  ];
+  $('#tiles').innerHTML = TILES.map(function (t, i) {
+    return '<a class="tile rv" style="--i:' + i + '" href="' + WA + encodeURIComponent('Hello Pushpa Jewellers, I’d like to see your ' + t[0].toLowerCase() + '.') + '" target="_blank" rel="noopener">' +
+      '<div class="ph"><img src="img/' + t[2] + '.webp" alt="" width="900" height="1125"><span class="go">Ask to see them</span></div>' +
+      '<div class="cap"><h3>' + t[0] + '</h3><span>' + t[1] + '</span></div></a>';
+  }).join('');
+
+  var NEW = [
+    ['Stacked bar bangle', 'Bangle', [12.470], 'p-stacked-bar-bangle'],
+    ['Red stone circle pendant', 'Pendant', [2.760], 'p-red-stone-circle-pendant'],
+    ['Three-row wave bangle', 'Bangle', [17.390], 'p-three-row-wave-bangle'],
+    ['Enamel flower bracelet', 'Bracelet', [6.680], 'p-enamel-flower-bracelet'],
+    ['Anchor and helm pendant', 'Pendant', [9.140], 'p-anchor-helm-pendant'],
+    ['Lattice cuff', 'Bangle', [23.530], 'p-lattice-cuff'],
+    ['Infinity ring', 'Ring', [1.280], 'p-infinity-ring'],
+    ['Filigree pendants', 'Pendant', [2.430, 2.840], 'p-filigree-pendants'],
+    ['Five-row bangle', 'Bangle', [20.830], 'p-five-row-bangle'],
+    ['Cross pendant and chain', 'Pendant', [12.020], 'p-cross-pendant'],
+    ['Chevron bangle', 'Bangle', [7.660], 'p-chevron-bangle']
+  ];
+  $('#track').innerHTML = NEW.map(function (p) {
+    var g = p[2], w = g.length > 1 ? g[0].toFixed(3) + ' – ' + g[1].toFixed(3) + ' g' : g[0].toFixed(3) + ' g';
+    var pw = g.length > 1 ? pawn(g[0]) + ' – ' + pawn(g[1]) + ' pawn' : pawn(g[0]) + ' pawn';
+    return '<a class="card" href="' + ask('the ' + p[0].toLowerCase() + ' (' + w + ', 22KT)') + '" target="_blank" rel="noopener" draggable="false">' +
+      '<div class="ph"><img src="img/' + p[3] + '.webp" alt="' + p[0] + ' in 22KT gold" width="900" height="1125" draggable="false"></div>' +
+      '<div class="card-b"><p class="card-k">' + p[1] + ' · 22KT</p><h3>' + p[0] + '</h3><p class="co"><i></i><span>' + w + '</span><b>' + pw + '</b></p></div></a>';
+  }).join('');
+
+  // drag, arrows and a progress line for the slider
+  var sl = $('#slider'), prog = $('#prog'), btns = $$('.nav2 .rnd');
+  function updateProg() {
+    var max = sl.scrollWidth - sl.clientWidth, vis = sl.scrollWidth ? sl.clientWidth / sl.scrollWidth : 1;
+    var w = Math.max(.12, Math.min(1, vis)), x = max > 0 ? sl.scrollLeft / max : 0;
+    prog.style.width = (w * 100) + '%'; prog.style.left = (x * (1 - w) * 100) + '%';
+    btns[0].disabled = sl.scrollLeft < 4; btns[1].disabled = sl.scrollLeft > max - 4;
+  }
+  function step() { var c = sl.querySelector('.card'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle($('#track')).columnGap || 20) : 300; }
+  btns.forEach(function (b) { b.addEventListener('click', function () { sl.scrollBy({ left: +b.dataset.dir * step() * (innerWidth > 900 ? 2 : 1), behavior: reduce ? 'auto' : 'smooth' }); }); });
+  sl.addEventListener('scroll', updateProg, { passive: true });
+  sl.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); sl.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * step(), behavior: 'smooth' }); } });
+  sl.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  var down = false, moved = false, sx = 0, sLeft = 0;
+  sl.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sLeft = sl.scrollLeft; });
+  window.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - sx;
+    if (!moved && Math.abs(dx) > 5) { moved = true; sl.classList.add('drag'); }
+    if (moved) sl.scrollLeft = sLeft - dx;
+  });
+  window.addEventListener('pointerup', function () {
+    if (!down) return; down = false;
+    if (moved) { sl.classList.remove('drag'); sl._dragged = true; setTimeout(function () { sl._dragged = false; }, 60); var s = step(); sl.scrollTo({ left: Math.round(sl.scrollLeft / s) * s, behavior: 'smooth' }); }
+  });
+  sl.addEventListener('click', function (e) { if (sl._dragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+  window.addEventListener('resize', updateProg);
+  updateProg();
+
+  /* ---------- the hero: three pieces in turn ---------- */
+  var HS = [
+    ['Leaf vine necklace', null],
+    ['Leaf fringe necklace', [24.380]],
+    ['Fine drop pendant', [1.080]]
+  ];
+  var hs = $('#hs'), slides = $$('.hs-slide', hs), bars = $$('.hs-bar', hs), card = $('#hs-card'), hsI = 0, hsT = null, DUR = 7000;
+  hs.style.setProperty('--dur', DUR + 'ms');
+  function hsShow(i) {
+    hsI = (i + slides.length) % slides.length;
+    slides.forEach(function (s, k) { s.classList.toggle('on', k === hsI); });
+    bars.forEach(function (b, k) { b.classList.remove('on'); b.classList.toggle('done', k < hsI); b.setAttribute('aria-pressed', k === hsI); });
+    void bars[hsI].offsetWidth; bars[hsI].classList.add('on');
+    var d = HS[hsI], w = d[1] ? d[1][0].toFixed(3) + ' g · ' + pawn(d[1][0]) + ' pawn' : 'Ask us for the weight';
+    $('#hs-n').textContent = '0' + (hsI + 1) + ' / 0' + slides.length;
+    $('#hs-t').textContent = d[0];
+    $('#hs-w').innerHTML = '<i></i><span>' + w + '</span>';
+    $('#hs-ask').href = ask('the ' + d[0].toLowerCase() + (d[1] ? ' (' + d[1][0].toFixed(3) + ' g)' : ''));
+    card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
+    arm();
+  }
+  function arm() { clearTimeout(hsT); if (!reduce && !document.hidden) hsT = setTimeout(function () { hsShow(hsI + 1); }, DUR); }
+  bars.forEach(function (b, k) { b.addEventListener('click', function () { hsShow(k); }); });
+  hs.addEventListener('mouseenter', function () { clearTimeout(hsT); });
+  hs.addEventListener('mouseleave', arm);
+  document.addEventListener('visibilitychange', arm);
+  $('#hs-ask').href = ask('the leaf vine necklace');
+  arm();
+
+  /* ---------- the moonstone (sandakada pahana), drawn from the centre out ---------- */
   var NS = 'http://www.w3.org/2000/svg';
   function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
   function f(n) { return n.toFixed(1); }
-  // a point on the upper half-circle; t runs 0 (right) to PI (left)
   function P(r, t) { return f(r * Math.cos(t)) + ' ' + f(-r * Math.sin(t)); }
-
-  /* ---------- the moonstone (sandakada pahana), drawn from the centre out ---------- */
-  var ms = document.getElementById('moonstone');
   var g = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': '1.3', 'stroke-linecap': 'round' });
-  ms.appendChild(g);
-  function delay(r) { return (0.15 + (r / 480) * 1.5).toFixed(2) + 's'; }
+  $('#moonstone').appendChild(g);
+  function delay(r) { return (0.25 + (r / 480) * 1.6).toFixed(2) + 's'; }
   function line(d, r) { var p = el('path', { d: d, pathLength: 1, class: 'ms' }); p.style.setProperty('--d', delay(r)); g.appendChild(p); }
   function dot(r, t, size) { var c = el('circle', { cx: f(r * Math.cos(t)), cy: f(-r * Math.sin(t)), r: size, fill: 'currentColor', stroke: 'none', class: 'ms-dot' }); c.style.setProperty('--d', delay(r)); g.appendChild(c); }
   function arc(r) { line('M' + f(-r) + ' 0 A' + r + ' ' + r + ' 0 0 1 ' + f(r) + ' 0', r); }
-  // petals or flames pointing outward, spread across the half-circle
   function petals(n, r0, r1, wide, lean, belly) {
     for (var i = 0; i < n; i++) {
       var t = (i + .5) / n * Math.PI, s = Math.PI / n * wide, rm = r0 + (r1 - r0) * (belly || .6);
       line('M' + P(r0, t - s) + ' Q' + P(rm, t - s * 1.15) + ' ' + P(r1, t + s * (lean || 0)) + ' Q' + P(rm, t + s * 1.15) + ' ' + P(r0, t + s), r1);
     }
   }
-  // a procession: teardrop figures walking along the arc, as the animals and geese do on the stone
   function procession(n, r, len, dir) {
     for (var i = 0; i < n; i++) {
       var t = (i + .5) / n * Math.PI, x = r * Math.cos(t), y = -r * Math.sin(t);
       var ang = Math.atan2(Math.cos(t), Math.sin(t)) * 180 / Math.PI + (dir < 0 ? 180 : 0);
       var p = el('path', { d: 'M' + (-len) + ' 0 C' + (-len * .5) + ' ' + (-len * .62) + ' ' + (len * .45) + ' ' + (-len * .6) + ' ' + len + ' 0 C' + (len * .45) + ' ' + (len * .6) + ' ' + (-len * .5) + ' ' + (len * .62) + ' ' + (-len) + ' 0 M' + (-len * .4) + ' 0 L' + (len * .55) + ' 0', pathLength: 1, class: 'ms', transform: 'translate(' + f(x) + ' ' + f(y) + ') rotate(' + f(ang) + ')' });
-      p.style.setProperty('--d', delay(r));
-      g.appendChild(p);
+      p.style.setProperty('--d', delay(r)); g.appendChild(p);
       dot(r, (i + 1) / n * Math.PI, 2.2);
     }
   }
-  // the creeper (liyavela): a wave around the arc with a curl at each crest
   function creeper(rc, amp, waves) {
-    var d = '', steps = 360;
-    for (var k = 0; k <= steps; k++) {
-      var t = k / steps * Math.PI, r = rc + amp * Math.sin(t * waves * 2);
-      d += (k ? ' L' : 'M') + P(r, t);
-    }
+    var d = '';
+    for (var k = 0; k <= 360; k++) { var t = k / 360 * Math.PI; d += (k ? ' L' : 'M') + P(rc + amp * Math.sin(t * waves * 2), t); }
     line(d, rc);
-    for (var j = 0; j < waves * 2; j++) {
-      var tc = (j + .25) / (waves * 2) * Math.PI, out = j % 2 === 0 ? 1 : -1;
-      dot(rc + out * (amp + 7), tc + .012, 2.4);
-    }
+    for (var j = 0; j < waves * 2; j++) dot(rc + (j % 2 ? -1 : 1) * (amp + 7), (j + .25) / (waves * 2) * Math.PI + .012, 2.4);
   }
-  // centre: the half lotus
   arc(34); arc(18);
   for (var i = 1; i < 6; i++) dot(26, i / 6 * Math.PI, 2);
   petals(7, 34, 118, .92, 0, .7);
@@ -582,50 +869,75 @@ button { font: inherit; color: inherit; cursor: pointer; }
   arc(176);
   procession(20, 202, 15, 1);                   // geese (hansa)
   arc(228); arc(236);
-  creeper(262, 13, 14);                         // the creeper
+  creeper(262, 13, 14);                         // the creeper (liyavela)
   arc(290);
   procession(24, 318, 17, -1);                  // the procession of animals
   arc(346); arc(354);
-  petals(40, 360, 404, .95, .55, .55);          // the flame ring, leaning
+  petals(40, 360, 404, .95, .55, .55);          // the flame ring
   petals(40, 360, 384, .45, .3, .55);
   arc(410);
   line('M-492 0 L492 0', 480);                  // the step it lies before
 
-  /* ---------- small creeper divider ---------- */
-  document.querySelectorAll('[data-vine]').forEach(function (svg) {
+  /* ---------- the creeper divider ---------- */
+  $$('[data-vine]').forEach(function (svg) {
     var vg = el('g', { fill: 'none', stroke: 'currentColor', 'stroke-width': '1', 'stroke-linecap': 'round' });
+    function add(d) { vg.appendChild(el('path', { d: d, pathLength: 1 })); }
     function side(dir) {
       var d = 'M' + (160 + dir * 18) + ' 14';
       for (var x = 18; x <= 150; x += 2) d += ' L' + f(160 + dir * x) + ' ' + f(14 + 5 * Math.sin((x - 18) / 22 * Math.PI) * Math.max(0, 1 - (x - 18) / 150));
-      vg.appendChild(el('path', { d: d }));
+      add(d);
       for (var k = 0; k < 5; k++) {
         var cx = 160 + dir * (29 + k * 22), up = k % 2 === 0 ? -1 : 1, s = 1 - k * .14;
-        vg.appendChild(el('path', { d: 'M' + f(cx) + ' ' + f(14 + up * 4 * s) + ' q' + f(dir * 4 * s) + ' ' + f(up * 6 * s) + ' ' + f(dir * 9 * s) + ' ' + f(up * 3 * s) + ' q' + f(-dir * 2 * s) + ' ' + f(-up * 3 * s) + ' ' + f(-dir * 4 * s) + ' ' + f(-up * 1 * s) }));
+        add('M' + f(cx) + ' ' + f(14 + up * 4 * s) + ' q' + f(dir * 4 * s) + ' ' + f(up * 6 * s) + ' ' + f(dir * 9 * s) + ' ' + f(up * 3 * s) + ' q' + f(-dir * 2 * s) + ' ' + f(-up * 3 * s) + ' ' + f(-dir * 4 * s) + ' ' + f(-up * s));
       }
     }
     side(1); side(-1);
-    // half lotus at the centre
-    vg.appendChild(el('path', { d: 'M152 19 Q160 2 168 19 M146 19 Q150 9 158 17 M174 19 Q170 9 162 17 M144 19 L176 19' }));
+    add('M152 19 Q160 2 168 19 M146 19 Q150 9 158 17 M174 19 Q170 9 162 17 M144 19 L176 19');
     svg.appendChild(vg);
   });
 
-  /* ---------- header ---------- */
-  var hdr = document.getElementById('hdr');
-  function onScroll() { hdr.classList.toggle('solid', window.scrollY > 40); }
+  /* ---------- things settle into place as they come into view; nothing is ever hidden ---------- */
+  function countUp(n) {
+    var to = parseFloat(n.dataset.count), dp = +n.dataset.dp || 0, t0 = performance.now(), dur = 1600;
+    (function frame(t) { var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); n.textContent = (to * e).toFixed(dp); if (k < 1) requestAnimationFrame(frame); })(t0);
+  }
+  var watched = $$('.rv, .rv-img, .vine, [data-count]');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var n = e.target;
+        if (n.dataset.count && n.dataset.wait) countUp(n);
+        n.classList.remove('pre'); io.unobserve(n);
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    watched.forEach(function (n) {
+      if (n.getBoundingClientRect().top > innerHeight) { n.classList.add('pre'); if (n.dataset.count) n.dataset.wait = '1'; }
+      io.observe(n);
+    });
+  }
+
+  /* ---------- the welcome: the three greetings take turns in gold ---------- */
+  var gr = $$('.greet > span'), gk = 0;
+  gr[0].classList.add('lit');
+  if (!reduce) setInterval(function () { gr[gk].classList.remove('lit'); gk = (gk + 1) % gr.length; gr[gk].classList.add('lit'); }, 2800);
+
+  /* ---------- header, menu, whatsapp button ---------- */
+  var hdr = $('#hdr'), wa = $('#wa');
+  function onScroll() { var y = window.scrollY; hdr.classList.toggle('solid', y > 40); wa.classList.toggle('show', y > 640); }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-
-  var menu = document.getElementById('menu'), sheet = document.getElementById('sheet');
-  function setSheet(open) { sheet.hidden = !open; menu.setAttribute('aria-expanded', String(open)); document.body.style.overflow = open ? 'hidden' : ''; }
+  var menu = $('#menu'), sheet = $('#sheet');
+  function setSheet(open) { sheet.hidden = !open; menu.setAttribute('aria-expanded', String(open)); document.body.classList.toggle('locked', open); }
   menu.addEventListener('click', function () { setSheet(true); });
-  document.getElementById('close').addEventListener('click', function () { setSheet(false); });
+  $('#close').addEventListener('click', function () { setSheet(false); });
   sheet.addEventListener('click', function (e) { if (e.target.tagName === 'A') setSheet(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sheet.hidden) setSheet(false); });
 
   /* ---------- copy a number ---------- */
-  var toast = document.getElementById('toast'), timer;
+  var toast = $('#toast'), timer;
   function say(m) { toast.textContent = m; toast.classList.add('show'); clearTimeout(timer); timer = setTimeout(function () { toast.classList.remove('show'); }, 2200); }
-  document.querySelectorAll('[data-copy]').forEach(function (b) {
+  $$('[data-copy]').forEach(function (b) {
     b.addEventListener('click', function () {
       var num = b.dataset.copy;
       function fallback() { var r = document.createRange(); r.selectNodeContents(b.previousElementSibling); var s = getSelection(); s.removeAllRanges(); s.addRange(r); say('Number selected: ' + num); }
@@ -633,6 +945,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
     });
   });
 
-  document.getElementById('yr').textContent = new Date().getFullYear();
+  $('#yr').textContent = new Date().getFullYear();
 })();
 </script>
