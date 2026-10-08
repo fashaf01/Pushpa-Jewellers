@@ -134,3 +134,11 @@ submit handler with your `fetch`.
 - Responsive from 320px up; no horizontal overflow at any width tested.
 - Honours `prefers-reduced-motion`; skip link, focus states and ARIA labels throughout.
 - `JewelryStore` JSON-LD in `<head>` carries both showrooms for local search.
+
+## Artifact pages
+
+`artifacts/pushpa-gold.html` is the source of the hosted preview at
+https://claude.ai/artifact/8gnoEVsiHEB4ka8ZfKiRqK: a 3D gold bangle over a
+moonstone doorstep (three.js r128 from cdnjs), a display case lit by the
+cursor, and a jeweller's scale that weighs a set in pawn. Its `img/` files are
+stored with the artifact, not in this repository.
