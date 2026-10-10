@@ -22,7 +22,10 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-section[id]{scroll-margin-top:calc(80px + var(--rate-h))}
+/* jump links land just under the header once it has shrunk on scroll (rate bar + 55px masthead, 57px on phones),
+   a pixel under rather than over, so no strip of the section above shows */
+section[id]{scroll-margin-top:calc(var(--rate-h) + 54px)}
+@media (max-width:1020px){section[id]{scroll-margin-top:calc(var(--rate-h) + 56px)}}
 body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
@@ -88,9 +91,14 @@ button{cursor:pointer;background:none;border:0;padding:0}
 @keyframes introOut{to{opacity:0;visibility:hidden}}
 
 /* ---------- masthead ---------- */
-.mast{position:sticky;top:0;z-index:50;background:rgba(59,10,37,.97);border-bottom:1px solid var(--plum-rule);color:var(--on-plum)}
+.mast{position:sticky;top:0;z-index:50;background:var(--plum);border-bottom:1px solid var(--plum-rule);color:var(--on-plum)}
 .mast-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;max-width:1480px;margin-inline:auto;padding:8px var(--gut);transition:padding .5s var(--ease)}
 .mast.small .mast-in{padding-block:3px}
+/* the masthead shrinks on scroll (119px to 93px, 115px to 95px on phones); its bottom margin grows by the same amount at the
+   same pace, so the page under it never shifts and a jump link lands true even on the first jump from the top */
+.mast{transition:margin .5s var(--ease)}
+.mast.small{margin-bottom:26px}
+@media (max-width:1020px){.mast.small{margin-bottom:20px}}
 /* today's gold rate: a thin strip above the masthead; tap it for per gram too */
 .rate-row{background:var(--plum-3);border-bottom:1px solid var(--plum-rule)}
 .rate-in{display:flex;justify-content:center;align-items:center;gap:16px;height:calc(var(--rate-h) - 1px);max-width:1480px;margin-inline:auto;padding-inline:var(--gut);font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden}
@@ -142,16 +150,30 @@ button{cursor:pointer;background:none;border:0;padding:0}
   .logo img{height:60px}
   .mast.small .logo img{height:50px}
 }
-.menu{border:0;padding:0;margin:0;width:100%;max-width:none;height:100%;max-height:none;background:var(--plum);color:var(--on-plum)}
+/* the phone menu: its top row mirrors the header (close, logo, call), then the pages in the desktop nav's small capitals,
+   the services as a compact group, and Call and WhatsApp side by side at the foot */
+.menu{border:0;padding:0;margin:0;width:100%;max-width:none;height:100%;max-height:none}
+.menu:focus,.enrol:focus{outline:none}
 .menu::backdrop{background:rgba(44,7,27,.6)}
-.menu-in{display:flex;flex-direction:column;min-height:100%;padding:16px var(--gut) 32px;gap:20px}
-.menu-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--plum-rule);padding-bottom:12px}
-.menu-top .icon-btn{justify-self:start;margin-left:-10px}
-.menu-top img{height:44px;width:auto}
-.menu nav{display:grid}
-.menu nav a{font-family:var(--display);font-size:clamp(26px,7vw,36px);line-height:1.2;text-decoration:none;color:var(--on-plum);padding-block:12px;border-bottom:1px solid var(--plum-rule)}
-.menu nav a.sub{font-size:17px;padding:10px 0 10px 18px;color:var(--on-plum-2);font-family:var(--sans)}
-.menu .btn{margin-top:auto}
+.menu[open]{animation:menuFade .3s ease}
+.menu[open] [style*="--i"]{animation:menuIn .55s var(--ease) both;animation-delay:calc(var(--i) * 45ms + 60ms)}
+@keyframes menuFade{from{opacity:0}}
+@keyframes menuIn{from{opacity:0;transform:translateY(10px)}}
+.menu-in{display:flex;flex-direction:column;min-height:100%;padding:0 var(--gut) max(24px,env(safe-area-inset-bottom))}
+.menu-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:10px;border-bottom:1px solid var(--plum-rule)}
+.menu .icon-btn{display:inline-flex}
+.menu-top .icon-btn:first-child{justify-self:start;margin-left:-10px}
+.menu-top .icon-btn:last-child{justify-self:end;margin-right:-10px}
+.menu-top img{height:50px;width:auto}
+.menu-nav{display:grid;padding-top:6px}
+.menu-nav a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--on-plum);border-bottom:1px solid var(--plum-rule)}
+.menu-nav svg{width:20px;height:10px;flex:none;color:var(--plum-gold)}
+.menu-svc{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;padding-top:22px}
+.menu-svc a{font-size:14.5px;color:var(--on-plum-2);text-decoration:none;padding-block:9px}
+.menu-svc .menu-h{grid-column:1/-1;padding-block:0 6px;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--plum-gold)}
+.menu-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;padding-top:28px}
+.menu-foot .btn{min-height:48px;padding:0 12px;gap:8px;font-size:12.5px}
+.menu-foot svg{width:16px;height:16px}
 
 /* ---------- hero: Pushpa then (1967) and now; a soft gilt wipe turns one into the other ---------- */
 .hero{position:relative;overflow:hidden;background:var(--plum-3);isolation:isolate;--edge:26vw;--turn:cubic-bezier(.65,.05,.36,1);--turn-d:1.5s}

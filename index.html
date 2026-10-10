@@ -136,24 +136,31 @@
   </div>
 </header>
 
-<dialog class="menu" id="menu" aria-label="Menu">
+<dialog class="menu dark" id="menu" aria-label="Menu" tabindex="-1" autofocus>
   <div class="menu-in">
     <div class="menu-top">
-      <button class="icon-btn" style="display:inline-flex" id="menu-x" aria-label="Close menu"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
-      <img src="assets/img/wordmark.webp" alt="Pushpa Jewellers" width="688" height="240">
+      <button class="icon-btn" type="button" id="menu-x" aria-label="Close menu"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+      <img src="assets/img/lockup.webp" alt="Pushpa Jewellers" width="688" height="603">
+      <a class="icon-btn" href="tel:+94312238822" aria-label="Call our hotline, 031 223 8822"><svg aria-hidden="true"><use href="#i-call"/></svg></a>
     </div>
-    <nav aria-label="Menu">
-      <a href="#top">Home</a>
-      <a href="#about">About us</a>
-      <a href="#collection">Products</a>
-      <a href="#services">Services</a>
-      <a class="sub" href="#suba">Suba Mangala plan</a>
-      <a class="sub" href="#services">Pawning</a>
-      <a class="sub" href="#services">Money exchange</a>
-      <a href="#visit">Contact us</a>
-      <a href="#track">Track an order</a>
+    <nav class="menu-nav" aria-label="Menu">
+      <a href="#top" style="--i:0">Home <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a href="#about" style="--i:1">About us <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a href="#collection" style="--i:2">Products <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a href="#track" style="--i:3">Track an order <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a href="#visit" style="--i:4">Contact us <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </nav>
-    <a class="btn gold" href="tel:+94312238822">Hotline 031 223 8822</a>
+    <div class="menu-svc" style="--i:5">
+      <a class="menu-h" href="#services">Services</a>
+      <a href="#suba">Suba Mangala plan</a>
+      <a href="#services">Pawning</a>
+      <a href="#services">Money exchange</a>
+      <a href="#services">Airline ticketing</a>
+    </div>
+    <div class="menu-foot" style="--i:6">
+      <a class="btn" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>Call us</a>
+      <a class="btn ghost" href="https://wa.me/94777770203" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-chat"/></svg>WhatsApp</a>
+    </div>
   </div>
 </dialog>
 
@@ -428,7 +435,7 @@
   </div>
 </footer>
 
-<dialog class="enrol" id="rate-d" aria-labelledby="rate-d-h">
+<dialog class="enrol" id="rate-d" aria-labelledby="rate-d-h" tabindex="-1" autofocus>
   <div class="rd">
     <div class="enrol-h"><div style="display:grid;gap:8px"><span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Gold today</span><h2 id="rate-d-h">Today&rsquo;s gold rate</h2></div><button class="x" type="button" id="rate-x" aria-label="Close"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
     <table class="rate-t" id="rate-t"></table>

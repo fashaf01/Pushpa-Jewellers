@@ -55,7 +55,8 @@
   d.addEventListener('click', function (e) { if (!e.target.closest('.dd')) { ddM.hidden = true; ddB.setAttribute('aria-expanded', 'false'); } });
   $$('a', ddM).forEach(function (a) { a.addEventListener('click', function () { ddM.hidden = true; ddB.setAttribute('aria-expanded', 'false'); }); });
   var menu = $('#menu');
-  $('#burger').addEventListener('click', function () { if (menu.showModal) menu.showModal(); else menu.setAttribute('open', ''); });
+  // focus the menu itself, not its close button, so opening it by touch draws no focus ring
+  $('#burger').addEventListener('click', function () { if (menu.showModal) menu.showModal(); else menu.setAttribute('open', ''); menu.focus(); });
   $('#menu-x').addEventListener('click', function () { menu.close ? menu.close() : menu.removeAttribute('open'); });
   $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { if (menu.close) menu.close(); }); });
 
@@ -221,6 +222,7 @@
       : '<p>The international gold market price, converted to rupees at today’s exchange rate and refreshed every hour. Our counter rate can differ, so call to confirm before you visit.</p>') +
       (time ? '<p class="tab">Updated ' + time + ', Sri Lanka time</p>' : '');
     if (rateD.showModal) rateD.showModal(); else rateD.setAttribute('open', '');
+    rateD.focus();
   });
   $('#rate-x').addEventListener('click', function () { rateD.close(); });
   rateD.addEventListener('click', function (e) { if (e.target === rateD) rateD.close(); });
