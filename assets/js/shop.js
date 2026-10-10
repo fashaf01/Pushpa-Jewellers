@@ -77,19 +77,37 @@
   }, true);
 
   /* ---------- a piece ---------- */
-  function photo(p, i) { return IMG + p.slug + (i > 1 ? '-' + i : '') + '.webp'; }
+  function photo(p, i, small) { return IMG + (small ? 'small/' : '') + p.slug + (i > 1 ? '-' + i : '') + '.webp'; }
   function thumbs(p) {
     var n = p.photos || 1, h = '';
     if (n < 2) return '';
-    for (var i = 1; i <= n; i++) h += '<button type="button" class="pv-th" data-photo="' + i + '" aria-pressed="' + (i === 1) + '" aria-label="Photo ' + i + ' of ' + n + '"><img src="' + photo(p, i) + '" alt="" width="1080" height="1350"></button>';
+    for (var i = 1; i <= n; i++) h += '<button type="button" class="pv-th" data-photo="' + i + '" aria-pressed="' + (i === 1) + '" aria-label="Photo ' + i + ' of ' + n + '"><img src="' + photo(p, i, true) + '" data-full="' + photo(p, i) + '" alt="" width="540" height="675"></button>';
     return '<div class="pv-ths">' + h + '</div>';
   }
+  var shown = 1;
+  function show(i) {
+    var p = state.piece && BY[state.piece], n = p ? p.photos || 1 : 1;
+    if (n < 2) return;
+    shown = (i - 1 + n) % n + 1;
+    $('#pv-img').src = photo(p, shown);
+    $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(+t.getAttribute('data-photo') === shown)); });
+  }
   pieceView.addEventListener('click', function (e) {
-    var b = e.target.closest('.pv-th'), p = state.piece && BY[state.piece];
-    if (!b || !p) return;
-    $('#pv-img').src = photo(p, +b.getAttribute('data-photo'));
-    $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(t === b)); });
+    var b = e.target.closest('.pv-th');
+    if (b) show(+b.getAttribute('data-photo'));
   });
+  // on phones, a sideways swipe across the photo turns to the next or previous one
+  var x0 = null, y0 = 0;
+  pieceView.addEventListener('touchstart', function (e) {
+    x0 = e.touches.length === 1 && e.target.closest('.pv-ph') ? e.touches[0].clientX : null;
+    if (x0 !== null) y0 = e.touches[0].clientY;
+  }, { passive: true });
+  pieceView.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(shown + (dx < 0 ? 1 : -1));
+  }, { passive: true });
   function renderPiece(p) {
     var cat = p.cats[0], more = list(cat, 'new').filter(function (q) { return q !== p; }).slice(0, 4);
     var ask = wa('I’d like to ask about the ' + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website.');
@@ -115,6 +133,11 @@
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
       '</div>';
+    shown = 1;
+    // fetch the other photos once the first has arrived, so turning to them is instant
+    $('#pv-img').addEventListener('load', function () {
+      for (var i = 2; i <= (p.photos || 1); i++) new Image().src = photo(p, i);
+    }, { once: true });
     showRate();
   }
   var gold = null;

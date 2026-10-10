@@ -270,7 +270,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 }
 
 /* ---------- marks: four hallmark stamps, struck as they arrive ---------- */
-.marks{background:var(--ivory);border-bottom:1px solid var(--rule)}
+.marks{background:var(--ivory);border-block:1px solid var(--rule)}
 .marks-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .mk{display:grid;justify-items:center;align-content:start;text-align:center;gap:16px;padding:clamp(30px,3.6vw,48px) clamp(12px,2vw,28px)}
 .mk+.mk{border-left:1px solid var(--rule)}
@@ -582,10 +582,10 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start;margin-top:22px}
 .pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
 .pv-ph::after{content:"";position:absolute;inset:12px;border:1px solid rgba(236,210,143,.75);pointer-events:none}
-.pv-ph img{width:100%;height:100%;object-fit:cover}
+.pv-ph img{width:100%;height:100%;object-fit:cover;touch-action:pan-y pinch-zoom}
 .pv-gal{display:grid;gap:12px;align-content:start}
 .pv-ths{display:flex;gap:10px}
-.pv-th{position:relative;width:72px;aspect-ratio:4/5;overflow:hidden;background:var(--tint);opacity:.6;transition:opacity .3s,box-shadow .3s}
+.pv-th{position:relative;width:84px;aspect-ratio:4/5;overflow:hidden;background:var(--tint);opacity:.6;transition:opacity .3s,box-shadow .3s}
 .pv-th img{width:100%;height:100%;object-fit:cover}
 .pv-th:hover{opacity:.9}
 .pv-th[aria-pressed="true"]{opacity:1;box-shadow:0 0 0 1px var(--gold),0 0 0 3px var(--ivory),0 0 0 4px rgba(201,162,74,.6)}
@@ -610,7 +610,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .pv{grid-template-columns:minmax(0,1fr);margin-top:16px}
   .pv-ph{margin-inline:calc(var(--gut) * -1)}
   .pv-ths{gap:8px}
-  .pv-th{width:60px}
+  .pv-th{width:64px}
   .pv-ph::after{inset:10px}
   .pv-c{position:static}
 }

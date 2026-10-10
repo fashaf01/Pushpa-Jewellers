@@ -8,7 +8,12 @@ top edge. Styled backdrops (a coloured box behind the piece) are centre-cropped 
     python3 tools/frame-photos.py <photo> <slug>          e.g.  python3 tools/frame-photos.py ~/ring.jpg rose-ring
 
 writes assets/img/shop/<slug>.webp (1080 x 1350) and assets/img/shop/small/<slug>.webp (540 x 675).
-For a second photo of the same piece use the slug rose-ring-2, and so on. Needs Pillow and NumPy.
+For a second photo of the same piece use the slug rose-ring-2, and so on.
+
+    python3 tools/frame-photos.py --closeup <photo> <slug>    e.g.  ... --closeup ~/ring.jpg rose-ring-2
+
+writes a close-up from the same photo instead: the most detailed part of the piece, about 1.65 times closer.
+Needs Pillow and NumPy.
 """
 import os, sys
 import numpy as np
@@ -58,14 +63,14 @@ def extend(img, l, t, r, b):
     return Image.composite(soft, out, mask.filter(ImageFilter.GaussianBlur(10)))
 
 
-def frame(path):
-    img = Image.open(path).convert('RGB')
+def frame_box(img):
+    """The 4:5 frame around the piece, in the photo's own pixels, and the photo extended to cover it where it must."""
     arr = np.asarray(img)
     w, h = img.size
     if is_backdrop(arr):
         cw = min(w, round(h * 4 / 5)); ch = round(cw * 5 / 4)
         x0, y0 = (w - cw) // 2, (h - ch) // 2
-        return img.crop((x0, y0, x0 + cw, y0 + ch)).resize((W, H), Image.LANCZOS)
+        return img, (x0, y0, x0 + cw, y0 + ch)
     x0, y0, x1, y1 = piece_box(arr) or (0, 0, w, h)
     bw, bh = x1 - x0, y1 - y0
     m = 0.11 * max(bw, bh * 0.8)
@@ -80,15 +85,41 @@ def frame(path):
     if B - T <= h:
         T, B = (0, B - T) if T < 0 else ((h - (B - T), h) if B > h else (T, B))
     pl, pt, pr, pb = max(0, -L), max(0, -T), max(0, R - w), max(0, B - h)
-    big = extend(img, pl, pt, pr, pb)
-    return big.crop((L + pl, T + pt, R + pl, B + pt)).resize((W, H), Image.LANCZOS)
+    return extend(img, pl, pt, pr, pb), (L + pl, T + pt, R + pl, B + pt)
+
+
+def frame(path):
+    big, box = frame_box(Image.open(path).convert('RGB'))
+    return big.crop(box).resize((W, H), Image.LANCZOS)
+
+
+def closeup(path):
+    """A closer look from the same photo: a 4:5 window about 60% of the frame's width, centred across the piece and
+    moved up or down to where the piece has the most detail (its stones, filigree and edges)."""
+    big, (L, T, R, B) = frame_box(Image.open(path).convert('RGB'))
+    arr = np.asarray(big.crop((L, T, R, B)))
+    fw, fh = R - L, B - T
+    g = np.asarray(Image.fromarray(arr).convert('L').filter(ImageFilter.GaussianBlur(1.5)), np.float32)
+    grad = np.hypot(np.diff(g, axis=1, append=g[:, -1:]), np.diff(g, axis=0, append=g[-1:]))
+    score = piece_mask(arr) * (0.4 + np.minimum(grad, 40) / 40)
+    cw = round(fw / 1.65); ch = round(cw * 5 / 4)
+    cx = (score.sum(0) * np.arange(fw)).sum() / max(score.sum(), 1)
+    x = int(min(max(cx - cw / 2, 0), fw - cw))
+    rows = np.concatenate([[0], score[:, x:x + cw].sum(1).cumsum()])
+    y = int(np.argmax(rows[ch:] - rows[:-ch]))
+    im = big.crop((L + x, T + y, L + x + cw, T + y + ch)).resize((W, H), Image.LANCZOS)
+    return im.filter(ImageFilter.UnsharpMask(radius=2, percent=50, threshold=2))
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    args = sys.argv[1:]
+    close = args[:1] == ['--closeup']
+    if close:
+        args = args[1:]
+    if len(args) != 2:
         sys.exit(__doc__)
-    photo, slug = sys.argv[1], sys.argv[2]
-    im = frame(photo)
+    photo, slug = args
+    im = closeup(photo) if close else frame(photo)
     os.makedirs(os.path.join(SHOP, 'small'), exist_ok=True)
     im.save(os.path.join(SHOP, slug + '.webp'), 'WEBP', quality=86, method=6)
     im.resize((540, 675), Image.LANCZOS).save(os.path.join(SHOP, 'small', slug + '.webp'), 'WEBP', quality=80, method=6)
