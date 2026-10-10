@@ -16,7 +16,7 @@ html = html
   .replace('<link rel="stylesheet" href="assets/css/styles.css">', () => `<style>\n${css}\n</style>`)
   .replace('<script src="assets/js/main.js" defer></script>', () => `<script>\nwindow.addEventListener('DOMContentLoaded', function () {\n${js}\n});\n</script>`)
   .replace('href="assets/img/favicon.svg"', () => `href="${dataUri('assets/img/favicon.svg')}"`)
-  .replace(/src="(assets\/img\/[^"]+)"/g, (_, p) => `src="${dataUri(p)}"`);
+  .replace(/(src|srcset)="(assets\/img\/[^"]+)"/g, (_, attr, p) => `${attr}="${dataUri(p)}"`);
 
 /* The site keeps its search-friendly title; the hosted preview is
    named for a gallery, where a short noun phrase reads better. */
@@ -27,6 +27,6 @@ fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, 'pushpa-jewellers.html'), html);
 
 /* Check for real attribute references only. */
-const left = html.match(/(?:href|src)=["']assets\/[^"']+/g);
+const left = html.match(/(?:href|src|srcset)=["']assets\/[^"']+/g);
 if (left) throw new Error(`not inlined: ${left.join(', ')}`);
 console.log(`dist/pushpa-jewellers.html  ${(html.length / 1024).toFixed(0)} KB, fully self-contained`);

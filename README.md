@@ -62,16 +62,27 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 7. **About.** 1967, the pride of Negombo.
 8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
 
-### The hero is 16:9 on desktop
+### Hero photos: one size for desktop, one for phones
 
-Both hero photographs are 1920 x 1080, so from 821px wide the hero takes that same
-16:9 shape and shows each bride whole, uncropped. On screens shorter than 16:9
-(most laptops, once the browser bar is counted) the hero runs a little past the
-fold, so the headline and buttons are centred in the part you see on arrival, and
-the 1967 / Today switch is lifted onto the first screen. Below 821px the phone
-layout puts the photo on top and the copy underneath.
+Each hero photo (today, and 1967) comes in two sizes, so four files in all. Every
+desktop screen shows the desktop photo in the same shape, and every phone the phone photo.
 
-The rule is the `desktop: the hero is 16:9` block in `styles.css`.
+| | Desktop (821px and wider) | Phone (820px and narrower) |
+|---|---|---|
+| Shape | 12:5 | 4:5 |
+| Size | **1920 x 800** | **1080 x 1350** (an Instagram portrait post) |
+| Files | `hero-now.webp`, `hero-then.webp` | `hero-now-mobile.webp`, `hero-then-mobile.webp` |
+| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | Keep the face and jewellery in the top two-thirds. The bottom third sits under the headline. |
+
+To change a photo, replace the file in `assets/img/` with one of the same name and
+size. The files there now are crops of the original 1920 x 1080 photographs (the phone
+crops are 864 x 1080, the same 4:5 shape).
+
+At 12:5 the whole hero, the 1967 / Today switch included, fits on the first screen of
+most laptops and desktops. Between 821px and 1279px wide the headline needs a little
+more height than 12:5 gives, so the hero grows and trims the photo's sides. Tablets
+use the phone photo with its height capped at 680px, which trims the bottom. The rules
+are the `desktop: one shape on every screen` block and the `phones:` lines in `styles.css`.
 
 ## Suba Mangala figures
 
