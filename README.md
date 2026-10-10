@@ -54,6 +54,8 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 ## Sections
 
 1. **Hero.** Opens on Pushpa in 1967, then turns to today. The 1967 / Today switch moves between them.
+   On phones the photo comes first, with the switch on its bottom edge and the copy centred below:
+   a label, a two-line headline, one button and a text link.
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
 4. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
@@ -72,7 +74,7 @@ desktop screen shows the desktop photo in the same shape, and every phone the ph
 | Shape | 12:5 | 4:5 |
 | Size | **1920 x 800** | **1080 x 1350** (an Instagram portrait post) |
 | Files | `hero-now.webp`, `hero-then.webp` | `hero-now-mobile.webp`, `hero-then-mobile.webp` |
-| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | Keep the face and jewellery in the top two-thirds. The bottom third sits under the headline. |
+| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, with the 1967 / Today switch on its bottom edge. Keep the face and jewellery above that. |
 
 To change a photo, replace the file in `assets/img/` with one of the same name and
 size. The files there now are crops of the original 1920 x 1080 photographs (the phone
