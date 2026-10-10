@@ -35,33 +35,45 @@ assets/js/site.js        shared by both pages: header, menus, gold rate bar, cop
 assets/js/main.js        home page only: hero turn, Suba Mangala calculator and enrolment,
                          order tracking, opening-hours week, the welcome
 assets/js/pieces.js      the shop's catalogue, one line per piece
+assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, kept for switching back
 assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
 assets/img/              photographs (webp) and favicon
 assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
 assets/img/orn/          gold ornaments: corner, dividers, mandalas (svg)
 api/gold.js              today's gold rate, a Vercel function served at /api/gold
+tools/frame-photos.py    frames a product photo of any size for the shop
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
 
 ## The shop
 
-`/shop/` shows every piece in `assets/js/pieces.js`, newest first, with its weight in grams
-and in pawn (8 g). Visitors can filter by necklaces, bangles, rings, pendants, bracelets or
-bridal, and sort by weight. Each piece has its own page at `/shop/?piece=<slug>`: the large
-photo, weight, description, today's 22K rate, an "Ask about this piece" button that opens
-WhatsApp with the piece's name and weight filled in, a call button, a link to its Instagram
-post, and more pieces of the same kind. Filters and sorting are in the address too
-(`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection
-tiles open the shop filtered this way.
+`/shop/` shows every piece in `assets/js/pieces.js` in list order, with its weight in grams and
+in pawn (8 g) where one is known. Visitors can filter by necklaces, bangles, rings, pendants,
+bracelets or bridal, and sort by weight (the sort appears once any piece has a weight). Each
+piece has its own page at `/shop/?piece=<slug>`: the large photo (with a switcher when there
+are more photos), weight, description, today's 22K rate, an "Ask about this piece" button that
+opens WhatsApp with the piece's name filled in, a call button, a link to its Instagram post when
+it has one, and more pieces of the same kind. Filters and sorting are in the address too
+(`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
+open the shop filtered this way.
 
-The 32 pieces and photos come from the shop's Instagram posts, approved for the website.
+**What it shows now.** 93 sample pieces photographed for another client, used with permission
+to preview the shop with clean product photography until Pushpa's own photographs arrive. They
+have no weights. Pushpa's 32 Instagram pieces are kept in `assets/js/pieces-instagram.js` with
+their photos; to show them instead, change `pieces.js` to `pieces-instagram.js` in
+`shop/index.html`.
 
 **To add a piece:**
 
-1. Put its photo, 1080 x 1350, in `assets/img/shop/`, named after the piece's slug
-   (`assets/img/shop/rose-ring.webp`).
-2. Make its grid copy: `python3 tools/shop-thumbs.py`. Without one, the grid uses the full photo.
-3. Add a line at the top of `assets/js/pieces.js`. The comments there explain each field.
+1. Frame its photo for the shop. Any size works:
+   `python3 tools/frame-photos.py path/to/photo.jpg rose-ring`
+   This finds the piece, centres it in the shop's 4:5 frame (1080 x 1350) with the photo's own
+   background carried out to the edges, and writes `assets/img/shop/rose-ring.webp` and its grid
+   copy in `small/`. A second photo of the same piece: `... photo2.jpg rose-ring-2`.
+   (Needs Pillow and NumPy. A photo already 1080 x 1350 can go straight into `assets/img/shop/`,
+   then `python3 tools/shop-thumbs.py` makes its grid copy.)
+2. Add a line at the top of `assets/js/pieces.js`, with `photos: 2` if it has a second photo.
+   The comments there explain each field.
 
 The shop page shares the home page's header, menus, footer and gold rate panel. They are
 copied into `shop/index.html` with links pointing back to the home page, so a change to any

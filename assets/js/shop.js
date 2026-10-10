@@ -45,7 +45,7 @@
 
   /* ---------- the grid ---------- */
   function card(p) {
-    var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '<i class="no">Ask us for the weight</i>';
+    var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
       '<div class="ph"><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async"></div>' +
       '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt + '</a></li>';
@@ -58,6 +58,7 @@
     });
     return out;
   }
+  sortSel.closest('.sort').hidden = !P.some(function (p) { return p.grams.length; });
   chips.innerHTML = CATS.map(function (c) {
     var n = c[0] === 'all' ? P.length : P.filter(function (p) { return p.cats.indexOf(c[0]) > -1; }).length;
     return '<button type="button" class="chip" data-cat="' + c[0] + '" aria-pressed="false">' + c[1] + '<span>' + n + '</span></button>';
@@ -76,6 +77,19 @@
   }, true);
 
   /* ---------- a piece ---------- */
+  function photo(p, i) { return IMG + p.slug + (i > 1 ? '-' + i : '') + '.webp'; }
+  function thumbs(p) {
+    var n = p.photos || 1, h = '';
+    if (n < 2) return '';
+    for (var i = 1; i <= n; i++) h += '<button type="button" class="pv-th" data-photo="' + i + '" aria-pressed="' + (i === 1) + '" aria-label="Photo ' + i + ' of ' + n + '"><img src="' + photo(p, i) + '" alt="" width="1080" height="1350"></button>';
+    return '<div class="pv-ths">' + h + '</div>';
+  }
+  pieceView.addEventListener('click', function (e) {
+    var b = e.target.closest('.pv-th'), p = state.piece && BY[state.piece];
+    if (!b || !p) return;
+    $('#pv-img').src = photo(p, +b.getAttribute('data-photo'));
+    $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(t === b)); });
+  });
   function renderPiece(p) {
     var cat = p.cats[0], more = list(cat, 'new').filter(function (q) { return q !== p; }).slice(0, 4);
     var ask = wa('I’d like to ask about the ' + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website.');
@@ -83,7 +97,7 @@
       '<div class="wrap">' +
         '<nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span aria-hidden="true">/</span><a href="./" data-cat="all">The collection</a><span aria-hidden="true">/</span><a href="?cat=' + cat + '" data-cat="' + cat + '">' + CAT[cat] + '</a></nav>' +
         '<div class="pv">' +
-          '<figure class="pv-ph"><img src="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + ', ' + esc(p.about) + '" width="1080" height="1350"></figure>' +
+          '<div class="pv-gal"><figure class="pv-ph"><img id="pv-img" src="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + ', ' + esc(p.about) + '" width="1080" height="1350"></figure>' + thumbs(p) + '</div>' +
           '<div class="pv-c">' +
             '<span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>' + esc(p.kind) + '</span>' +
             '<h1 class="pv-h">' + esc(p.name) + '</h1>' +
@@ -96,7 +110,7 @@
               '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-chat"/></svg>Ask about this piece</a>' +
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
-            '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' +
+            (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
           '</div>' +
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
