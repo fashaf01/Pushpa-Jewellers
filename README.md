@@ -7,14 +7,19 @@ Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
 gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
 frame (the arch).
 
-No build step, no dependencies. Open `index.html`, or serve the folder:
+No build step, no dependencies. It is hosted on Vercel at
+**https://pushpa-jewellers.vercel.app**. Locally, open `index.html` or serve the folder:
 
 ```bash
 python3 -m http.server 8000
 ```
 
+A plain static server has no `/api/gold`, so locally the top bar shows
+"Call 031 223 8822 for today's gold rate" instead of the rate.
+
 `node build.js` inlines the CSS, JS, favicon and every image into a single
-self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file.
+self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
+(it too shows the call line in place of the rate).
 
 ## Files
 
@@ -25,7 +30,26 @@ assets/js/main.js        hero turn, Suba Mangala calculator, enrol dialog, order
                          opening-hours week, scroll reveals
 assets/img/              photographs (webp) and favicon
 assets/img/orn/          gold ornaments: corner, dividers, mandalas (svg)
+api/gold.js              today's gold rate, a Vercel function served at /api/gold
 ```
+
+## Today's gold rate
+
+The bar at the top of the page shows 24K and 22K per pawn (8 g); tapping it shows
+per gram too. It stays at the top while the page scrolls.
+
+The page calls `/api/gold` (`api/gold.js`). That function converts the international
+gold price (gold-api.com) into rupees with the day's USD/LKR rate (open.er-api.com),
+and Vercel's CDN keeps each answer for an hour. 22K is 22/24 of the 24K price. The
+page reloads the rate every 30 minutes and whenever the tab comes back into view.
+
+This is the market price, not the counter price, and the two can differ; the
+details panel says so. To show the showroom's own counter rate instead, set
+`GOLD_24K_PAWN_LKR` and `GOLD_22K_PAWN_LKR` (whole rupees per pawn, for example
+`360000`) in the Vercel project under Settings > Environment Variables, then
+redeploy. Remove them to go back to the market price.
+
+If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
 
 ## Sections
 

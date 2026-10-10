@@ -196,6 +196,38 @@
     week.innerHTML = html + '</div>';
   })();
 
+  /* ---------- today's gold rate (api/gold.js): 24K and 22K per pawn in the bar; tap for per gram too ---------- */
+  var gold = null, rateB = $('#rate'), rateD = $('#rate-d');
+  function loadGold() {
+    if (!window.fetch) return;
+    fetch('/api/gold', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); }).then(function (g) {
+      if (!g || !g.k24 || !g.k22) return;
+      gold = g;
+      $('#r24').textContent = rs(+g.k24.pawn);
+      $('#r22').textContent = rs(+g.k22.pawn);
+      rateB.hidden = false;
+      $('#rate-fb').hidden = true;
+    }).catch(function () {});
+  }
+  rateB.addEventListener('click', function () {
+    if (!gold) return;
+    var when = new Date(gold.updated), time = '';
+    try { if (!isNaN(when)) time = when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Colombo' }); } catch (e) {}
+    $('#rate-t').innerHTML = '<thead><tr><th scope="col">Purity</th><th scope="col">Per gram</th><th scope="col">Per pawn (8 g)</th></tr></thead><tbody>' +
+      '<tr><th scope="row">24K</th><td>Rs ' + rs(+gold.k24.gram) + '</td><td>Rs ' + rs(+gold.k24.pawn) + '</td></tr>' +
+      '<tr><th scope="row">22K</th><td>Rs ' + rs(+gold.k22.gram) + '</td><td>Rs ' + rs(+gold.k22.pawn) + '</td></tr></tbody>';
+    $('#rate-note').innerHTML = (gold.source === 'showroom'
+      ? '<p>Today’s rate at our counter.</p>'
+      : '<p>The international gold market price, converted to rupees at today’s exchange rate and refreshed every hour. Our counter rate can differ, so call to confirm before you visit.</p>') +
+      (time ? '<p class="tab">Updated ' + time + ', Sri Lanka time</p>' : '');
+    if (rateD.showModal) rateD.showModal(); else rateD.setAttribute('open', '');
+  });
+  $('#rate-x').addEventListener('click', function () { rateD.close(); });
+  rateD.addEventListener('click', function (e) { if (e.target === rateD) rateD.close(); });
+  loadGold();
+  setInterval(loadGold, 30 * 60 * 1000);
+  d.addEventListener('visibilitychange', function () { if (!d.hidden) loadGold(); });
+
   /* ---------- welcome, copy ---------- */
   var hello = $$('.hello span'), hk = 0;
   hello[0].classList.add('lit');

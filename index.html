@@ -99,6 +99,17 @@
 </div>
 
 <header class="mast dark" id="mast">
+  <div class="rate-row"><div class="rate-in">
+    <span class="rate-place">Negombo &middot; Katunayake &middot; Open daily</span>
+    <a class="rate-fb" id="rate-fb" href="tel:+94312238822">Call <b class="tab">031 223 8822</b> for today&rsquo;s gold rate</a>
+    <button class="rate" type="button" id="rate" aria-haspopup="dialog" hidden>
+      <span class="rate-dot" aria-hidden="true"></span>
+      <span class="rate-k">Gold today</span>
+      <span class="rate-v tab"><b>24K</b>Rs <span id="r24"></span></span>
+      <span class="rate-v tab"><b>22K</b>Rs <span id="r22"></span></span>
+      <span class="rate-u">/ pawn</span>
+    </button>
+  </div></div>
   <div class="mast-in">
     <a class="logo" href="#top" aria-label="Pushpa Jewellers, home"><img src="assets/img/lockup.webp" alt="Pushpa Jewellers, since 1967" width="688" height="603"></a>
     <ul class="nav" role="list">
@@ -417,6 +428,15 @@
     <div class="foot-b"><span>&copy; 2026 Pushpa Jewellers (Pvt) Ltd, www.pushpa-jewellers.com</span><span>Hotline 031 223 8822</span></div>
   </div>
 </footer>
+
+<dialog class="enrol" id="rate-d" aria-labelledby="rate-d-h">
+  <div class="rd">
+    <div class="enrol-h"><div style="display:grid;gap:8px"><span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Gold today</span><h2 id="rate-d-h">Today&rsquo;s gold rate</h2></div><button class="x" type="button" id="rate-x" aria-label="Close"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <table class="rate-t" id="rate-t"></table>
+    <div class="rate-note" id="rate-note"></div>
+    <a class="btn" href="tel:+94312238822">Call 031 223 8822</a>
+  </div>
+</dialog>
 
 <dialog class="enrol" id="enrol" aria-labelledby="enrol-h">
   <form id="eform" novalidate>

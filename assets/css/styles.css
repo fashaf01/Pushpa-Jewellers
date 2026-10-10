@@ -16,12 +16,13 @@
   --fancy-it:"the-seasons","Pinyon Script","Snell Roundhand",cursive;
   --si:"Noto Serif Sinhala","Iskoola Pota",serif; --ta:"Noto Serif Tamil",Latha,serif;
   --max:1320px; --gut:clamp(16px,4vw,48px); --sec:clamp(72px,9vw,128px);
+  --rate-h:38px; /* the gold rate bar above the masthead */
   --ease:cubic-bezier(.2,.7,.2,1); --wipe:cubic-bezier(.75,0,.2,1);
   --arch:999px 999px 0 0;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-section[id]{scroll-margin-top:80px}
+section[id]{scroll-margin-top:calc(80px + var(--rate-h))}
 body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
@@ -90,6 +91,23 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .mast{position:sticky;top:0;z-index:50;background:rgba(59,10,37,.97);border-bottom:1px solid var(--plum-rule);color:var(--on-plum)}
 .mast-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;max-width:1480px;margin-inline:auto;padding:8px var(--gut);transition:padding .5s var(--ease)}
 .mast.small .mast-in{padding-block:3px}
+/* today's gold rate: a thin strip above the masthead; tap it for per gram too */
+.rate-row{background:var(--plum-3);border-bottom:1px solid var(--plum-rule)}
+.rate-in{display:flex;justify-content:center;align-items:center;gap:16px;height:calc(var(--rate-h) - 1px);max-width:1480px;margin-inline:auto;padding-inline:var(--gut);font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden}
+.rate-place{display:none;color:var(--on-plum-2);letter-spacing:.04em}
+.rate-fb{color:var(--on-plum-2);text-decoration:none}
+.rate-fb b{color:var(--gold-light);font-weight:600}
+.rate{display:inline-flex;align-items:center;gap:12px;height:100%;color:var(--on-plum);font-size:12.5px}
+.rate[hidden],.rate-fb[hidden]{display:none}
+.rate-dot{width:6px;height:6px;border-radius:50%;background:var(--plum-gold);box-shadow:0 0 0 3px rgba(226,194,122,.2);animation:live 2.4s ease-in-out infinite}
+@keyframes live{50%{box-shadow:0 0 0 6px rgba(226,194,122,0)}}
+.rate-k{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--plum-gold)}
+.rate-u{color:var(--on-plum-2)}
+.rate:hover .rate-u{text-decoration:underline}
+.rate-v{font-weight:600}
+.rate-v b{font-family:var(--display);font-weight:600;color:var(--plum-gold);margin-right:6px}
+@media (min-width:1021px){.rate-in{justify-content:space-between}.rate-place{display:inline}}
+@media (max-width:400px){.rate-k{display:none}.rate{gap:10px;font-size:12px}}
 .logo{display:block;line-height:0}
 .logo img{height:64px;width:auto;transition:height .5s var(--ease)}
 .mast.small .logo img{height:48px}
@@ -144,7 +162,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .then-i .era{transform:scale(1.04);transition:transform 2.4s var(--ease)}
 .loaded .is-then .then-i .era{transform:none}
 .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(44,7,27,.9) 0%,rgba(44,7,27,.66) 32%,rgba(44,7,27,0) 60%),linear-gradient(0deg,rgba(44,7,27,.6) 0%,rgba(44,7,27,0) 22%)}
-.hero-in{position:relative;z-index:3;min-height:clamp(560px,calc(100svh - 81px),max(860px,42vw));display:grid;align-content:center;padding-block:clamp(48px,6vw,96px)}
+.hero-in{position:relative;z-index:3;min-height:clamp(560px,calc(100svh - 81px - var(--rate-h)),max(860px,42vw));display:grid;align-content:center;padding-block:clamp(48px,6vw,96px)}
 /* desktop: fewer words, so the two brides carry it */
 @media (min-width:821px){
   .hero .now-c .script,.hero .now-c .lede,.hero .then-c .label{display:none}
@@ -197,9 +215,9 @@ button{cursor:pointer;background:none;border:0;padding:0}
   .hero{container-type:inline-size}
   .hero-in{min-height:calc(100cqw * 9 / 16 - 6px);align-content:start}
   /* on screens shorter than 16:9 the hero runs past the fold: centre the copy in the part you see on arrival,
-     and lift the 1967 / Today switch onto that first screen (81px is the masthead) */
-  .hcopy{min-height:calc(min(100cqw * 9 / 16, 100svh - 81px) - 6px - 2 * clamp(48px,6vw,96px))}
-  .eras-ui{bottom:max(clamp(24px,3vw,40px),calc(100% - 100svh + 81px + clamp(24px,3vw,40px)))}
+     and lift the 1967 / Today switch onto that first screen (81px is the masthead, under the gold rate bar) */
+  .hcopy{min-height:calc(min(100cqw * 9 / 16, 100svh - 81px - var(--rate-h)) - 6px - 2 * clamp(48px,6vw,96px))}
+  .eras-ui{bottom:max(clamp(24px,3vw,40px),calc(100% - 100svh + 81px + var(--rate-h) + clamp(24px,3vw,40px)))}
 }
 @media (max-width:820px){
   .hero{--ph:min(108vw,600px);--edge:40vw}
@@ -476,6 +494,14 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .enrol .x svg{width:22px;height:22px}
 .enrol .note{font-size:13.5px;color:var(--muted);padding:12px 14px;background:var(--tint)}
 .enrol .btn{justify-self:stretch}
+.rd{display:grid;gap:16px;padding:clamp(26px,4vw,40px)}
+.rate-t{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.rate-t th,.rate-t td{text-align:right;padding:13px 0;border-bottom:1px solid var(--rule)}
+.rate-t th:first-child{text-align:left}
+.rate-t thead th{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.rate-t tbody th{font-family:var(--display);font-size:17px;font-weight:600;color:var(--gold-deep)}
+.rate-t td{font-size:17px;font-weight:600;color:var(--ink)}
+.rate-note{display:grid;gap:6px;font-size:14px;color:var(--muted)}
 
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,20px);opacity:0;background:var(--plum);color:var(--on-plum);font-size:14px;padding:12px 18px;transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
