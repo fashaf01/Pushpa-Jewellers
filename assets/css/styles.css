@@ -122,7 +122,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .nav{display:flex;justify-content:center;align-items:center;gap:clamp(16px,2.4vw,40px)}
 .nav>li{position:relative}
 .n{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:13.5px;letter-spacing:.1em;font-weight:600;text-transform:uppercase;text-decoration:none;color:var(--on-plum);padding-block:12px;background:linear-gradient(var(--plum-gold),var(--plum-gold)) 50% 100%/0 1px no-repeat;transition:background-size .4s var(--ease),color .3s}
-.n:hover,.n[aria-expanded="true"]{background-size:100% 1px;color:var(--gold-light)}
+.n:hover,.n[aria-expanded="true"],.n[aria-current="page"]{background-size:100% 1px;color:var(--gold-light)}
 .n svg{width:10px;height:10px;transition:transform .3s}
 .n[aria-expanded="true"] svg{transform:rotate(180deg)}
 .dd-m{position:absolute;left:50%;top:100%;transform:translateX(-50%);min-width:280px;padding:10px;background:var(--plum-2);box-shadow:inset 0 0 0 1px var(--plum-rule),0 24px 40px -20px rgba(0,0,0,.6);display:grid}
@@ -544,12 +544,89 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .fab{display:none}
 @media (max-width:760px){.fab{position:fixed;right:16px;bottom:16px;z-index:45;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;background:var(--wine);color:var(--gold-light);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;box-shadow:0 10px 24px -12px rgba(44,7,27,.6);transform:translateY(90px);transition:transform .6s var(--ease)}.fab.show{transform:none}.fab svg{width:18px;height:18px}}
 
+/* ---------- shop: the collection grid and a page for each piece (shop/index.html, shop.js) ---------- */
+.crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.crumbs a{text-decoration:none;color:inherit;transition:color .3s}
+.crumbs a:hover{color:var(--wine)}
+.crumbs [aria-current]{color:var(--gold-deep)}
+.dark .crumbs{color:var(--on-plum-2)}
+.dark .crumbs a:hover,.dark .crumbs [aria-current]{color:var(--plum-gold)}
+.shop-head{padding-block:clamp(32px,4.4vw,64px) clamp(30px,4vw,56px);border-bottom:1px solid var(--plum-rule)}
+.shop-head .wrap{display:grid;gap:14px;justify-items:start}
+.shop-body{padding-block:clamp(22px,2.6vw,34px) var(--sec)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.shop-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;margin:16px 0 26px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine);box-shadow:inset 0 0 0 1px var(--rule-2);transition:background .3s,color .3s,box-shadow .3s}
+.chip:hover{box-shadow:inset 0 0 0 1px var(--wine)}
+.chip span{font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:0;color:var(--soft);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--wine);color:var(--gold-light);box-shadow:none}
+.chip[aria-pressed="true"] span{color:var(--gold-light);opacity:.8}
+.sort{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.sort select{min-height:40px;padding:0 36px 0 14px;border:1px solid var(--rule-2);border-radius:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 3.5L5 7l3.5-3.5' fill='none' stroke='%236d1745' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 13px center/10px;-webkit-appearance:none;appearance:none;font-size:14px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--ink);cursor:pointer}
+.shop-count{font-size:13.5px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(26px,3vw,44px) clamp(16px,2vw,28px)}
+.pc{animation:pcIn .7s var(--ease) both}
+@keyframes pcIn{from{opacity:0;transform:translateY(12px)}}
+.pc a{display:grid;gap:6px;text-decoration:none;color:inherit}
+.pc .ph{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--tint);margin-bottom:6px}
+.pc .ph::after{content:"";position:absolute;inset:8px;border:1px solid rgba(236,210,143,.7);pointer-events:none;transition:inset .6s var(--ease),border-color .5s}
+.pc img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.pc a:hover img{transform:scale(1.04)}
+.pc a:hover .ph::after{inset:12px;border-color:#fff1c8}
+.pc b{font-family:var(--display);font-weight:600;font-size:15.5px;line-height:1.3;letter-spacing:.03em;color:var(--wine)}
+.pc .m{font-size:13px;color:var(--muted)}
+.pc i{font-style:normal;font-size:13px;font-weight:600;color:var(--gold-deep);font-variant-numeric:tabular-nums}
+.pc i small,.pv-wt small{font-size:.85em;font-weight:500;color:var(--muted)}
+.pc i.no{font-weight:500;color:var(--soft)}
+.pv-wrap{padding-block:clamp(22px,2.6vw,34px) var(--sec)}
+.pv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start;margin-top:22px}
+.pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
+.pv-ph::after{content:"";position:absolute;inset:12px;border:1px solid rgba(236,210,143,.75);pointer-events:none}
+.pv-ph img{width:100%;height:100%;object-fit:cover}
+.pv-c{position:sticky;top:112px;display:grid;gap:20px;justify-items:start}
+.pv-h{font-family:var(--fancy);font-size:clamp(32px,3.6vw,54px);line-height:1.06;color:var(--wine)}
+.pv-wt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;border-block:1px solid var(--rule)}
+.pv-wt div{display:grid;gap:4px;padding-block:14px}
+.pv-wt div+div{padding-left:22px;border-left:1px solid var(--rule)}
+.pv-wt dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.pv-wt dd{font-family:var(--display);font-weight:600;font-size:clamp(20px,1.9vw,26px);line-height:1.25;color:var(--wine);font-variant-numeric:tabular-nums}
+.pv-wt.none{display:block;padding-block:14px;color:var(--muted)}
+.pv-wt dd .u,.pv-wt dd small{font-family:var(--sans);font-size:.62em;font-weight:500;letter-spacing:0;color:var(--muted)}
+.pv-d{max-width:46ch;font-size:clamp(16px,1.2vw,17.5px)}
+.pv-price{max-width:46ch;font-size:14px;color:var(--muted)}
+.pv-price b{color:var(--gold-deep)}
+.pv-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.pv-more{margin-top:clamp(56px,7vw,104px);padding-top:clamp(36px,4vw,56px);border-top:1px solid var(--rule)}
+.pv-more .h2{margin-bottom:clamp(24px,3vw,40px)}
+@media (max-width:1020px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){
+  .pv{grid-template-columns:minmax(0,1fr);margin-top:16px}
+  .pv-ph{margin-inline:calc(var(--gut) * -1)}
+  .pv-ph::after{inset:10px}
+  .pv-c{position:static}
+}
+@media (max-width:600px){
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(var(--gut) * -1);padding-inline:var(--gut)}
+  .shop-meta{margin:12px 0 20px}
+  .sort select{min-height:38px;font-size:13.5px}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;min-height:38px;padding:0 14px;font-size:12px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px}
+  .pc .ph{margin-bottom:4px}
+  .pc .ph::after{inset:6px}
+  .pc b{font-size:14px}
+  .pc .m,.pc i{font-size:12px}
+  .pv-h{font-size:32px}
+  .pv-ctas{display:grid;width:100%}
+}
+
 /* tuned for The Seasons (mixed case, lighter than Cinzel's capitals); only applies when the kit loads */
 .has-seasons .hero h1{font-size:clamp(40px,5vw,82px);font-weight:400;letter-spacing:0;line-height:1.02}
 .has-seasons .then-year{font-weight:400;letter-spacing:0}
 .has-seasons .h2{font-size:clamp(34px,4.2vw,60px);font-weight:400;letter-spacing:0}
 .has-seasons .suba h2{font-size:clamp(52px,6.2vw,96px);font-weight:400;letter-spacing:0}
 .has-seasons .year{font-weight:400;letter-spacing:0}
+.has-seasons .pv-h{font-weight:400}
 .has-seasons .hello .e{font-weight:400}
 .has-seasons .enrol h2{font-size:clamp(28px,3.4vw,36px);font-weight:400}
 .has-seasons .foot-top .scr{font-size:clamp(20px,1.9vw,26px);letter-spacing:.02em}

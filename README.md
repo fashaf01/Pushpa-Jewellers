@@ -1,14 +1,17 @@
-# Pushpa Jewellers — Landing Page
+# Pushpa Jewellers — Website
 
-A static landing page for **Pushpa Jewellers (Pvt) Ltd**, *Forever Quality & Trust*,
+A static website for **Pushpa Jewellers (Pvt) Ltd**, *Forever Quality & Trust*,
 since 1967. Negombo and Katunayake, Sri Lanka.
 
 Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
 gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
 frame (the arch).
 
+Two pages: the home page (`index.html`) and the shop (`shop/index.html`, at `/shop/`).
+
 No build step, no dependencies. It is hosted on Vercel at
-**https://pushpa-jewellers.vercel.app**. Locally, open `index.html` or serve the folder:
+**https://pushpa-jewellers.vercel.app**. Locally, serve the folder (the shop needs a server,
+since it lives at `/shop/`):
 
 ```bash
 python3 -m http.server 8000
@@ -17,21 +20,52 @@ python3 -m http.server 8000
 A plain static server has no `/api/gold`, so locally the top bar shows
 "Call 031 223 8822 for today's gold rate" instead of the rate.
 
-`node build.js` inlines the CSS, JS, favicon and every image into a single
-self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
-(it too shows the call line in place of the rate).
+`node build.js` inlines the CSS, JS, favicon and every image of the home page into a
+single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
+(it too shows the call line in place of the rate, and has no shop).
 
 ## Files
 
 ```
-index.html               markup, the inline SVG icon sprite, JSON-LD
-assets/css/styles.css    design tokens and all layout
-assets/js/main.js        hero turn, Suba Mangala calculator, enrol dialog, order tracking,
-                         opening-hours week, scroll reveals
+index.html               the home page: markup, the inline SVG icon sprite, JSON-LD
+shop/index.html          the shop
+assets/css/styles.css    design tokens and all layout, both pages
+assets/js/site.js        shared by both pages: header, menus, gold rate bar, copy buttons,
+                         header shrinking on scroll, reveals, the entrance
+assets/js/main.js        home page only: hero turn, Suba Mangala calculator and enrolment,
+                         order tracking, opening-hours week, the welcome
+assets/js/pieces.js      the shop's catalogue, one line per piece
+assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
 assets/img/              photographs (webp) and favicon
+assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
 assets/img/orn/          gold ornaments: corner, dividers, mandalas (svg)
 api/gold.js              today's gold rate, a Vercel function served at /api/gold
+tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
+
+## The shop
+
+`/shop/` shows every piece in `assets/js/pieces.js`, newest first, with its weight in grams
+and in pawn (8 g). Visitors can filter by necklaces, bangles, rings, pendants, bracelets or
+bridal, and sort by weight. Each piece has its own page at `/shop/?piece=<slug>`: the large
+photo, weight, description, today's 22K rate, an "Ask about this piece" button that opens
+WhatsApp with the piece's name and weight filled in, a call button, a link to its Instagram
+post, and more pieces of the same kind. Filters and sorting are in the address too
+(`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection
+tiles open the shop filtered this way.
+
+The 32 pieces and photos come from the shop's Instagram posts, approved for the website.
+
+**To add a piece:**
+
+1. Put its photo, 1080 x 1350, in `assets/img/shop/`, named after the piece's slug
+   (`assets/img/shop/rose-ring.webp`).
+2. Make its grid copy: `python3 tools/shop-thumbs.py`. Without one, the grid uses the full photo.
+3. Add a line at the top of `assets/js/pieces.js`. The comments there explain each field.
+
+The shop page shares the home page's header, menus, footer and gold rate panel. They are
+copied into `shop/index.html` with links pointing back to the home page, so a change to any
+of them has to be made in both files.
 
 ## Today's gold rate
 

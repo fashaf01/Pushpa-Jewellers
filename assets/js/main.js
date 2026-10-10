@@ -1,17 +1,11 @@
+/* The home page: the hero's turn from 1967 to today, the Suba Mangala calculator and enrolment, order and repair
+   tracking, this week's hours, the welcome, and the counter photo warming to colour. What every page shares
+   (header, menus, gold rate, reveals, entrance) is in site.js, which runs first and provides window.PJ. */
 (function () {
   'use strict';
-  var d = document;
-  function $(s, r) { return (r || d).querySelector(s); }
-  function $$(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
-  var WA = 'https://wa.me/94777770203?text=';
-  function wa(t) { return WA + encodeURIComponent('Hello Pushpa Jewellers, ' + t); }
-  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-  function rs(n) { return n.toLocaleString('en-US'); }
-  var toast = $('#toast'), tt;
-  function say(m) { toast.textContent = m; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2200); }
-  function openWA(url) { var w = window.open(url, '_blank', 'noopener'); if (!w) location.href = url; }
+  var PJ = window.PJ, d = document;
+  if (!PJ || !d.getElementById('hero')) return;
+  var $ = PJ.$, $$ = PJ.$$, reduce = PJ.reduce, wa = PJ.wa, clamp = PJ.clamp, rs = PJ.rs, openWA = PJ.openWA;
 
   /* ---------- odometer: digits roll into place ---------- */
   var ODOS = [];
@@ -48,17 +42,6 @@
     }
     this.str = str;
   };
-
-  /* ---------- masthead, services menu, mobile menu ---------- */
-  var mast = $('#mast'), ddB = $('#dd-b'), ddM = $('#dd-m');
-  ddB.addEventListener('click', function () { var o = ddM.hidden; ddM.hidden = !o; ddB.setAttribute('aria-expanded', String(o)); });
-  d.addEventListener('click', function (e) { if (!e.target.closest('.dd')) { ddM.hidden = true; ddB.setAttribute('aria-expanded', 'false'); } });
-  $$('a', ddM).forEach(function (a) { a.addEventListener('click', function () { ddM.hidden = true; ddB.setAttribute('aria-expanded', 'false'); }); });
-  var menu = $('#menu');
-  // focus the menu itself, not its close button, so opening it by touch draws no focus ring
-  $('#burger').addEventListener('click', function () { if (menu.showModal) menu.showModal(); else menu.setAttribute('open', ''); menu.focus(); });
-  $('#menu-x').addEventListener('click', function () { menu.close ? menu.close() : menu.removeAttribute('open'); });
-  $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { if (menu.close) menu.close(); }); });
 
   /* ---------- hero: opens on Pushpa in 1967, then turns to today; the switch moves between them ---------- */
   var hero = $('#hero'), eraLive = $('#era-live'), thenC = $('#then-c'), nowC = $('#now-c'), eraBtns = $$('[data-era]', hero), firstT = [];
@@ -197,59 +180,18 @@
     week.innerHTML = html + '</div>';
   })();
 
-  /* ---------- today's gold rate (api/gold.js): 24K and 22K per pawn in the bar; tap for per gram too ---------- */
-  var gold = null, rateB = $('#rate'), rateD = $('#rate-d');
-  function loadGold() {
-    if (!window.fetch) return;
-    fetch('/api/gold', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); }).then(function (g) {
-      if (!g || !g.k24 || !g.k22) return;
-      gold = g;
-      $('#r24').textContent = rs(+g.k24.pawn);
-      $('#r22').textContent = rs(+g.k22.pawn);
-      rateB.hidden = false;
-      $('#rate-fb').hidden = true;
-    }).catch(function () {});
-  }
-  rateB.addEventListener('click', function () {
-    if (!gold) return;
-    var when = new Date(gold.updated), time = '';
-    try { if (!isNaN(when)) time = when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Colombo' }); } catch (e) {}
-    $('#rate-t').innerHTML = '<thead><tr><th scope="col">Purity</th><th scope="col">Per gram</th><th scope="col">Per pawn (8 g)</th></tr></thead><tbody>' +
-      '<tr><th scope="row">24K</th><td>Rs ' + rs(+gold.k24.gram) + '</td><td>Rs ' + rs(+gold.k24.pawn) + '</td></tr>' +
-      '<tr><th scope="row">22K</th><td>Rs ' + rs(+gold.k22.gram) + '</td><td>Rs ' + rs(+gold.k22.pawn) + '</td></tr></tbody>';
-    $('#rate-note').innerHTML = (gold.source === 'showroom'
-      ? '<p>Today’s rate at our counter.</p>'
-      : '<p>The international gold market price, converted to rupees at today’s exchange rate and refreshed every hour. Our counter rate can differ, so call to confirm before you visit.</p>') +
-      (time ? '<p class="tab">Updated ' + time + ', Sri Lanka time</p>' : '');
-    if (rateD.showModal) rateD.showModal(); else rateD.setAttribute('open', '');
-    rateD.focus();
-  });
-  $('#rate-x').addEventListener('click', function () { rateD.close(); });
-  rateD.addEventListener('click', function (e) { if (e.target === rateD) rateD.close(); });
-  loadGold();
-  setInterval(loadGold, 30 * 60 * 1000);
-  d.addEventListener('visibilitychange', function () { if (!d.hidden) loadGold(); });
-
-  /* ---------- welcome, copy ---------- */
+  /* ---------- welcome ---------- */
   var hello = $$('.hello span'), hk = 0;
   hello[0].classList.add('lit');
   if (!reduce) setInterval(function () { hello[hk].classList.remove('lit'); hk = (hk + 1) % hello.length; hello[hk].classList.add('lit'); }, 2800);
-  $$('.copy').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var v = b.getAttribute('data-copy');
-      try { navigator.clipboard.writeText(v).then(function () { say('Copied ' + v); }, function () { say(v); }); } catch (e) { say(v); }
-    });
-  });
 
-  /* ---------- scroll ---------- */
-  var shopPh = $('#shop-ph'), fab = $('#fab'), ticking = false;
+  /* ---------- scroll: the counter photo warms from sepia to colour ---------- */
+  var shopPh = $('#shop-ph'), ticking = false;
   function prog(el) { var r = el.getBoundingClientRect(), vh = window.innerHeight; return clamp((vh - r.top) / (vh + r.height), 0, 1); }
   function onScroll() {
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () {
       ticking = false;
-      mast.classList.toggle('small', window.scrollY > 60);
-      fab.classList.toggle('show', window.scrollY > window.innerHeight * .8);
       shopPh.style.setProperty('--gs', reduce ? 0 : clamp(1 - (prog(shopPh) - 0.2) / 0.4, 0, 1).toFixed(3));
     });
   }
@@ -257,27 +199,22 @@
   window.addEventListener('resize', function () { onScroll(); if (tlSeen) fillTL(); });
   onScroll();
 
-  /* ---------- reveals; coins and the timeline play when they come into view ---------- */
+  /* ---------- the calculator's coins and the timeline play when they come into view ---------- */
   var calcEl = $('.calc'), tlCard = $('.tl-card');
   if ('IntersectionObserver' in window && !reduce) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
-        var t = e.target; t.classList.add('in'); io.unobserve(t);
+        var t = e.target; io.unobserve(t);
         if (t === calcEl) setTimeout(function () { renderCalc(true); }, 300);
         if (t === tlCard) { tlSeen = true; setTimeout(fillTL, 300); }
       });
     }, { rootMargin: '0px 0px -10% 0px' });
-    $$('.rv').forEach(function (el) { if (!el.closest('.hero')) io.observe(el); });
-  } else { $$('.rv').forEach(function (el) { el.classList.add('in'); }); tlSeen = true; fillTL(); }
+    io.observe(calcEl); io.observe(tlCard);
+  } else { tlSeen = true; fillTL(); }
 
-  try { if (d.fonts && d.fonts.load) d.fonts.load('1em "the-seasons"').then(function (f) { if (f && f.length) d.documentElement.classList.add('has-seasons'); }, function () {}); } catch (e) {}
   if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { ODOS.forEach(function (o) { o.measure(); var s0 = o.str; o.str = ''; o.set(s0, true); }); });
 
-  /* ---------- entrance, after the flower has drawn ---------- */
-  var delay = reduce ? 0 : 1900;
-  setTimeout(function () {
-    d.body.classList.add('loaded');
-    playFirst();
-  }, delay);
+  /* ---------- entrance: once the flower has drawn, 1967 holds, then turns to today ---------- */
+  PJ.onLoaded(playFirst);
 })();

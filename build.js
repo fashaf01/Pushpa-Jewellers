@@ -1,4 +1,4 @@
-/* Inlines the stylesheet, script, favicon and every image into one self-contained page,
+/* Inlines the stylesheet, scripts, favicon and every image of the home page into one self-contained page,
    for hosting that serves a single file. */
 const fs = require('fs');
 const path = require('path');
@@ -10,11 +10,10 @@ const dataUri = p => `data:${TYPES[path.extname(p)]};base64,${read(p).toString('
 
 let html = read('index.html', 'utf8');
 const css = read('assets/css/styles.css', 'utf8');
-const js = read('assets/js/main.js', 'utf8');
 
 html = html
   .replace('<link rel="stylesheet" href="assets/css/styles.css">', () => `<style>\n${css}\n</style>`)
-  .replace('<script src="assets/js/main.js" defer></script>', () => `<script>\nwindow.addEventListener('DOMContentLoaded', function () {\n${js}\n});\n</script>`)
+  .replace(/<script src="(assets\/js\/[^"]+)" defer><\/script>/g, (_, p) => `<script>\nwindow.addEventListener('DOMContentLoaded', function () {\n${read(p, 'utf8')}\n});\n</script>`)
   .replace('href="assets/img/favicon.svg"', () => `href="${dataUri('assets/img/favicon.svg')}"`)
   .replace(/(src|srcset)="(assets\/img\/[^"]+)"/g, (_, attr, p) => `${attr}="${dataUri(p)}"`);
 
