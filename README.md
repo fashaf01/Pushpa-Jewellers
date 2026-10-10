@@ -1,7 +1,11 @@
 # Pushpa Jewellers — Landing Page
 
-A static landing page for **Pushpa Jewellers (Pvt) Ltd** — *Forever Trusted Jewellers
-since 1967* — Negombo and Katunayake, Sri Lanka.
+A static landing page for **Pushpa Jewellers (Pvt) Ltd**, *Forever Quality & Trust*,
+since 1967. Negombo and Katunayake, Sri Lanka.
+
+Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
+gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
+frame (the arch).
 
 No build step, no dependencies. Open `index.html`, or serve the folder:
 
@@ -9,128 +13,100 @@ No build step, no dependencies. Open `index.html`, or serve the folder:
 python3 -m http.server 8000
 ```
 
-`node build.js` inlines the CSS, JS and favicon into a single self-contained
-`dist/pushpa-jewellers.html`, for hosting that serves one file.
+`node build.js` inlines the CSS, JS, favicon and every image into a single
+self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file.
 
 ## Files
 
 ```
-index.html              markup + the inline SVG sprite that draws every illustration
-assets/css/styles.css   design tokens and all layout
-assets/js/main.js       drawer, carousel, scroll reveal, form handling
-assets/img/favicon.svg  tab icon
+index.html               markup, the inline SVG icon sprite, JSON-LD
+assets/css/styles.css    design tokens and all layout
+assets/js/main.js        hero turn, Suba Mangala calculator, enrol dialog, order tracking,
+                         opening-hours week, scroll reveals
+assets/img/              photographs (webp) and favicon
+assets/img/orn/          gold ornaments: corner, dividers, mandalas (svg)
 ```
+
+## Sections
+
+1. **Hero.** Opens on Pushpa in 1967, then turns to today. The 1967 / Today switch moves between them.
+2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
+3. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
+4. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
+5. **Services.** Pawning, money exchange and airline ticketing.
+6. **The collection.** Necklaces, bangles, rings and pendants.
+7. **About.** 1967, the pride of Negombo.
+8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
+
+### The hero is 16:9 on desktop
+
+Both hero photographs are 1920 x 1080, so from 821px wide the hero takes that same
+16:9 shape and shows each bride whole, uncropped. On screens shorter than 16:9
+(most laptops, once the browser bar is counted) the hero runs a little past the
+fold, so the headline and buttons are centred in the part you see on arrival, and
+the 1967 / Today switch is lifted onto the first screen. Below 821px the phone
+layout puts the photo on top and the copy underneath.
+
+The rule is the `desktop: the hero is 16:9` block in `styles.css`.
+
+## Suba Mangala figures
+
+On the 6 month plan the cash gift is half of one instalment. On the 12 month plan
+it is one full instalment. Instalments run Rs 1,000 to Rs 10,000 in steps of 1,000.
+The calculator and both plan tables come from the one `plan()` function in `main.js`.
+
+## WhatsApp
+
+There is no backend. Enrolling, tracking and every "Ask about" link open WhatsApp
+with the message pre-filled. The number is at the top of `main.js` and in the
+`wa.me` links in `index.html`:
+
+```js
+var WA = 'https://wa.me/94777770203?text=';
+```
+
+## Fonts
+
+- **The Seasons** (Adobe Fonts kit `tiq7fhn`) for the big headlines. **Add the
+  site's domain to this kit in Adobe Fonts > Web Projects**, or the kit will not
+  serve on the live site. The page falls back to Cinzel if it does not load.
+- **Cinzel, Figtree, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil**
+  from Google Fonts.
 
 ## Business details used on the page
 
-These came from the company's public listings and social profiles. **Please check
-each one before the site goes live.**
+**Please check each one before the site goes live.**
 
 | | |
 |---|---|
-| Founded | 1967 |
-| Negombo (flagship) | 67 & 69 Greens Road, Negombo 11500 |
-| Katunayake | 8A Averiwatte Road, Katunayake |
-| Phone | 031 223 3857 · 031 222 2404 · 077 777 0203 |
+| Founded | 1967, Greens Road, Negombo |
+| Showrooms | 67 Greens Road, Negombo (head office) · 150A Sea Street, Negombo · 8A Averiwatte, Katunayake |
+| Hotline | 031 223 8822 |
+| Tel | 031 223 3857 · 031 222 2404 · Katunayake 011 225 4689 |
+| WhatsApp | 077 777 0203 |
 | Hours | Mon–Sat 9.15 am – 7.30 pm · Sun 9.15 am – 2.00 pm |
 | Instagram | [@pushpajewellers_official](https://www.instagram.com/pushpajewellers_official/) |
 | Facebook | [pushpajewellerspvtltd](https://www.facebook.com/pushpajewellerspvtltd/) |
-| Products | 22kt & 18kt gold, diamonds, platinum, gemstones |
-| Services | Retail, bespoke, bridal, gold pawning, authorised money exchange |
+| Services | Suba Mangala plan, order and repair tracking, pawning, money exchange (Western Union, MoneyGram, Ria), airline ticketing |
 
-**Not yet filled in:** a public email address. Search the directory listings and
-you find `pushpaairtravels@gmail.com`, which belongs to the sister travel
-business — so it is deliberately left off the page rather than guessed at.
-Add the real one to the footer and the `JewelryStore` JSON-LD block when you have it.
+The same details are in the `JewelryStore` JSON-LD in `<head>`. Update both together.
 
-## Getting the real photography
+## Product photography
 
-The build environment has no outbound network access — every host, including
-Instagram, Facebook and the old WooCommerce site, is refused by the egress
-proxy. So the images have to be fetched from a machine that can reach them.
-
-`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library:
+`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library into
+`product-images/`, with a `manifest.tsv` of titles and alt text:
 
 ```sh
 sh tools/fetch-images.sh https://saravanas.lk
 ```
 
-It walks `/wp-json/wp/v2/media`, saves every image into `product-images/`, and
-writes `manifest.tsv` mapping each file to its title and alt text — which is
-what tells us which shot is which piece. If the REST route is disabled it
-prints a `wget` fallback that mirrors `/wp-content/uploads/`.
-
-Commit that folder and the images can be wired into the slots below.
-
-**Before using them, confirm the photographs are the client's to use.** Product
-photography is normally owned by whoever shot it, and a site being "the old
-site" is worth verifying if the domain belongs to a different trading name.
-
-## Adding photography
-
-Every image is drawn in SVG. To use real photographs, you do not touch the
-markup — open `assets/js/main.js` and paste a URL against the slot you want:
-
-```js
-var PHOTOS = {
-  heroAside: 'https://images.unsplash.com/photo-XXXX?w=1600&q=80&fm=webp',
-  catRings:  'assets/img/rings.jpg',
-  ...
-};
-```
-
-A slot with a URL swaps to the photograph; a slot left empty keeps its
-drawing, so the page never shows a hole. The drawing is only removed once the
-photograph has actually loaded, so a broken or slow URL degrades quietly.
-
-Any direct image URL works: an Unsplash CDN link (the
-`https://images.unsplash.com/photo-…` address behind their Download button),
-or your own file committed under `assets/img/`. Appending
-`?w=1600&q=80&fm=webp` to an Unsplash URL keeps the page light.
-
-The nineteen slots, and the crop each one wants:
-
-| Key | Where | Crop |
-|---|---|---|
-| `heroAside` | Hero, right panel | tall portrait — model wearing a bridal set |
-| `catNecklaces` `catEarrings` `catRings` `catBangles` | Category strip | portrait lifestyle — neck, ear, hand, wrist |
-| `prodSolitaire` `prodBridalNecklace` `prodStuds` `prodSapphire` `prodTennis` `prodBangles` `prodPendant` `prodChain` | Favourites carousel | square packshot on white |
-| `workshop` | Workshop panel | bench, tools, a jeweller at work |
-| `bridalSet` `bridalEarrings` `bridalBangles` | Bridal | tall portrait |
-| `showroomNegombo` `showroomKatunayake` | Showrooms | wide — shopfront or interior |
-
-Two cautions worth keeping in mind:
-
-- **Stock photography is not your stock.** A generic photo beside a specific
-  listing ("22kt gold · 42.6 g") reads as a real product that you can be asked
-  to sell. Use stock for the atmosphere slots — hero, categories, bridal,
-  workshop, showrooms — and hold the eight carousel slots for photographs of
-  pieces you actually have.
-- **Check the licence covers commercial use.** The Unsplash licence does; many
-  other "free" libraries require attribution or bar commercial use.
-
-## Prices
-
-Gold pieces read **"At today's gold rate"** rather than a fixed figure, because
-22kt prices track the daily rate. Stone-led pieces read **"Price on enquiry."**
-Weights and carats in the markup are illustrative — swap them for the real stock.
-
-## The appointment form
-
-There is no backend. A valid submission opens WhatsApp with the enquiry pre-filled,
-which is how the showroom already takes bookings. The number is at the top of
-`main.js`:
-
-```js
-var WHATSAPP_NUMBER = '94777770203';
-```
-
-To post to a real endpoint instead, replace the `window.open(...)` call in the
-submit handler with your `fetch`.
+**Before using any photograph, confirm it is the client's to use** and that the
+licence covers commercial use.
 
 ## Notes
 
-- Fonts load from Google Fonts (Cormorant Garamond + Jost) with system fallbacks.
-- Responsive from 320px up; no horizontal overflow at any width tested.
-- Honours `prefers-reduced-motion`; skip link, focus states and ARIA labels throughout.
-- `JewelryStore` JSON-LD in `<head>` carries both showrooms for local search.
+- Responsive from 320px up, with no horizontal scroll.
+- Honours `prefers-reduced-motion`. The intro, hero turn, reveals and coin
+  animations all switch off.
+- Focus states, ARIA labels and live regions throughout. The Sinhala and Tamil
+  lines carry `lang` attributes.
