@@ -114,9 +114,9 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
    a label, a two-line headline, one button and a text link.
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
-4. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
+4. **Services.** Pawning, money exchange and airline ticketing (the menu's Services link lands here).
 5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
-6. **Services.** Pawning, money exchange and airline ticketing.
+6. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
 7. **About.** 1967, the pride of Negombo.
 8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
 
