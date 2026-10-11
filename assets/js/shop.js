@@ -175,6 +175,57 @@
   }
   pieceView.addEventListener('scroll', function (e) { if (e.target.id === 'pv-track' && !tick) tick = requestAnimationFrame(glide); }, true);
   pieceView.addEventListener('touchstart', function () { aim = 0; }, { passive: true });
+  /* A finger on the photo: the photos are set not to scroll by touch (touch-action: pan-y in the styles), so an up or down
+     drag always scrolls the page. A drag that is clearly sideways moves the photos with the finger, and on release the
+     photos settle on the next one, the same one, or the one before, by how far and how fast the finger went. */
+  var drag = null, settling = null;
+  // snapping stays off while the photos glide to their place, so it cannot pull them to another one on the way; one pending
+  // clean-up at a time, so an old one can never switch snapping back on in the middle of the next drag
+  function endSettling() {
+    if (!settling) return;
+    clearTimeout(settling.timer);
+    settling.t.removeEventListener('scrollend', settling.fn);
+    settling.t.classList.remove('drag');
+    settling = null;
+  }
+  pieceView.addEventListener('pointerdown', function (e) {
+    var t = e.pointerType !== 'mouse' && e.target.closest ? e.target.closest('#pv-track') : null;
+    if (!t || t.children.length < 2) return;
+    aim = 0;
+    endSettling();
+    drag = { t: t, id: e.pointerId, x: e.clientX, y: e.clientY, left: t.scrollLeft, w: t.clientWidth || 1, lock: null, lx: e.clientX, lt: e.timeStamp, vx: 0 };
+  });
+  pieceView.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.lock) {
+      // wait until the finger has gone far enough to tell; it is sideways only if it is clearly more sideways than up or down
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      drag.lock = Math.abs(dx) > Math.abs(dy) * 1.5 ? 'x' : 'y';
+      if (drag.lock === 'x') { drag.t.classList.add('drag'); try { drag.t.setPointerCapture(e.pointerId); } catch (err) {} }
+    }
+    if (drag.lock !== 'x') return;
+    drag.t.scrollLeft = Math.max(0, Math.min(drag.t.scrollWidth - drag.w, drag.left - dx));
+    var dt = e.timeStamp - drag.lt;
+    if (dt > 0) drag.vx = (e.clientX - drag.lx) / dt;
+    drag.lx = e.clientX; drag.lt = e.timeStamp;
+  });
+  function release(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (d.lock !== 'x') return;
+    // a cancelled touch (the browser took it over) has no finger position of its own, so use the last one seen
+    var dx = (e.type === 'pointercancel' ? d.lx : e.clientX) - d.x, start = Math.round(d.left / d.w), n = d.t.children.length;
+    if (e.type === 'pointercancel') d.vx = 0;
+    var far = Math.abs(dx) > d.w * 0.18 || Math.abs(d.vx) > 0.35;
+    var to = Math.max(0, Math.min(n - 1, start + (far ? (dx < 0 ? 1 : -1) : 0)));
+    show(to + 1);
+    endSettling();
+    settling = { t: d.t, fn: endSettling, timer: setTimeout(endSettling, 700) };
+    if ('onscrollend' in window) d.t.addEventListener('scrollend', endSettling, { once: true });
+  }
+  pieceView.addEventListener('pointerup', release);
+  pieceView.addEventListener('pointercancel', release);
   pieceView.addEventListener('click', function (e) {
     var b = e.target.closest('.pv-th, .pv-nav');
     if (b) show(b.classList.contains('pv-nav') ? shown + +b.getAttribute('data-step') : +b.getAttribute('data-photo'));
@@ -243,7 +294,7 @@
       update();
       end = to && to();
       if (end) end.style.viewTransitionName = 'pj-photo';
-    }).finished.then(function () { if (end) end.style.viewTransitionName = ''; }, function () {});
+    }).finished.then(function () { if (end) end.style.viewTransitionName = ''; }, function () { if (end) end.style.viewTransitionName = ''; });
   }
   function cardPhoto(slug, root) { return slug ? $('a[data-piece="' + slug + '"] .ph', root) : null; }
   function piecePhoto() { return $('.pv-ph', pieceView); }

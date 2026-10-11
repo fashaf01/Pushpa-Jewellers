@@ -599,7 +599,11 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
 .pv-ph::after{content:"";position:absolute;inset:12px;border:1px solid rgba(236,210,143,.75);pointer-events:none}
 /* the photos sit side by side and slide under the finger, snapping one at a time */
-.pv-track{display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none}
+/* touch-action: pan-y: a finger on the photos scrolls the page up and down and never grabs the photos by itself; sideways
+   swiping is done in shop.js, so a slightly crooked up or down swipe cannot get stuck on the photos */
+.pv-track{display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-y}
+.pv-track.drag{scroll-snap-type:none}
+.pv-sl img{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 .pv-track::-webkit-scrollbar{display:none}
 .pv-track:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
 .pv-sl{flex:0 0 100%;height:100%;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always}

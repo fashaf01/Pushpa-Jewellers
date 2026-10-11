@@ -206,6 +206,8 @@ licence covers commercial use.
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
   it is tapped), taps do not flash grey, and the colour behind the page when it is pulled past
   the top or bottom is the header's plum.
+- On a product page the photos are set to `touch-action: pan-y`, so a finger on the photo always scrolls the page up and
+  down; sideways swiping is done in `shop.js` (it follows the finger, and only starts once the drag is clearly sideways).
 - The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
 - Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
