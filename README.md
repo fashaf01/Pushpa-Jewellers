@@ -48,8 +48,8 @@ tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ## The shop
 
 `/shop/` shows every piece in `assets/js/pieces.js` in list order, with its weight in grams and
-in pawn (8 g) where one is known. Visitors can filter by necklaces, bangles, rings, pendants,
-bracelets or bridal, and sort by weight (the sort appears once any piece has a weight). Each
+in pawn (8 g) where one is known. Visitors can filter by the categories that have pieces (a
+category with none gets no button), and sort by weight (the sort appears once any piece has a weight). Each
 piece has its own page at `/shop/?piece=<slug>`: the large photo with the piece's other photos
 underneath (swipe across the photo on a phone; on a computer use the arrows or the thumbs, and the
 photo zooms in under the pointer), weight, description, today's 22K rate, an "Ask about this piece" button that
@@ -58,12 +58,17 @@ it has one, and more pieces of the same kind. Filters and sorting are in the add
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
-**What it shows now.** Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with
-their weights and a link to each post. Their second photo is a close-up cropped from the post. When
-`pieces.js` has pieces too, the shop spreads them through the Instagram ones, one in every row of four
-(`mix()` in `shop.js`). The sample photos from another client have been removed; they are still in
-git history (commit 6957cc7 and earlier). `assets/js/pieces.js` is the list for new pieces, and it is
-empty for now.
+**What it shows now.** 104 pieces from two lists:
+
+- 72 pieces from the photos uploaded in `assets/img/shop` (`assets/js/pieces.js`), each with two
+  photos. Their names and descriptions are written from the product names; their weights are not
+  known yet, so each page asks for the weight.
+- Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with their weights and a
+  link to each post. Their second photo is a close-up cropped from the post.
+
+The shop spreads the Instagram pieces evenly through the others (`mix()` in `shop.js`). Photos
+that would need background added to fill the 4:5 frame are cut to a clean 4:5 window of the photo
+instead, so no background is invented. Watermarks in the uploaded photos are cropped out.
 
 **To add a piece:**
 
@@ -122,20 +127,22 @@ desktop screen shows the desktop photo in the same shape, and every phone the ph
 
 | | Desktop (821px and wider) | Phone (820px and narrower) |
 |---|---|---|
-| Shape | 12:5 | 4:5 |
-| Size | **1920 x 800** | **1080 x 1350** (an Instagram portrait post) |
+| Shape | 2:1 | 4:5 |
+| Size | **1774 x 887** | **1120 x 1400** |
 | Files | `hero-now.webp`, `hero-then.webp` | `hero-now-mobile.webp`, `hero-then-mobile.webp` |
 | Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, with the 1967 / Today switch on its bottom edge. Keep the face and jewellery above that. |
 
 To change a photo, replace the file in `assets/img/` with one of the same name and
-size. The files there now are crops of the original 1920 x 1080 photographs (the phone
-crops are 864 x 1080, the same 4:5 shape).
+size (any size in the same shape works). Today is the bright traditional scene (a white and
+gold saree beside a brass lamp), 1967 the wood-panelled room.
 
-At 12:5 the whole hero, the 1967 / Today switch included, fits on the first screen of
-most laptops and desktops. Between 821px and 1279px wide the headline needs a little
-more height than 12:5 gives, so the hero grows and trims the photo's sides. Tablets
-use the phone photo with its height capped at 680px, which trims the bottom. The rules
-are the `desktop: one shape on every screen` block and the `phones:` lines in `styles.css`.
+On a screen tall enough the whole 2:1 photo shows. On a short screen the hero is cut to the
+screen's height, but no lower than 560px, trimming the photo's lower edge, so the whole hero,
+the 1967 / Today switch included, stays on the first screen of most laptops and desktops.
+Between 821px and 1279px wide the headline needs a little more height, so the hero grows and
+trims the photo's sides. Tablets use the phone photo with its height capped at 680px, which
+trims the bottom. The rules are the `desktop: one shape on every screen` block and the
+`phones:` lines in `styles.css`.
 
 ## Suba Mangala figures
 

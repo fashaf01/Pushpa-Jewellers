@@ -6,10 +6,15 @@
 (function () {
   'use strict';
   var PJ = window.PJ, d = document;
-  // Pushpa's own pieces spread through the others, one in every row of four, a step further along each row
+  // Pushpa's own pieces (Instagram) spread evenly through the others, so they are never bunched at the end
   function mix(own, rest) {
-    var out = rest.slice();
-    own.forEach(function (p, r) { out.splice(Math.min(r * 4 + r % 4, out.length), 0, p); });
+    var total = own.length + rest.length, slots = {}, out = [], k, pos;
+    own.forEach(function (p, r) {
+      pos = Math.floor((r + 0.5) * total / own.length);
+      while (slots[pos]) pos++;
+      slots[pos] = p;
+    });
+    for (k = 0, pos = 0; pos < total; pos++) out.push(slots[pos] || rest[k++]);
     return out;
   }
   var P = mix(window.PIECES_INSTAGRAM || [], window.PIECES || []);
@@ -17,7 +22,7 @@
   var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa, reduce = PJ.reduce;
   var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
   var IMG = '../assets/img/shop/', IG = 'https://www.instagram.com/pushpajewellers_official/p/';
-  var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['bangles', 'Bangles'], ['rings', 'Rings'], ['pendants', 'Pendants'], ['bracelets', 'Bracelets'], ['bridal', 'Bridal']];
+  var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['earrings', 'Earrings'], ['rings', 'Rings'], ['bracelets', 'Bracelets'], ['bangles', 'Bangles'], ['pendants', 'Pendants'], ['bridal', 'Bridal']];
   var CAT = {}; CATS.forEach(function (c) { CAT[c[0]] = c[1]; });
   var SORTS = { 'new': 1, light: 1, heavy: 1 };
 
@@ -69,6 +74,9 @@
     return out;
   }
   sortSel.closest('.sort').hidden = !P.some(function (p) { return p.grams.length; });
+  // a category with no pieces yet has no button
+  CATS = CATS.filter(function (c) { return c[0] === 'all' || P.some(function (p) { return p.cats.indexOf(c[0]) > -1; }); });
+  CATS.forEach(function (c) { CAT[c[0]] = c[1]; });
   chips.innerHTML = CATS.map(function (c) {
     var n = c[0] === 'all' ? P.length : P.filter(function (p) { return p.cats.indexOf(c[0]) > -1; }).length;
     return '<button type="button" class="chip" data-cat="' + c[0] + '" aria-pressed="false">' + c[1] + '<span>' + n + '</span></button>';
@@ -149,16 +157,19 @@
     t.scrollTo({ left: (i - 1) * t.clientWidth, behavior: reduce ? 'instant' : 'smooth' });
   }
   // as the photos slide, each glides a little slower than its frame, and settles from slightly closer
+  // Every position is read before anything is written, so each frame costs one layout, not one per photo.
+  // Each photo is one full width, so its position is its index times that width.
   function glide() {
     tick = 0;
     var t = $('#pv-track');
     if (!t) return;
-    var w = t.clientWidth || 1, i = Math.round(t.scrollLeft / w) + 1;
-    $$('.pv-sl', t).forEach(function (sl) {
-      var f = Math.max(-1, Math.min(1, (sl.offsetLeft - t.scrollLeft) / w));
-      sl.style.setProperty('--f', f.toFixed(4));
-      sl.style.setProperty('--a', Math.abs(f).toFixed(4));
-    });
+    var w = t.clientWidth || 1, x = t.scrollLeft, i = Math.round(x / w) + 1;
+    var sl = t.children;
+    for (var k = 0; k < sl.length; k++) {
+      var f = Math.max(-1, Math.min(1, (k * w - x) / w));
+      sl[k].style.setProperty('--f', f.toFixed(3));
+      sl[k].style.setProperty('--a', Math.abs(f).toFixed(3));
+    }
     if (aim) { if (i === aim && Math.abs(t.scrollLeft - (aim - 1) * w) < 2) aim = 0; }
     else if (i !== shown) mark(i);
   }
