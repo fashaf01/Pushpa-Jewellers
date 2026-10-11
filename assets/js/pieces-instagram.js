@@ -1,5 +1,5 @@
 /* The 32 pieces from Pushpa's Instagram posts (approved for the website), newest first. The shop shows them
-   spread through the pieces in pieces.js, one in every row of four (see mix() in shop.js). Their photos are in
+   in this order, with any pieces in pieces.js spread among them (see mix() in shop.js). Their photos are in
    assets/img/shop/ under the same slugs; each one's second photo is a close-up cropped from the post. The fields
    are explained at the top of pieces.js. */
 window.PIECES_INSTAGRAM = [

@@ -58,17 +58,12 @@ it has one, and more pieces of the same kind. Filters and sorting are in the add
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
-**What it shows now.** 125 pieces from two lists, mixed together:
-
-- Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with their weights and a
-  link to each post. Their second photo is a close-up cropped from the post.
-- 93 sample pieces photographed for another client (`assets/js/pieces.js`), used with permission
-  to preview the shop with clean product photography until Pushpa's own photographs arrive. They
-  have no weights. Each has a close-up as its last photo, cut from its main photo by
-  `frame-photos.py --closeup`; six also have a second real photo.
-
-The shop spreads the Instagram pieces through the others, one in every row of four (`mix()` in
-`shop.js`). To show only one list, remove the other's `<script>` line from `shop/index.html`.
+**What it shows now.** Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with
+their weights and a link to each post. Their second photo is a close-up cropped from the post. When
+`pieces.js` has pieces too, the shop spreads them through the Instagram ones, one in every row of four
+(`mix()` in `shop.js`). The sample photos from another client have been removed; they are still in
+git history (commit 6957cc7 and earlier). `assets/js/pieces.js` is the list for new pieces, and it is
+empty for now.
 
 **To add a piece:**
 
