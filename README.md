@@ -35,7 +35,7 @@ assets/js/site.js        shared by both pages: header, menus, gold rate bar, cop
 assets/js/main.js        home page only: hero turn, Suba Mangala calculator and enrolment,
                          order tracking, opening-hours week, the welcome
 assets/js/pieces.js      the shop's catalogue, one line per piece
-assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, kept for switching back
+assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, shown in the shop alongside pieces.js
 assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
 assets/img/              photographs (webp) and favicon
 assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
@@ -57,12 +57,17 @@ it has one, and more pieces of the same kind. Filters and sorting are in the add
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
-**What it shows now.** 93 sample pieces photographed for another client, used with permission
-to preview the shop with clean product photography until Pushpa's own photographs arrive. They
-have no weights. Each has a close-up as its last photo, cut from its main photo by
-`frame-photos.py --closeup`; six also have a second real photo. Pushpa's 32 Instagram pieces are kept in `assets/js/pieces-instagram.js` with
-their photos; to show them instead, change `pieces.js` to `pieces-instagram.js` in
-`shop/index.html`.
+**What it shows now.** 125 pieces from two lists, mixed together:
+
+- Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with their weights and a
+  link to each post. Their second photo is a close-up cropped from the post.
+- 93 sample pieces photographed for another client (`assets/js/pieces.js`), used with permission
+  to preview the shop with clean product photography until Pushpa's own photographs arrive. They
+  have no weights. Each has a close-up as its last photo, cut from its main photo by
+  `frame-photos.py --closeup`; six also have a second real photo.
+
+The shop spreads the Instagram pieces through the others, one in every row of four (`mix()` in
+`shop.js`). To show only one list, remove the other's `<script>` line from `shop/index.html`.
 
 **To add a piece:**
 
@@ -106,8 +111,8 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 1. **Hero.** Opens on Pushpa in 1967, then turns to today. The 1967 / Today switch moves between them.
    On phones the photo comes first, with the switch on its bottom edge and the copy centred below:
    a label, a two-line headline, one button and a text link.
-2. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
-3. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
+2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
+3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
 4. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
 5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
 6. **Services.** Pawning, money exchange and airline ticketing.

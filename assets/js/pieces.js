@@ -1,9 +1,9 @@
 /* The shop's pieces, in the order they show (newest first).
 
    For now these are sample product photos from another client, used with permission to preview the shop with
-   clean product photography until Pushpa's own photographs arrive. They carry no weights. Pushpa's 32 Instagram
-   pieces are kept in pieces-instagram.js. Each one's last photo is a close-up cut from its main photo
-   (tools/frame-photos.py --closeup).
+   clean product photography until Pushpa's own photographs arrive. They carry no weights. Each one's last photo
+   is a close-up cut from its main photo (tools/frame-photos.py --closeup). The shop shows Pushpa's 32 Instagram
+   pieces (pieces-instagram.js) spread through these.
 
    To add a piece, put a line at the top of this list and its photo in assets/img/shop/:
      - the photo is 1080 x 1350, named after the slug: assets/img/shop/rose-ring.webp. A photo of any other size

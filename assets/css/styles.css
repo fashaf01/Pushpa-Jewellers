@@ -270,7 +270,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 }
 
 /* ---------- marks: four hallmark stamps, struck as they arrive ---------- */
-.marks{background:var(--ivory);border-block:1px solid var(--rule)}
+.marks{background:var(--ivory);border-bottom:1px solid var(--rule)}
 .marks-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .mk{display:grid;justify-items:center;align-content:start;text-align:center;gap:16px;padding:clamp(30px,3.6vw,48px) clamp(12px,2vw,28px)}
 .mk+.mk{border-left:1px solid var(--rule)}

@@ -3,8 +3,15 @@
    The pieces come from pieces.js; the header, menus and gold rate from site.js. */
 (function () {
   'use strict';
-  var PJ = window.PJ, P = window.PIECES, d = document;
-  if (!PJ || !P || !d.getElementById('grid')) return;
+  var PJ = window.PJ, d = document;
+  // Pushpa's own pieces spread through the others, one in every row of four, a step further along each row
+  function mix(own, rest) {
+    var out = rest.slice();
+    own.forEach(function (p, r) { out.splice(Math.min(r * 4 + r % 4, out.length), 0, p); });
+    return out;
+  }
+  var P = mix(window.PIECES_INSTAGRAM || [], window.PIECES || []);
+  if (!PJ || !P.length || !d.getElementById('grid')) return;
   var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa;
   var IMG = '../assets/img/shop/', IG = 'https://www.instagram.com/pushpajewellers_official/p/';
   var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['bangles', 'Bangles'], ['rings', 'Rings'], ['pendants', 'Pendants'], ['bracelets', 'Bracelets'], ['bridal', 'Bridal']];
