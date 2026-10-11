@@ -206,14 +206,17 @@ licence covers commercial use.
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
   it is tapped), taps do not flash grey, and the colour behind the page when it is pulled past
   the top or bottom is the header's plum.
-- On a product page the photos are set to `touch-action: pan-y`, so a finger on the photo always scrolls the page up and
-  down; sideways swiping is done in `shop.js` (it follows the finger, and only starts once the drag is clearly sideways).
+- On a product page the photos are one row that slides by a transform (`place()` in `shop.js`), not by scrolling, so it
+  behaves the same on every phone. The row is `touch-action: pan-y`, so a finger on the photo always scrolls the page up and
+  down; a drag that is clearly sideways moves the row with the finger and settles on a photo when released. Arrows, thumbs,
+  the arrow keys and a sideways trackpad swipe work on a computer. Jumping to the top of the page when a product opens switches
+  the page's gliding off first, because a glide ignores the user's finger until it is done.
 - The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
 - Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
   medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
   place, photos that slide under the finger, and a card's photo growing into its piece's page
-  and back (view transitions, in browsers that have them).
+  and back (view transitions, only on screens with a mouse, in browsers that have them).
 - Honours `prefers-reduced-motion`: all of that switches off.
 - Focus states, ARIA labels and live regions throughout. The Sinhala and Tamil
   lines carry `lang` attributes.

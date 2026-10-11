@@ -140,96 +140,111 @@
         : '') +
       '</figure>' + (n > 1 ? '<div class="pv-ths">' + th + '</div>' : '') + '</div>';
   }
-  // shown: the photo in view. aim: the photo a thumb or arrow is gliding to, so the thumbs don't flicker on the way
-  var shown = 1, aim = 0, tick = 0;
+  /* The photos are one row that slides by position alone (a transform), not by scrolling, so it behaves the same on every
+     phone. The row is set to touch-action: pan-y in the styles, so a finger on a photo always scrolls the page up and down.
+     A drag that is clearly sideways moves the row with the finger; on release it settles on the next photo, the same one or
+     the one before, by how far and how fast the finger went. Each photo glides a little slower than its frame. */
+  var shown = 1, gal = null; // shown: the photo in view; gal: the open piece's row { t, n, w, x }
   function mark(i) {
     shown = i;
     var c = $('#pv-n');
     if (c) c.textContent = i;
     $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(+t.getAttribute('data-photo') === i)); });
   }
-  function show(i) {
-    var t = $('#pv-track'), n = t ? t.children.length : 1;
-    if (n < 2) return;
-    i = (i - 1 + n) % n + 1;
-    aim = i;
-    mark(i);
-    t.scrollTo({ left: (i - 1) * t.clientWidth, behavior: reduce ? 'instant' : 'smooth' });
-  }
-  // as the photos slide, each glides a little slower than its frame, and settles from slightly closer
-  // Every position is read before anything is written, so each frame costs one layout, not one per photo.
-  // Each photo is one full width, so its position is its index times that width.
-  function glide() {
-    tick = 0;
-    var t = $('#pv-track');
-    if (!t) return;
-    var w = t.clientWidth || 1, x = t.scrollLeft, i = Math.round(x / w) + 1;
-    var sl = t.children;
+  // x: the row's offset in px (0, or negative). The photos' glide (--f, --a) follows it, from the same x.
+  function place(x, animate) {
+    gal.x = x;
+    gal.t.classList.toggle('glide', !!animate && !reduce);
+    gal.t.style.transform = 'translate3d(' + x + 'px,0,0)';
+    var at = -x / gal.w, sl = gal.t.children;
     for (var k = 0; k < sl.length; k++) {
-      var f = Math.max(-1, Math.min(1, (k * w - x) / w));
+      var f = Math.max(-1, Math.min(1, k - at));
       sl[k].style.setProperty('--f', f.toFixed(3));
       sl[k].style.setProperty('--a', Math.abs(f).toFixed(3));
     }
-    if (aim) { if (i === aim && Math.abs(t.scrollLeft - (aim - 1) * w) < 2) aim = 0; }
-    else if (i !== shown) mark(i);
   }
-  pieceView.addEventListener('scroll', function (e) { if (e.target.id === 'pv-track' && !tick) tick = requestAnimationFrame(glide); }, true);
-  pieceView.addEventListener('touchstart', function () { aim = 0; }, { passive: true });
-  /* A finger on the photo: the photos are set not to scroll by touch (touch-action: pan-y in the styles), so an up or down
-     drag always scrolls the page. A drag that is clearly sideways moves the photos with the finger, and on release the
-     photos settle on the next one, the same one, or the one before, by how far and how fast the finger went. */
-  var drag = null, settling = null;
-  // snapping stays off while the photos glide to their place, so it cannot pull them to another one on the way; one pending
-  // clean-up at a time, so an old one can never switch snapping back on in the middle of the next drag
-  function endSettling() {
-    if (!settling) return;
-    clearTimeout(settling.timer);
-    settling.t.removeEventListener('scrollend', settling.fn);
-    settling.t.classList.remove('drag');
-    settling = null;
+  function show(i, noWrap) {
+    if (!gal || gal.n < 2) return;
+    if (noWrap && (i < 1 || i > gal.n)) return;
+    i = (i - 1 + gal.n) % gal.n + 1;
+    mark(i);
+    place(-(i - 1) * gal.w, true);
   }
-  pieceView.addEventListener('pointerdown', function (e) {
-    var t = e.pointerType !== 'mouse' && e.target.closest ? e.target.closest('#pv-track') : null;
-    if (!t || t.children.length < 2) return;
-    aim = 0;
-    endSettling();
-    drag = { t: t, id: e.pointerId, x: e.clientX, y: e.clientY, left: t.scrollLeft, w: t.clientWidth || 1, lock: null, lx: e.clientX, lt: e.timeStamp, vx: 0 };
+  function initGallery() {
+    var t = $('#pv-track');
+    shown = 1;
+    gal = t ? { t: t, n: t.children.length, w: t.clientWidth || 1, x: 0 } : null;
+    if (gal) place(0, false);
+  }
+  window.addEventListener('resize', function () {
+    if (!gal || !gal.t.isConnected) return;
+    gal.w = gal.t.clientWidth || 1;
+    place(-(shown - 1) * gal.w, false);
   });
-  pieceView.addEventListener('pointermove', function (e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-    if (!drag.lock) {
-      // wait until the finger has gone far enough to tell; it is sideways only if it is clearly more sideways than up or down
+  // where the row is right now, even part-way through a glide, so a touch can take hold of it
+  function rowX() {
+    if (!gal.t.classList.contains('glide')) return gal.x;
+    try { return new DOMMatrix(getComputedStyle(gal.t).transform).m41; } catch (err) { return gal.x; }
+  }
+  var tch = null;
+  pieceView.addEventListener('touchstart', function (e) {
+    var t = e.target.closest && e.target.closest('#pv-track');
+    if (!gal || !t || gal.n < 2 || e.touches.length !== 1) { tch = null; return; }
+    var c = e.touches[0], x = rowX();
+    place(x, false);
+    tch = { x: c.clientX, y: c.clientY, from: x, lock: null, lx: c.clientX, lt: e.timeStamp, vx: 0 };
+  }, { passive: true });
+  pieceView.addEventListener('touchmove', function (e) {
+    if (!tch || !gal) return;
+    var c = e.touches[0], dx = c.clientX - tch.x, dy = c.clientY - tch.y;
+    if (!tch.lock) {
+      // wait until the finger has gone far enough to tell; it is sideways only if clearly more sideways than up or down
       if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-      drag.lock = Math.abs(dx) > Math.abs(dy) * 1.5 ? 'x' : 'y';
-      if (drag.lock === 'x') { drag.t.classList.add('drag'); try { drag.t.setPointerCapture(e.pointerId); } catch (err) {} }
+      tch.lock = Math.abs(dx) > Math.abs(dy) * 1.5 ? 'x' : 'y';
     }
-    if (drag.lock !== 'x') return;
-    drag.t.scrollLeft = Math.max(0, Math.min(drag.t.scrollWidth - drag.w, drag.left - dx));
-    var dt = e.timeStamp - drag.lt;
-    if (dt > 0) drag.vx = (e.clientX - drag.lx) / dt;
-    drag.lx = e.clientX; drag.lt = e.timeStamp;
-  });
-  function release(e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    var d = drag; drag = null;
-    if (d.lock !== 'x') return;
-    // a cancelled touch (the browser took it over) has no finger position of its own, so use the last one seen
-    var dx = (e.type === 'pointercancel' ? d.lx : e.clientX) - d.x, start = Math.round(d.left / d.w), n = d.t.children.length;
-    if (e.type === 'pointercancel') d.vx = 0;
-    var far = Math.abs(dx) > d.w * 0.18 || Math.abs(d.vx) > 0.35;
-    var to = Math.max(0, Math.min(n - 1, start + (far ? (dx < 0 ? 1 : -1) : 0)));
-    show(to + 1);
-    endSettling();
-    settling = { t: d.t, fn: endSettling, timer: setTimeout(endSettling, 700) };
-    if ('onscrollend' in window) d.t.addEventListener('scrollend', endSettling, { once: true });
+    if (tch.lock !== 'x') return;
+    var min = -(gal.n - 1) * gal.w, x = tch.from + dx;
+    if (x > 0) x *= 0.35; else if (x < min) x = min + (x - min) * 0.35; // a little give past the first and the last photo
+    place(x, false);
+    var dt = e.timeStamp - tch.lt;
+    if (dt > 0) tch.vx = (c.clientX - tch.lx) / dt;
+    tch.lx = c.clientX; tch.lt = e.timeStamp;
+  }, { passive: true });
+  function lift(e) {
+    if (!tch) return;
+    var d = tch; tch = null;
+    if (!gal) return;
+    // a touch that stopped a glide but then did not drag sideways (a tap, or a swipe up or down) lets the row finish its glide
+    if (d.lock !== 'x') { if (Math.abs(gal.x + (shown - 1) * gal.w) > 1) place(-(shown - 1) * gal.w, true); return; }
+    var c = e.changedTouches && e.changedTouches[0];
+    // a cancelled touch has no finger position of its own, so use the last one seen
+    var endX = e.type === 'touchcancel' || !c ? d.lx : c.clientX;
+    if (e.type === 'touchcancel' || e.timeStamp - d.lt > 80) d.vx = 0; // a finger that paused before lifting is not a flick
+    var dx = endX - d.x, start = Math.round(-d.from / gal.w);
+    var far = Math.abs(dx) > gal.w * 0.18 || Math.abs(d.vx) > 0.35;
+    show(Math.max(0, Math.min(gal.n - 1, start + (far ? (dx < 0 ? 1 : -1) : 0))) + 1);
   }
-  pieceView.addEventListener('pointerup', release);
-  pieceView.addEventListener('pointercancel', release);
+  pieceView.addEventListener('touchend', lift, { passive: true });
+  pieceView.addEventListener('touchcancel', lift, { passive: true });
+  // on a desk: the arrows and thumbs below, the arrow keys, and a sideways swipe on a trackpad
   pieceView.addEventListener('click', function (e) {
     var b = e.target.closest('.pv-th, .pv-nav');
     if (b) show(b.classList.contains('pv-nav') ? shown + +b.getAttribute('data-step') : +b.getAttribute('data-photo'));
   });
+  pieceView.addEventListener('keydown', function (e) {
+    if (!gal || !e.target.closest || !e.target.closest('#pv-track')) return;
+    if (e.key === 'ArrowLeft') { show(shown - 1, true); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { show(shown + 1, true); e.preventDefault(); }
+  });
+  var wheeled = 0;
+  pieceView.addEventListener('wheel', function (e) {
+    if (!gal || gal.n < 2 || !e.target.closest('#pv-track')) return;
+    if (Math.abs(e.deltaX) < 8 || Math.abs(e.deltaX) < Math.abs(e.deltaY) * 1.5) return;
+    e.preventDefault();
+    if (e.timeStamp - wheeled < 450) return;
+    wheeled = e.timeStamp;
+    show(shown + (e.deltaX > 0 ? 1 : -1), true);
+  }, { passive: false });
   // on a desk, the photo under the pointer is seen closer, and follows the pointer
   if (fine && !reduce) {
     pieceView.addEventListener('mousemove', function (e) {
@@ -270,8 +285,7 @@
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
       '</div>';
-    shown = 1; aim = 0;
-    glide();
+    initGallery();
     reveal(pieceView);
     showRate();
   }
@@ -284,7 +298,8 @@
 
   /* ---------- show the view the address asks for ---------- */
   // where the browser can, the photo grows out of its card into the piece's page and back (a view transition)
-  var vt = !!d.startViewTransition && !reduce;
+  // not on touch screens: a phone does not need a page transition standing between a tap and the next scroll
+  var vt = !!d.startViewTransition && !reduce && fine;
   function morph(from, update, to) {
     if (!vt || !from) { update(); return; }
     from.style.viewTransitionName = 'pj-photo';
@@ -299,7 +314,15 @@
   function cardPhoto(slug, root) { return slug ? $('a[data-piece="' + slug + '"] .ph', root) : null; }
   function piecePhoto() { return $('.pv-ph', pieceView); }
   // jump, not glide: the page underneath has just been replaced
-  function jump(y) { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
+  // The page glides to anchors by default (html { scroll-behavior: smooth }), and a glide ignores the user's finger until it is
+  // done, so the jump to the top switches gliding off first, and reads the style back so the browser applies that before the jump.
+  function jump(y) {
+    var h = d.documentElement, was = h.style.scrollBehavior;
+    h.style.scrollBehavior = 'auto';
+    void getComputedStyle(h).scrollBehavior;
+    window.scrollTo(0, y);
+    h.style.scrollBehavior = was;
+  }
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   var gridY = 0;
   function render(fromNav) {

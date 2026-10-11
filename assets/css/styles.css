@@ -598,18 +598,17 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start;margin-top:22px}
 .pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
 .pv-ph::after{content:"";position:absolute;inset:12px;border:1px solid rgba(236,210,143,.75);pointer-events:none}
-/* the photos sit side by side and slide under the finger, snapping one at a time */
-/* touch-action: pan-y: a finger on the photos scrolls the page up and down and never grabs the photos by itself; sideways
-   swiping is done in shop.js, so a slightly crooked up or down swipe cannot get stuck on the photos */
-.pv-track{display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-y}
-.pv-track.drag{scroll-snap-type:none}
-.pv-sl img{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
-.pv-track::-webkit-scrollbar{display:none}
+/* the photos are one row that slides by position alone (a transform set in shop.js), not by scrolling, so it behaves the
+   same on every phone. touch-action: pan-y: a finger on the photos scrolls the page up and down and never grabs the row by
+   itself; the sideways swipe is done in shop.js, so a slightly crooked up or down swipe cannot get stuck on the photos */
+.pv-track{display:flex;height:100%;touch-action:pan-y pinch-zoom;will-change:transform}
+.pv-track.glide{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .pv-track:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
-.pv-sl{flex:0 0 100%;height:100%;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always}
+.pv-sl{flex:0 0 100%;height:100%;overflow:hidden}
 /* each photo glides a little slower than its frame (--f, from shop.js) and settles from slightly closer (--a);
    on a desk the photo under the pointer is seen closer (--z), around the pointer (--zx, --zy) */
-.pv-sl img{width:100%;height:100%;object-fit:cover;will-change:transform;transform:translate3d(calc(var(--f,0) * -36%),0,0) scale(calc(1 + var(--a,0) * .1)) scale(var(--z,1));transform-origin:var(--zx,50%) var(--zy,50%)}
+.pv-sl img{width:100%;height:100%;object-fit:cover;will-change:transform;transform:translate3d(calc(var(--f,0) * -36%),0,0) scale(calc(1 + var(--a,0) * .1)) scale(var(--z,1));transform-origin:var(--zx,50%) var(--zy,50%);-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+.pv-track.glide .pv-sl img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .pv-track.zoom{cursor:zoom-in}
 .pv-track.zoom .pv-sl img{--z:1.9}
 @media (hover:hover) and (pointer:fine){.pv-sl img{transition:transform .5s var(--ease)}}
