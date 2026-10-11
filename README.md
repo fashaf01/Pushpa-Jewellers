@@ -201,6 +201,12 @@ licence covers commercial use.
 ## Notes
 
 - Responsive from 320px up, with no horizontal scroll.
+- The header shrinks on scroll on desktop only. On phones and tablets it keeps one height, so
+  nothing moves under the finger and jump links always land just under it (`scroll-margin-top`).
+- Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
+  it is tapped), taps do not flash grey, and the colour behind the page when it is pulled past
+  the top or bottom is the header's plum.
+- The round WhatsApp button on phones uses WhatsApp's own glyph (`#i-wa` in the icon sprite).
 - Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
   medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into

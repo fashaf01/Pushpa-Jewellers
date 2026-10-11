@@ -22,10 +22,10 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-/* jump links land just under the header once it has shrunk on scroll (rate bar + 55px masthead, 57px on phones),
-   a pixel under rather than over, so no strip of the section above shows */
+/* jump links land just under the header (on desktop once it has shrunk on scroll: rate bar + 55px masthead; on phones it
+   never shrinks: rate bar + 77px), a pixel under rather than over, so no strip of the section above shows */
 section[id]{scroll-margin-top:calc(var(--rate-h) + 54px)}
-@media (max-width:1020px){section[id]{scroll-margin-top:calc(var(--rate-h) + 56px)}}
+@media (max-width:1020px){section[id]{scroll-margin-top:calc(var(--rate-h) + 76px)}}
 body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
@@ -93,12 +93,11 @@ button{cursor:pointer;background:none;border:0;padding:0}
 /* ---------- masthead ---------- */
 .mast{position:sticky;top:0;z-index:50;background:var(--plum);border-bottom:1px solid var(--plum-rule);color:var(--on-plum)}
 .mast-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;max-width:1480px;margin-inline:auto;padding:8px var(--gut);transition:padding .5s var(--ease)}
-.mast.small .mast-in{padding-block:3px}
+@media (min-width:1021px){.mast.small .mast-in{padding-block:3px}}
 /* the masthead shrinks on scroll (119px to 93px, 115px to 95px on phones); its bottom margin grows by the same amount at the
    same pace, so the page under it never shifts and a jump link lands true even on the first jump from the top */
 .mast{transition:margin .5s var(--ease)}
-.mast.small{margin-bottom:26px}
-@media (max-width:1020px){.mast.small{margin-bottom:20px}}
+@media (min-width:1021px){.mast.small{margin-bottom:26px}}
 /* today's gold rate: a thin strip above the masthead; tap it for per gram too */
 .rate-row{background:var(--plum-3);border-bottom:1px solid var(--plum-rule)}
 .rate-in{display:flex;justify-content:center;align-items:center;gap:16px;height:calc(var(--rate-h) - 1px);max-width:1480px;margin-inline:auto;padding-inline:var(--gut);font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden}
@@ -118,7 +117,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 @media (max-width:400px){.rate-k{display:none}.rate{gap:10px;font-size:12px}}
 .logo{display:block;line-height:0}
 .logo img{height:64px;width:auto;transition:height .5s var(--ease)}
-.mast.small .logo img{height:48px}
+@media (min-width:1021px){.mast.small .logo img{height:48px}}
 .nav{display:flex;justify-content:center;align-items:center;gap:clamp(16px,2.4vw,40px)}
 .nav>li{position:relative}
 .n{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:13.5px;letter-spacing:.1em;font-weight:600;text-transform:uppercase;text-decoration:none;color:var(--on-plum);padding-block:12px;background:linear-gradient(var(--plum-gold),var(--plum-gold)) 50% 100%/0 1px no-repeat;transition:background-size .4s var(--ease),color .3s}
@@ -148,7 +147,6 @@ button{cursor:pointer;background:none;border:0;padding:0}
   .mast-in>.icon-btn{justify-self:start;margin-left:-10px}
   .acts{justify-self:end;margin-right:-10px}
   .logo img{height:60px}
-  .mast.small .logo img{height:50px}
 }
 /* the phone menu: its top row mirrors the header (close, logo, call), then the pages in the desktop nav's small capitals,
    the services as a compact group, and Call and WhatsApp side by side at the foot */
@@ -220,8 +218,10 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .js .hero.is-then h1 .ln>span{transition-duration:.6s;transition-delay:0s}
 .hero .lede{max-width:40ch;color:var(--on-plum)}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.hero .now-c .lede{display:none}
+@media (min-width:821px) and (min-height:780px){.hero .now-c .lede{display:block;max-width:44ch;font-size:clamp(15px,1.15vw,17.5px)}}
 .then-year{font-family:var(--fancy);font-weight:600;font-size:clamp(84px,9vw,148px);line-height:.9;letter-spacing:-.01em;padding-right:.04em}
-.then-h{font-family:var(--fancy);font-style:italic;font-synthesis:none;font-size:clamp(28px,2.8vw,44px);line-height:1.1;color:var(--on-plum)}
+.then-h{font-family:var(--fancy);font-style:italic;font-synthesis:none;font-size:clamp(28px,2.8vw,44px);line-height:1.1;color:var(--on-plum);max-width:16em;text-wrap:balance}
 /* only on the opening: a thin line fills while 1967 holds, then the page turns to today */
 .timer{width:min(260px,70%);height:2px;background:var(--plum-rule);overflow:hidden;margin-top:6px}
 .timer i{display:block;height:100%;background:var(--plum-gold);transform:scaleX(0);transform-origin:left}
@@ -261,7 +261,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
   .hcopy{max-width:none;text-align:center}
   .state{justify-items:center;align-content:start}
   .eras-ui{position:static;order:-1;justify-content:center;margin-bottom:20px}
-  .era-tg button{min-height:36px;padding:0 16px;font-size:11.5px}
+  .era-tg button{min-height:40px;padding:0 16px;font-size:11.5px}
   .hero .now-c{gap:12px}
   .hero h1{max-width:none}
   .hero .ctas{flex-direction:column;align-items:stretch;width:100%;gap:2px;margin-top:8px}
@@ -544,7 +544,17 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,20px);opacity:0;background:var(--plum);color:var(--on-plum);font-size:14px;padding:12px 18px;transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .fab{display:none}
-@media (max-width:760px){.fab{position:fixed;right:16px;bottom:16px;z-index:45;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;background:var(--wine);color:var(--gold-light);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;box-shadow:0 10px 24px -12px rgba(44,7,27,.6);transform:translateY(90px);transition:transform .6s var(--ease)}.fab.show{transform:none}.fab svg{width:18px;height:18px}}
+/* the WhatsApp button: WhatsApp's own green and glyph in a round button, bottom right. The glyph's circle is centred in the
+   button (its tail hangs out to the lower left), so it sits balanced; its words are for screen readers only. It springs up
+   once the hero is behind, and sends out a ring now and then. */
+@media (max-width:760px){
+  .fab{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:45;display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:0;border-radius:50%;background:linear-gradient(145deg,#2fd873,#1fb055);color:#fff;text-decoration:none;box-shadow:0 10px 24px -8px rgba(18,110,52,.6),0 2px 6px rgba(44,7,27,.25);transform:translateY(96px) scale(.8);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .35s var(--ease)}
+  .fab.show{transform:none;opacity:1;pointer-events:auto}
+  .fab svg{width:30px;height:30px;display:block}
+  .fab::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;animation:ping 4s ease-out 2.5s infinite}
+  .fab:active{transform:scale(.94)}
+}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(47,216,115,.55)}55%,100%{box-shadow:0 0 0 14px rgba(47,216,115,0)}}
 
 /* ---------- shop: the collection grid and a page for each piece (shop/index.html, shop.js) ---------- */
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
@@ -647,9 +657,8 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .shop-head .wrap{gap:10px}
   .crumbs{font-size:11px}
   .shop-meta{margin:10px 0 18px;font-size:13.5px}
-  .sort select{min-height:34px;font-size:13px}
   .chips::-webkit-scrollbar{display:none}
-  .chip{flex:none;min-height:34px;padding:0 12px;gap:6px;font-size:11.5px}
+  .chip{flex:none;min-height:40px;padding:0 12px;gap:6px;font-size:11.5px}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 10px}
   .pc .ph{margin-bottom:4px}
   .pc .ph::after{inset:6px}
@@ -763,9 +772,6 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .foot-top img{height:60px}
   .foot-top .scr,.has-seasons .foot-top .scr{font-size:17px}
   .foot-g{gap:22px;padding-block:26px}
-  /* WhatsApp as a round button, its words kept for screen readers */
-  .fab{width:50px;height:50px;min-height:0;padding:0;justify-content:center;border-radius:50%;font-size:0;letter-spacing:0;right:14px;bottom:14px}
-  .fab svg{width:22px;height:22px}
 }
 
 /* ---------- motion: the finishing touches ---------- */
@@ -814,12 +820,18 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .btn:active,.chip:active{transform:scale(.97)}
   .pc a:active .ph,.door:active .ph{transform:scale(.98)}
 }
-/* the WhatsApp button springs up, and a ring goes out from it now and then */
-@media (max-width:760px){
-  .fab.show{transition-timing-function:cubic-bezier(.34,1.56,.64,1)}
-  .fab::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;animation:ping 4s ease-out 2.5s infinite}
+
+/* ---------- phones: the small things that go wrong on a real phone ---------- */
+html{background:var(--plum-3)} /* what shows above the page when it is pulled past the top, and below the footer */
+a,button,label,select,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a tap, no double-tap zoom */
+@media (max-width:820px){
+  /* the phone zooms the whole page when a field smaller than 16px is tapped */
+  select,input,textarea{font-size:16px}
 }
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(226,194,122,.6)}55%,100%{box-shadow:0 0 0 14px rgba(226,194,122,0)}}
+@media (max-width:600px){
+  .sort select{min-height:40px;font-size:16px}
+}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important}

@@ -207,11 +207,11 @@
             '<h1 class="pv-h">' + esc(p.name) + '</h1>' +
             (p.weight
               ? '<dl class="pv-wt"><div><dt>Weight</dt><dd>' + unit(weightText(p)) + '</dd></div><div><dt>In pawn</dt><dd>' + pawnText(p) + '</dd></div></dl>'
-              : '<p class="pv-wt none">Ask us for the weight of this piece.</p>') +
+              : '<p class="pv-wt none">We will confirm the weight of this piece when you ask.</p>') +
             '<p class="pv-d">' + esc(p.about) + '</p>' +
-            '<p class="pv-price">Gold is priced by weight at the day’s rate, so ask us for today’s price of this piece.<span id="pv-rate"></span></p>' +
+            '<p class="pv-price">Gold is priced by its weight at the day’s rate, so the price of a piece moves with the market. Ask us for today’s price and we will reply on WhatsApp.<span id="pv-rate"></span></p>' +
             '<div class="pv-ctas">' +
-              '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-chat"/></svg>Ask about this piece</a>' +
+              '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Ask about this piece</a>' +
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
             (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
