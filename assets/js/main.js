@@ -185,14 +185,18 @@
   hello[0].classList.add('lit');
   if (!reduce) setInterval(function () { hello[hk].classList.remove('lit'); hk = (hk + 1) % hello.length; hello[hk].classList.add('lit'); }, 2800);
 
-  /* ---------- scroll: the counter photo warms from sepia to colour ---------- */
-  var shopPh = $('#shop-ph'), ticking = false;
+  /* ---------- scroll: the counter photo warms from sepia to colour, and the hero's words drift away ---------- */
+  var shopPh = $('#shop-ph'), ticking = false, hcopy = $('.hero .hcopy');
   function prog(el) { var r = el.getBoundingClientRect(), vh = window.innerHeight; return clamp((vh - r.top) / (vh + r.height), 0, 1); }
   function onScroll() {
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () {
       ticking = false;
       shopPh.style.setProperty('--gs', reduce ? 0 : clamp(1 - (prog(shopPh) - 0.2) / 0.4, 0, 1).toFixed(3));
+      // desktop: the hero's words drift up and fade a little as the page scrolls away from them
+      var y = window.innerWidth > 820 && !reduce ? clamp(window.scrollY / hero.offsetHeight, 0, 1) : 0;
+      hcopy.style.transform = y ? 'translate3d(0,' + (-y * 60).toFixed(1) + 'px,0)' : '';
+      hcopy.style.opacity = y ? (1 - y * 0.6).toFixed(3) : '';
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });

@@ -1,6 +1,8 @@
 /* The shop: the collection grid, filtered by category and sorted by weight, and a page for each piece at
    ?piece=<slug>. Filters and sorting live in the address too (?cat=bangles&sort=light), so any view can be shared.
-   The pieces come from pieces.js; the header, menus and gold rate from site.js. */
+   The pieces come from pieces.js; the header, menus and gold rate from site.js.
+   Motion: cards rise into place as they come into view; a piece's photos slide under the finger; and where the
+   browser has view transitions, a card's photo grows into the piece's page and shrinks back into its card. */
 (function () {
   'use strict';
   var PJ = window.PJ, d = document;
@@ -12,7 +14,8 @@
   }
   var P = mix(window.PIECES_INSTAGRAM || [], window.PIECES || []);
   if (!PJ || !P.length || !d.getElementById('grid')) return;
-  var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa;
+  var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa, reduce = PJ.reduce;
+  var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
   var IMG = '../assets/img/shop/', IG = 'https://www.instagram.com/pushpajewellers_official/p/';
   var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['bangles', 'Bangles'], ['rings', 'Rings'], ['pendants', 'Pendants'], ['bracelets', 'Bracelets'], ['bridal', 'Bridal']];
   var CAT = {}; CATS.forEach(function (c) { CAT[c[0]] = c[1]; });
@@ -54,7 +57,7 @@
   function card(p) {
     var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
-      '<div class="ph"><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async"></div>' +
+      '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async"></div>' +
       '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt + '</a></li>';
   }
   function list(cat, sort) {
@@ -70,9 +73,38 @@
     var n = c[0] === 'all' ? P.length : P.filter(function (p) { return p.cats.indexOf(c[0]) > -1; }).length;
     return '<button type="button" class="chip" data-cat="' + c[0] + '" aria-pressed="false">' + c[1] + '<span>' + n + '</span></button>';
   }).join('');
-  function renderGrid() {
+  // cards rise into place as they come into view, a few at a time
+  var cio = !reduce && 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    var k = 0;
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.style.setProperty('--c', Math.min(k++, 7));
+      e.target.classList.add('in');
+      cio.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -5% 0px' }) : null;
+  function reveal(root, now) {
+    $$('.pc', root).forEach(function (c) {
+      if (now || !cio) c.classList.add('in', 'seen');
+      else cio.observe(c);
+    });
+  }
+  // on a desk, a card's second photo fades in under the pointer, fetched the first time the card is hovered
+  if (fine) d.addEventListener('mouseover', function (e) {
+    var a = e.target.closest && e.target.closest('.pc a'), ph = a && $('.ph[data-alt]', a);
+    if (!ph || ph.hasAttribute('data-got')) return;
+    ph.setAttribute('data-got', '');
+    var im = new Image();
+    im.className = 'alt pre'; im.alt = '';
+    im.onload = function () { ph.appendChild(im); requestAnimationFrame(function () { requestAnimationFrame(function () { im.classList.remove('pre'); }); }); };
+    im.src = ph.getAttribute('data-alt');
+  });
+  chips.querySelectorAll('.chip').forEach(function (c, i) { c.style.setProperty('--i', i); });
+  function renderGrid(now) {
     var items = list(state.cat, state.sort);
+    if (cio) $$('.pc', grid).forEach(function (c) { cio.unobserve(c); });
     grid.innerHTML = items.map(card).join('');
+    reveal(grid, now);
     count.textContent = items.length + (items.length === 1 ? ' piece' : ' pieces') + (state.cat === 'all' ? '' : ' in ' + CAT[state.cat].toLowerCase());
     $$('.chip', chips).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-cat') === state.cat)); });
     sortSel.value = state.sort;
@@ -83,38 +115,74 @@
     if (t.tagName === 'IMG' && t.dataset.full && t.src.indexOf('/small/') > -1) t.src = t.dataset.full;
   }, true);
 
-  /* ---------- a piece ---------- */
+  /* ---------- a piece: its photos slide under the finger, or turn with the arrows and the thumbs below ---------- */
   function photo(p, i, small) { return IMG + (small ? 'small/' : '') + p.slug + (i > 1 ? '-' + i : '') + '.webp'; }
-  function thumbs(p) {
-    var n = p.photos || 1, h = '';
-    if (n < 2) return '';
-    for (var i = 1; i <= n; i++) h += '<button type="button" class="pv-th" data-photo="' + i + '" aria-pressed="' + (i === 1) + '" aria-label="Photo ' + i + ' of ' + n + '"><img src="' + photo(p, i, true) + '" data-full="' + photo(p, i) + '" alt="" width="540" height="675"></button>';
-    return '<div class="pv-ths">' + h + '</div>';
+  function gallery(p) {
+    var n = p.photos || 1, sl = '', th = '';
+    for (var i = 1; i <= n; i++) {
+      sl += '<div class="pv-sl"><img src="' + photo(p, i) + '" alt="' + esc(p.name) + (i === 1 ? ', ' + esc(p.about) : ', photo ' + i + ' of ' + n) + '" width="1080" height="1350" decoding="async"></div>';
+      th += '<button type="button" class="pv-th" data-photo="' + i + '" aria-pressed="' + (i === 1) + '" aria-label="Photo ' + i + ' of ' + n + '" style="--i:' + i + '"><img src="' + photo(p, i, true) + '" data-full="' + photo(p, i) + '" alt="" width="540" height="675"></button>';
+    }
+    return '<div class="pv-gal"><figure class="pv-ph">' +
+      '<div class="pv-track" id="pv-track"' + (n > 1 ? ' tabindex="0" aria-label="Photos of the ' + esc(p.name) + ', ' + n + ' in all"' : '') + '>' + sl + '</div>' +
+      (n > 1
+        ? '<button type="button" class="pv-nav prev" data-step="-1" aria-label="Previous photo"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
+          '<button type="button" class="pv-nav next" data-step="1" aria-label="Next photo"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
+          '<span class="pv-count" aria-hidden="true"><b id="pv-n">1</b> / ' + n + '</span>'
+        : '') +
+      '</figure>' + (n > 1 ? '<div class="pv-ths">' + th + '</div>' : '') + '</div>';
   }
-  var shown = 1;
+  // shown: the photo in view. aim: the photo a thumb or arrow is gliding to, so the thumbs don't flicker on the way
+  var shown = 1, aim = 0, tick = 0;
+  function mark(i) {
+    shown = i;
+    var c = $('#pv-n');
+    if (c) c.textContent = i;
+    $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(+t.getAttribute('data-photo') === i)); });
+  }
   function show(i) {
-    var p = state.piece && BY[state.piece], n = p ? p.photos || 1 : 1;
+    var t = $('#pv-track'), n = t ? t.children.length : 1;
     if (n < 2) return;
-    shown = (i - 1 + n) % n + 1;
-    $('#pv-img').src = photo(p, shown);
-    $$('.pv-th', pieceView).forEach(function (t) { t.setAttribute('aria-pressed', String(+t.getAttribute('data-photo') === shown)); });
+    i = (i - 1 + n) % n + 1;
+    aim = i;
+    mark(i);
+    t.scrollTo({ left: (i - 1) * t.clientWidth, behavior: reduce ? 'instant' : 'smooth' });
   }
+  // as the photos slide, each glides a little slower than its frame, and settles from slightly closer
+  function glide() {
+    tick = 0;
+    var t = $('#pv-track');
+    if (!t) return;
+    var w = t.clientWidth || 1, i = Math.round(t.scrollLeft / w) + 1;
+    $$('.pv-sl', t).forEach(function (sl) {
+      var f = Math.max(-1, Math.min(1, (sl.offsetLeft - t.scrollLeft) / w));
+      sl.style.setProperty('--f', f.toFixed(4));
+      sl.style.setProperty('--a', Math.abs(f).toFixed(4));
+    });
+    if (aim) { if (i === aim && Math.abs(t.scrollLeft - (aim - 1) * w) < 2) aim = 0; }
+    else if (i !== shown) mark(i);
+  }
+  pieceView.addEventListener('scroll', function (e) { if (e.target.id === 'pv-track' && !tick) tick = requestAnimationFrame(glide); }, true);
+  pieceView.addEventListener('touchstart', function () { aim = 0; }, { passive: true });
   pieceView.addEventListener('click', function (e) {
-    var b = e.target.closest('.pv-th');
-    if (b) show(+b.getAttribute('data-photo'));
+    var b = e.target.closest('.pv-th, .pv-nav');
+    if (b) show(b.classList.contains('pv-nav') ? shown + +b.getAttribute('data-step') : +b.getAttribute('data-photo'));
   });
-  // on phones, a sideways swipe across the photo turns to the next or previous one
-  var x0 = null, y0 = 0;
-  pieceView.addEventListener('touchstart', function (e) {
-    x0 = e.touches.length === 1 && e.target.closest('.pv-ph') ? e.touches[0].clientX : null;
-    if (x0 !== null) y0 = e.touches[0].clientY;
-  }, { passive: true });
-  pieceView.addEventListener('touchend', function (e) {
-    if (x0 === null) return;
-    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
-    x0 = null;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(shown + (dx < 0 ? 1 : -1));
-  }, { passive: true });
+  // on a desk, the photo under the pointer is seen closer, and follows the pointer
+  if (fine && !reduce) {
+    pieceView.addEventListener('mousemove', function (e) {
+      var t = e.target.closest('.pv-track');
+      if (!t) return;
+      var r = t.getBoundingClientRect();
+      t.style.setProperty('--zx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+      t.style.setProperty('--zy', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      t.classList.add('zoom');
+    });
+    pieceView.addEventListener('mouseout', function (e) {
+      var t = e.target.closest('.pv-track');
+      if (t && !t.contains(e.relatedTarget)) t.classList.remove('zoom');
+    });
+  }
   function renderPiece(p) {
     var cat = p.cats[0], more = list(cat, 'new').filter(function (q) { return q !== p; }).slice(0, 4);
     var ask = wa('I’d like to ask about the ' + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website.');
@@ -122,7 +190,7 @@
       '<div class="wrap">' +
         '<nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span aria-hidden="true">/</span><a href="./" data-cat="all">The collection</a><span aria-hidden="true">/</span><a href="?cat=' + cat + '" data-cat="' + cat + '">' + CAT[cat] + '</a></nav>' +
         '<div class="pv">' +
-          '<div class="pv-gal"><figure class="pv-ph"><img id="pv-img" src="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + ', ' + esc(p.about) + '" width="1080" height="1350"></figure>' + thumbs(p) + '</div>' +
+          gallery(p) +
           '<div class="pv-c">' +
             '<span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>' + esc(p.kind) + '</span>' +
             '<h1 class="pv-h">' + esc(p.name) + '</h1>' +
@@ -140,11 +208,9 @@
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
       '</div>';
-    shown = 1;
-    // fetch the other photos once the first has arrived, so turning to them is instant
-    $('#pv-img').addEventListener('load', function () {
-      for (var i = 2; i <= (p.photos || 1); i++) new Image().src = photo(p, i);
-    }, { once: true });
+    shown = 1; aim = 0;
+    glide();
+    reveal(pieceView);
     showRate();
   }
   var gold = null;
@@ -155,6 +221,21 @@
   PJ.onGold(function (g) { gold = g; showRate(); });
 
   /* ---------- show the view the address asks for ---------- */
+  // where the browser can, the photo grows out of its card into the piece's page and back (a view transition)
+  var vt = !!d.startViewTransition && !reduce;
+  function morph(from, update, to) {
+    if (!vt || !from) { update(); return; }
+    from.style.viewTransitionName = 'pj-photo';
+    var end;
+    d.startViewTransition(function () {
+      from.style.viewTransitionName = '';
+      update();
+      end = to && to();
+      if (end) end.style.viewTransitionName = 'pj-photo';
+    }).finished.then(function () { if (end) end.style.viewTransitionName = ''; }, function () {});
+  }
+  function cardPhoto(slug, root) { return slug ? $('a[data-piece="' + slug + '"] .ph', root) : null; }
+  function piecePhoto() { return $('.pv-ph', pieceView); }
   // jump, not glide: the page underneath has just been replaced
   function jump(y) { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -163,30 +244,42 @@
     var p = state.piece && BY[state.piece];
     gridView.hidden = !!p; pieceView.hidden = !p;
     if (p) { renderPiece(p); d.title = p.name + ' · Pushpa Jewellers'; if (fromNav) jump(0); }
-    else { renderGrid(); d.title = (state.cat === 'all' ? 'The collection' : CAT[state.cat]) + ' · Pushpa Jewellers'; if (fromNav === 'back') jump(gridY); }
+    else { renderGrid(fromNav === 'back'); d.title = (state.cat === 'all' ? 'The collection' : CAT[state.cat]) + ' · Pushpa Jewellers'; if (fromNav === 'back') jump(gridY); }
   }
-  function go(next, push) {
+  function go(next, push, from) {
     if (next.piece && !state.piece) gridY = window.scrollY;
-    state = next;
-    history[push ? 'pushState' : 'replaceState'](null, '', href(state));
-    render(true);
+    morph(from, function () {
+      state = next;
+      history[push ? 'pushState' : 'replaceState'](null, '', href(state));
+      render(true);
+    }, piecePhoto);
   }
   d.addEventListener('click', function (e) {
     if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target.closest('a[data-piece], a[data-cat], .chip');
     if (!a) return;
     e.preventDefault();
-    if (a.hasAttribute('data-piece')) go({ cat: state.cat, sort: state.sort, piece: a.getAttribute('data-piece') }, true);
+    if (a.hasAttribute('data-piece')) go({ cat: state.cat, sort: state.sort, piece: a.getAttribute('data-piece') }, true, $('.ph', a));
     else {
       // a category: from a piece's breadcrumb it is a new page, from the chips it only refilters
-      var fromPiece = !!state.piece;
-      state = { cat: a.getAttribute('data-cat'), sort: state.sort, piece: null };
-      history[fromPiece ? 'pushState' : 'replaceState'](null, '', href(state));
-      render(false);
-      if (fromPiece) jump(0);
+      var was = state.piece;
+      morph(was && piecePhoto(), function () {
+        state = { cat: a.getAttribute('data-cat'), sort: state.sort, piece: null };
+        history[was ? 'pushState' : 'replaceState'](null, '', href(state));
+        render(false);
+        if (was) jump(0);
+      }, function () { return cardPhoto(was, grid); });
     }
   });
   sortSel.addEventListener('change', function () { go({ cat: state.cat, sort: sortSel.value, piece: null }, false); });
-  window.addEventListener('popstate', function () { var wasPiece = !!state.piece; state = read(); render(wasPiece && !state.piece ? 'back' : true); });
+  window.addEventListener('popstate', function (e) {
+    var was = state.piece, next = read();
+    // a browser that animated the swipe back itself has already shown the change
+    var from = e.hasUAVisualTransition ? null : was ? piecePhoto() : cardPhoto(next.piece, grid);
+    morph(from, function () {
+      state = next;
+      render(was && !state.piece ? 'back' : true);
+    }, function () { return state.piece ? piecePhoto() : cardPhoto(was, grid); });
+  });
   render(false);
 })();

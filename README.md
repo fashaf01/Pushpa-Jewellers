@@ -51,7 +51,8 @@ tools/shop-thumbs.py     makes the small grid copies of new shop photos
 in pawn (8 g) where one is known. Visitors can filter by necklaces, bangles, rings, pendants,
 bracelets or bridal, and sort by weight (the sort appears once any piece has a weight). Each
 piece has its own page at `/shop/?piece=<slug>`: the large photo with the piece's other photos
-underneath (tap one to show it, or swipe across the photo on a phone), weight, description, today's 22K rate, an "Ask about this piece" button that
+underneath (swipe across the photo on a phone; on a computer use the arrows or the thumbs, and the
+photo zooms in under the pointer), weight, description, today's 22K rate, an "Ask about this piece" button that
 opens WhatsApp with the piece's name filled in, a call button, a link to its Instagram post when
 it has one, and more pieces of the same kind. Filters and sorting are in the address too
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
@@ -198,7 +199,11 @@ licence covers commercial use.
 ## Notes
 
 - Responsive from 320px up, with no horizontal scroll.
-- Honours `prefers-reduced-motion`. The intro, hero turn, reveals and coin
-  animations all switch off.
+- Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
+  open out, ornaments unfold, the collection's photos settle into their arches, the service
+  medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
+  place, photos that slide under the finger, and a card's photo growing into its piece's page
+  and back (view transitions, in browsers that have them).
+- Honours `prefers-reduced-motion`: all of that switches off.
 - Focus states, ARIA labels and live regions throughout. The Sinhala and Tamil
   lines carry `lang` attributes.
