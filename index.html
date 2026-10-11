@@ -247,66 +247,6 @@
   </div>
 </section>
 
-<!-- ================= services ================= -->
-<section class="serv dark" id="services" aria-labelledby="serv-h">
-  <div class="wrap">
-    <div class="serv-head">
-      <h2 class="h2 rv" id="serv-h">More than a jewellery shop</h2>
-      <p class="lede rv">Three more things you can do at our counter.</p>
-    </div>
-    <div class="svc-g">
-      <article class="svc rv" style="--d:0">
-        <span class="medal" aria-hidden="true"><svg><use href="#i-pawn"/></svg></span>
-        <h3>Pawning</h3>
-        <div class="tx"><p>Pawn your gold with a jeweller who knows its worth, and take it home again when you redeem it.</p></div>
-        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20gold%20pawning." target="_blank" rel="noopener">Ask about pawning <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </article>
-      <article class="svc rv" style="--d:1">
-        <span class="medal" aria-hidden="true"><svg><use href="#i-fx"/></svg></span>
-        <h3>Money exchange</h3>
-        <div class="tx"><p>Authorised money changers. Change currency and send or receive money at the counter.</p><p class="partners">Western Union, MoneyGram and Ria</p></div>
-        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20today%27s%20exchange%20rate." target="_blank" rel="noopener">Ask today&rsquo;s rate <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </article>
-      <article class="svc rv" style="--d:2">
-        <span class="medal" aria-hidden="true"><svg><use href="#i-plane"/></svg></span>
-        <h3>Airline ticketing</h3>
-        <div class="tx"><p>Book your flights at our counter, from the people you buy your gold from.</p></div>
-        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20airline%20tickets." target="_blank" rel="noopener">Ask about a ticket <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ================= track ================= -->
-<section class="track" id="track" aria-labelledby="track-h">
-  <div class="wrap">
-    <div class="track-head">
-      <h2 class="h2 rv" id="track-h">Track your order</h2>
-      <p class="lede rv">Check a made-to-order piece or a repair with the number on your receipt. We reply on WhatsApp.</p>
-    </div>
-    <div class="ledger">
-      <form class="tform rv" id="tform" novalidate>
-        <fieldset class="segctl">
-          <legend class="sr">What would you like to check?</legend>
-          <input type="radio" name="kind" id="k-order" value="order" checked><label for="k-order">Order</label>
-          <input type="radio" name="kind" id="k-repair" value="repair"><label for="k-repair">Repair bill</label>
-        </fieldset>
-        <div class="two">
-          <div class="field"><label for="t-no" id="t-no-l">Order number</label><input id="t-no" name="no" required autocomplete="off" aria-describedby="t-no-h"><span class="hint" id="t-no-h">Printed on your receipt.</span></div>
-          <div class="field"><label for="t-ph">Mobile, last 4 digits</label><input id="t-ph" name="ph" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="off" aria-describedby="t-ph-h"><span class="hint" id="t-ph-h">So only you can see it.</span></div>
-        </div>
-        <p class="hint" id="t-err" role="alert" style="color:var(--wine);font-size:14px;min-height:1.4em"></p>
-        <button class="btn" type="submit"><svg aria-hidden="true"><use href="#i-chat"/></svg>Get my status</button>
-      </form>
-
-      <div class="tl-card rv" style="--d:2" aria-labelledby="tl-h">
-        <div class="tl-top"><h3 id="tl-h">Your status, step by step</h3><span class="tag">Example</span></div>
-        <div class="tl-w"><span class="bar" id="tl-bar" aria-hidden="true"></span><ol class="tl" id="tl"></ol></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= Suba Mangala ================= -->
 <section class="suba dark" id="suba" aria-labelledby="suba-h">
   <div class="wrap suba-g">
@@ -364,6 +304,66 @@
       <p class="sr" aria-live="polite" id="c-live"></p>
       <button class="btn" type="button" data-enrol>Enrol in this plan</button>
       <p class="fine">Figures from the Suba Mangala plan table. On the 6 month plan the gift is half of one instalment; on the 12 month plan it is one full instalment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= track ================= -->
+<section class="track" id="track" aria-labelledby="track-h">
+  <div class="wrap">
+    <div class="track-head">
+      <h2 class="h2 rv" id="track-h">Track your order</h2>
+      <p class="lede rv">Check a made-to-order piece or a repair with the number on your receipt. We reply on WhatsApp.</p>
+    </div>
+    <div class="ledger">
+      <form class="tform rv" id="tform" novalidate>
+        <fieldset class="segctl">
+          <legend class="sr">What would you like to check?</legend>
+          <input type="radio" name="kind" id="k-order" value="order" checked><label for="k-order">Order</label>
+          <input type="radio" name="kind" id="k-repair" value="repair"><label for="k-repair">Repair bill</label>
+        </fieldset>
+        <div class="two">
+          <div class="field"><label for="t-no" id="t-no-l">Order number</label><input id="t-no" name="no" required autocomplete="off" aria-describedby="t-no-h"><span class="hint" id="t-no-h">Printed on your receipt.</span></div>
+          <div class="field"><label for="t-ph">Mobile, last 4 digits</label><input id="t-ph" name="ph" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="off" aria-describedby="t-ph-h"><span class="hint" id="t-ph-h">So only you can see it.</span></div>
+        </div>
+        <p class="hint" id="t-err" role="alert" style="color:var(--wine);font-size:14px;min-height:1.4em"></p>
+        <button class="btn" type="submit"><svg aria-hidden="true"><use href="#i-chat"/></svg>Get my status</button>
+      </form>
+
+      <div class="tl-card rv" style="--d:2" aria-labelledby="tl-h">
+        <div class="tl-top"><h3 id="tl-h">Your status, step by step</h3><span class="tag">Example</span></div>
+        <div class="tl-w"><span class="bar" id="tl-bar" aria-hidden="true"></span><ol class="tl" id="tl"></ol></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= services ================= -->
+<section class="serv dark" id="services" aria-labelledby="serv-h">
+  <div class="wrap">
+    <div class="serv-head">
+      <h2 class="h2 rv" id="serv-h">More than a jewellery shop</h2>
+      <p class="lede rv">Three more things you can do at our counter.</p>
+    </div>
+    <div class="svc-g">
+      <article class="svc rv" style="--d:0">
+        <span class="medal" aria-hidden="true"><svg><use href="#i-pawn"/></svg></span>
+        <h3>Pawning</h3>
+        <div class="tx"><p>Pawn your gold with a jeweller who knows its worth, and take it home again when you redeem it.</p></div>
+        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20gold%20pawning." target="_blank" rel="noopener">Ask about pawning <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+      <article class="svc rv" style="--d:1">
+        <span class="medal" aria-hidden="true"><svg><use href="#i-fx"/></svg></span>
+        <h3>Money exchange</h3>
+        <div class="tx"><p>Authorised money changers. Change currency and send or receive money at the counter.</p><p class="partners">Western Union, MoneyGram and Ria</p></div>
+        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20today%27s%20exchange%20rate." target="_blank" rel="noopener">Ask today&rsquo;s rate <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+      <article class="svc rv" style="--d:2">
+        <span class="medal" aria-hidden="true"><svg><use href="#i-plane"/></svg></span>
+        <h3>Airline ticketing</h3>
+        <div class="tx"><p>Book your flights at our counter, from the people you buy your gold from.</p></div>
+        <a class="alink" href="https://wa.me/94777770203?text=Hello%20Pushpa%20Jewellers%2C%20I%27d%20like%20to%20ask%20about%20airline%20tickets." target="_blank" rel="noopener">Ask about a ticket <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
     </div>
   </div>
 </section>
