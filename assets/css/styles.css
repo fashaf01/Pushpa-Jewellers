@@ -616,17 +616,29 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 }
 @media (max-width:600px){
   .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(var(--gut) * -1);padding-inline:var(--gut)}
-  .shop-meta{margin:12px 0 20px}
-  .sort select{min-height:38px;font-size:13.5px}
+  .shop-head{padding-block:26px 24px}
+  .shop-head .wrap{gap:10px}
+  .crumbs{font-size:11px}
+  .shop-meta{margin:10px 0 18px;font-size:13.5px}
+  .sort select{min-height:34px;font-size:13px}
   .chips::-webkit-scrollbar{display:none}
-  .chip{flex:none;min-height:38px;padding:0 14px;font-size:12px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px}
+  .chip{flex:none;min-height:34px;padding:0 12px;gap:6px;font-size:11.5px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 10px}
   .pc .ph{margin-bottom:4px}
   .pc .ph::after{inset:6px}
-  .pc b{font-size:14px}
-  .pc .m,.pc i{font-size:12px}
-  .pv-h{font-size:32px}
-  .pv-ctas{display:grid;width:100%}
+  .pc a{gap:4px}
+  .pc b{font-size:12.5px}
+  .pc .m,.pc i{font-size:11.5px;line-height:1.5}
+  .pv{gap:22px}
+  .pv-h{font-size:27px}
+  .pv-wt div{padding-block:11px}
+  .pv-wt dt{font-size:11px}
+  .pv-wt dd{font-size:18px}
+  .pv-d{font-size:15px}
+  .pv-price{font-size:13px}
+  .pv-th{width:54px}
+  .pv-ctas{display:grid;width:100%;gap:10px}
+  .pv-more{margin-top:44px;padding-top:30px}
 }
 
 /* tuned for The Seasons (mixed case, lighter than Cinzel's capitals); only applies when the kit loads */
@@ -645,71 +657,88 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 /* phones: a calmer page. Smaller display type, stamps and medals, less air between sections,
    services as a compact list, and no repeated buttons where the next thing on screen already has them */
 @media (max-width:600px){
-  :root{--sec:56px}
-  .h2,.has-seasons .h2{font-size:30px}
-  .lede{font-size:15.5px}
+  :root{--sec:48px}
+  body{font-size:15px}
+  .h2,.has-seasons .h2{font-size:26px}
+  .lede{font-size:14.5px}
+  .label{font-size:11px;letter-spacing:.14em}
+  .btn{min-height:46px;padding:0 20px;gap:10px;font-size:12.5px}
+  .btn svg{width:16px;height:16px}
+  .alink{font-size:12.5px;padding-block:8px}
   .hero .label{font-size:11px}
-  .hero .btn{min-height:48px}
-  .mk{gap:10px;padding:20px 8px 22px}
-  .stamp{width:76px}
-  .mk b{font-size:13.5px}
-  .mk p{font-size:12.5px}
+  .hero .btn{min-height:46px}
+  .mk{gap:8px;padding:18px 8px 18px}
+  .stamp{width:66px}
+  .mk b{font-size:12.5px}
+  .mk p{font-size:12px}
   .suba-g{gap:32px}
   .suba-c{gap:18px}
-  .suba h2,.has-seasons .suba h2{font-size:44px}
-  .suba .sub{font-size:12px;letter-spacing:.12em;margin-top:-6px}
+  .suba h2,.has-seasons .suba h2{font-size:36px}
+  .suba .sub{font-size:11px;letter-spacing:.12em;margin-top:-6px}
   .tri{gap:4px;line-height:1.5}
-  .tri .si{font-size:14.5px}
-  .tri .ta{font-size:13px}
-  .rules li{font-size:14px;padding-block:11px;gap:12px}
+  .tri .si{font-size:13.5px}
+  .tri .ta{font-size:12.5px}
+  .rules li{font-size:13.5px;padding-block:10px;gap:12px}
   .rules .fl{margin-top:4px}
   .suba-ctas{display:none}
-  .calc{gap:20px;padding:26px 18px}
-  .calc h3{font-size:18px}
-  .amt-h output{font-size:20px}
-  .grand .fig{font-size:40px}
+  .calc{gap:18px;padding:22px 16px}
+  .calc h3{font-size:16px}
+  .amt-h output{font-size:18px}
+  .grand .fig{font-size:34px}
   .calc .fine{font-size:12px}
   .track-head{margin-bottom:28px}
   .ledger>*{padding:24px 18px}
-  .tform{gap:18px}
+  .tform{gap:16px}
+  .two{gap:14px}
+  .field{gap:2px}
+  .tform .field label{font-size:11.5px}
+  .tform .field input{min-height:42px;font-size:17px}
+  .field .hint{font-size:12px}
+  .tl b{font-size:14.5px}
+  .tl div span{font-size:13px}
+  .tl li{gap:14px}
   .tl-top{margin-bottom:12px}
-  .tl-top h3{font-size:17px}
-  .tl li{padding-block:9px}
+  .tl-top h3{font-size:15.5px}
+  .tl li{padding-block:8px}
   .serv-head{margin-bottom:24px}
-  .svc{grid-template-columns:64px minmax(0,1fr);justify-items:start;align-items:start;text-align:left;gap:4px 18px;padding:24px 0}
+  .svc{grid-template-columns:52px minmax(0,1fr);justify-items:start;align-items:start;text-align:left;gap:4px 16px;padding:20px 0}
   .svc>:not(.medal){grid-column:2}
-  .medal{grid-row:1/span 3;width:64px;height:64px;margin:2px 0 0}
+  .medal{grid-row:1/span 3;width:52px;height:52px;margin:2px 0 0}
   .medal::before{inset:3px}
-  .medal::after{inset:8px}
-  .medal svg{width:28px;height:28px}
-  .svc h3{font-size:22px}
+  .medal::after{inset:7px}
+  .medal svg{width:22px;height:22px}
+  .svc h3{font-size:19px}
   .svc .tx{justify-items:start;gap:6px}
-  .svc p{font-size:14.5px;max-width:none}
+  .svc p{font-size:14px;max-width:none}
   .svc .alink{margin-top:4px}
-  .coll-head{margin-bottom:32px}
-  .doors{grid-auto-columns:56vw}
-  .door{gap:12px}
-  .door b{font-size:18px}
-  .door span{font-size:13px;margin-top:-10px}
-  .coll-foot{margin-top:28px}
-  .shop-ph{padding:16px}
-  .shop-ph .cn{width:88px}
+  .coll-head{margin-bottom:26px}
+  .doors{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-columns:auto;overflow:visible;gap:22px 12px;padding-bottom:0}
+  .door{gap:8px}
+  .door .ph::after{inset:7px}
+  .door b{font-size:15.5px}
+  .door span{font-size:12px;margin-top:-6px}
+  .coll-foot{margin-top:24px}
+  .shop-ph{max-width:300px;margin-inline:auto;padding:14px}
+  .shop-ph .cn{width:70px}
+  .shop-ph figcaption{font-size:13px;margin-top:14px}
   .about-c{gap:16px}
-  .year{font-size:72px}
-  .flower{gap:6px 16px}
-  .flower .lotus{width:72px}
-  .flower .si{font-size:24px}
-  .flower p{font-size:14px}
-  .hello span{font-size:24px}
+  .year{font-size:56px}
+  .flower{gap:6px 14px}
+  .flower .lotus{width:60px}
+  .flower .si{font-size:21px}
+  .flower p{font-size:13.5px}
+  .hello span{font-size:21px}
   .stores{margin-top:36px}
   .store{padding:20px 0 22px;gap:6px}
-  .store h3{font-size:21px}
-  .store p{font-size:14px}
-  .lines{gap:2px 24px;padding-top:16px;font-size:14px}
-  .foot-top img{height:72px}
-  .foot-top .scr,.has-seasons .foot-top .scr{font-size:19px}
+  .store h3{font-size:19px}
+  .store p{font-size:13.5px}
+  .lines{gap:2px 24px;padding-top:16px;font-size:13.5px}
+  .foot-top img{height:60px}
+  .foot-top .scr,.has-seasons .foot-top .scr{font-size:17px}
   .foot-g{gap:22px;padding-block:26px}
-  .fab{min-height:44px;padding:0 15px;font-size:12px;right:14px;bottom:14px}
+  /* WhatsApp as a round button, its words kept for screen readers */
+  .fab{width:50px;height:50px;min-height:0;padding:0;justify-content:center;border-radius:50%;font-size:0;letter-spacing:0;right:14px;bottom:14px}
+  .fab svg{width:22px;height:22px}
 }
 
 @media (prefers-reduced-motion:reduce){
