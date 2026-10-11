@@ -544,17 +544,15 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,20px);opacity:0;background:var(--plum);color:var(--on-plum);font-size:14px;padding:12px 18px;transition:opacity .3s,transform .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .fab{display:none}
-/* the WhatsApp button: WhatsApp's own green and glyph in a round button, bottom right. The glyph's circle is centred in the
-   button (its tail hangs out to the lower left), so it sits balanced; its words are for screen readers only. It springs up
-   once the hero is behind, and sends out a ring now and then. */
+/* the WhatsApp button: the site's wine with a white WhatsApp glyph, in a round button, bottom right, quiet so it does not pull
+   the eye. The glyph's circle is centred in the button (its tail hangs out to the lower left), so it sits balanced; its words
+   are for screen readers only. It springs up once the hero is behind. */
 @media (max-width:760px){
-  .fab{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:45;display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:0;border-radius:50%;background:linear-gradient(145deg,#2fd873,#1fb055);color:#fff;text-decoration:none;box-shadow:0 10px 24px -8px rgba(18,110,52,.6),0 2px 6px rgba(44,7,27,.25);transform:translateY(96px) scale(.8);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .35s var(--ease)}
+  .fab{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:45;display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:0;border-radius:50%;background:var(--wine);color:#fff;text-decoration:none;box-shadow:0 10px 24px -10px rgba(44,7,27,.65),0 2px 6px rgba(44,7,27,.25);transform:translateY(96px) scale(.8);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .35s var(--ease)}
   .fab.show{transform:none;opacity:1;pointer-events:auto}
   .fab svg{width:30px;height:30px;display:block}
-  .fab::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;animation:ping 4s ease-out 2.5s infinite}
   .fab:active{transform:scale(.94)}
 }
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(47,216,115,.55)}55%,100%{box-shadow:0 0 0 14px rgba(47,216,115,0)}}
 
 /* ---------- shop: the collection grid and a page for each piece (shop/index.html, shop.js) ---------- */
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}

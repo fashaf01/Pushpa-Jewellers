@@ -206,7 +206,7 @@ licence covers commercial use.
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
   it is tapped), taps do not flash grey, and the colour behind the page when it is pulled past
   the top or bottom is the header's plum.
-- The round WhatsApp button on phones uses WhatsApp's own glyph (`#i-wa` in the icon sprite).
+- The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
 - Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
   medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
