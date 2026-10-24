@@ -5,7 +5,8 @@ since 1967. Negombo and Katunayake, Sri Lanka.
 
 Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
 gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
-frame (the arch).
+frame (the cusped arch of an old doorway). It is meant to feel like a house that has been here since 1967:
+book type, old paper, plum like printed velvet, gilt line ornament.
 
 Six pages: the home page (`index.html`), the shop (`shop/index.html`, at `/shop/`), About us (`/about/`), and one page
 for each of the three counter services: pawning, money exchange and airline ticketing (`/services/<name>/`). Suba Mangala
@@ -44,7 +45,7 @@ assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, shown in the shop 
 assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
 assets/img/              photographs (webp) and favicon
 assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
-assets/img/orn/          gold ornaments: corner, dividers, mandalas (svg)
+assets/img/orn/          gold ornaments: corner, dividers, mandalas, the line-drawn lotus (svg)
 api/gold.js              today's gold rate, a Vercel function served at /api/gold
 tools/frame-photos.py    frames a product photo of any size for the shop, or cuts a close-up from it
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
@@ -187,7 +188,10 @@ var WA = 'https://wa.me/94777770203?text=';
 - **The Seasons** (Adobe Fonts kit `tiq7fhn`) for the big headlines. **Add the
   site's domain to this kit in Adobe Fonts > Web Projects**, or the kit will not
   serve on the live site. The page falls back to Cinzel if it does not load.
-- **Cinzel, Figtree, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil**
+- **EB Garamond** for all reading text, an old book type. It runs small, so `font-size-adjust` (`--text-adjust`)
+  sizes it up to match the sizes in the stylesheet; the display faces opt out of that.
+- **Cinzel** for the small capitals: navigation, buttons, labels, links.
+- **Cinzel, EB Garamond, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil**
   from Google Fonts.
 
 ## Business details used on the page
@@ -223,8 +227,12 @@ licence covers commercial use.
 ## Notes
 
 - Responsive from 320px up, with no horizontal scroll.
-- The ivory pages carry a fine paper grain (`--paper` in `styles.css`), and the steps on the About and service pages
-  are numbered in Roman capitals, ruled like an old account book.
+- Heritage details, all at the top of `styles.css` as drawn data URIs: a fine paper grain on the ivory (`--paper`); plum
+  as printed velvet, small gold florets on a fine nap (`--damask`, `--velvet`); the cusped arch (`--arch-mask`,
+  `--arch-line` on the collection photos, `--arch-tall` behind page titles); gilt corner brackets on framed cards
+  (`--brackets`); and the old label shape with inward corners for tiles (`--label`). The line-drawn lotus
+  (`assets/img/orn/lotus-line.svg`) sits at the edges of plum sections and page titles. Steps on the About and service
+  pages are numbered in Roman capitals, ruled like an old account book.
 - The header shrinks on scroll on desktop only. On phones and tablets it keeps one height, so
   nothing moves under the finger and jump links always land just under it (`scroll-margin-top`).
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
