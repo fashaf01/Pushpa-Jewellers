@@ -65,10 +65,14 @@ pieces of the same kind. Filters and sorting are in the address too
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
-**The price on a piece's page.** A piece with `price` (rupees) shows that price. A piece with a weight and a `karat`
+**The price on a piece's card and page.** A piece with `price` (rupees) shows that price. **Every piece now has a
+sample price, put in to show the design: replace them with the real prices before the site goes live** (the sample
+figures are the weight at about Rs 31,250 a gram plus 16% where the weight is known, and a typical figure for the
+kind of piece where it is not). A piece with a weight and a `karat`
 shows its gold value today: the weight times today's rate for that karat (from `/api/gold`), rounded to Rs 100, with
 the weight, karat and rate per gram written under it and a plain note that making charges are added at the counter.
 A set adds its pieces' weights; a range of weights gives a range of values. Anything else reads "Price on request".
+Delete a piece's `price` to fall back to these.
 The 28 Instagram pieces whose posts print a weight also print 22KT, so they carry `karat: 22`. Setting the showroom's
 own rate in Vercel (see *Today's gold rate*) makes these values use it.
 
@@ -123,13 +127,12 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 
 ## The intro
 
-The home page opens on the logo coming through smoke. Soft wisps drift up from the lower part of the screen, past
-the logo, and thin away; the logo comes through them from soft focus to sharp, the motto, *Forever Quality & Trust*,
-follows, and the intro fades away after 2.8 seconds. The smoke is drawn on a canvas by `main.js` (cloudy noise in
-warm ivory, at half size, about forty wisps in all; it stops and removes itself once the smoke has gone). The timing is
-the `animation-delay` on `.intro` in `styles.css`; `site.js` reads it from there to start the hero's entrance as the
-intro lifts, so change it in the CSS only. The logo's size is `.intro-logo` (220px wide on desktop). Other pages have
-no intro, and it is skipped for visitors who ask for reduced motion.
+The home page opens on the logo, in the classic way: a warm light comes up behind it, the logo fades up into place, a
+fine gold rule draws out either side of the Pushpa flower beneath it, the motto, *Forever Quality & Trust*, follows,
+and after 2.6 seconds the intro fades away. It is all CSS (the `intro` block in `styles.css`). The timing is the
+`animation-delay` on `.intro`; `site.js` reads it from there to start the hero's entrance as the intro lifts, so change
+it in the CSS only. The logo's size is `.intro-logo` (220px wide on desktop). Other pages have no intro, and it is
+skipped for visitors who ask for reduced motion.
 
 ## Logo size
 

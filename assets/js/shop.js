@@ -63,7 +63,8 @@
     var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
       '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async"></div>' +
-      '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt + '</a></li>';
+      '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt +
+      (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : '') + '</a></li>';
   }
   function list(cat, sort) {
     var out = P.filter(function (p) { return cat === 'all' || p.cats.indexOf(cat) > -1; });
@@ -267,7 +268,7 @@
   function perGram(k) { return k === 22 ? +gold.k22.gram : +gold.k24.gram * k / 24; }
   function priceHTML(p) {
     if (p.price) return '<span class="pv-pk">Price</span><b class="pv-pv tab">Rs ' + rs(p.price) + '</b>' +
-      '<p class="pv-pn">Ask us about it on WhatsApp, or call the hotline, and we will have it ready for you to see at the counter.</p>';
+      '<p class="pv-pn">Gold moves with the day’s rate, so we confirm the price when you ask. Message us on WhatsApp or call the hotline.</p>';
     if (p.grams.length && p.karat && gold) {
       var g = perGram(p.karat), weights = p.isSet ? [p.grams.reduce(function (a, b) { return a + b; }, 0)] : p.grams;
       return '<span class="pv-pk">Gold value today</span><b class="pv-pv tab">' + weights.map(function (w) { return 'Rs ' + rs(Math.round(w * g / 100) * 100); }).join(' – ') + '</b>' +

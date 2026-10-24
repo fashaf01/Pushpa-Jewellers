@@ -24,9 +24,9 @@
   --paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .13 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --ease:cubic-bezier(.2,.7,.2,1); --wipe:cubic-bezier(.75,0,.2,1);
   /* the cusped arch of an old doorway, for the collection photos (mask and gold line) and behind page titles */
-  --arch-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 430' preserveAspectRatio='none'%3E%3Cpath d='M0 430 V150.0 A28.0 28.0 0 0 1 22.0 104.0 A30.0 30.0 0 0 1 60.0 64.0 A30.0 30.0 0 0 1 108.0 36.0 C128.0 30.0 146.0 18.0 150.0 0.0 C154.0 18.0 172.0 30.0 192.0 36.0 A30.0 30.0 0 0 1 240.0 64.0 A30.0 30.0 0 0 1 278.0 104.0 A28.0 28.0 0 0 1 300.0 150.0 V430 Z'/%3E%3C/svg%3E");
-  --arch-line:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 430' preserveAspectRatio='none'%3E%3Cpath d='M0 430 V150.0 A28.0 28.0 0 0 1 22.0 104.0 A30.0 30.0 0 0 1 60.0 64.0 A30.0 30.0 0 0 1 108.0 36.0 C128.0 30.0 146.0 18.0 150.0 0.0 C154.0 18.0 172.0 30.0 192.0 36.0 A30.0 30.0 0 0 1 240.0 64.0 A30.0 30.0 0 0 1 278.0 104.0 A28.0 28.0 0 0 1 300.0 150.0 V430 Z' fill='none' stroke='rgb(236,210,143)' stroke-opacity='.8' stroke-width='1.3' vector-effect='non-scaling-stroke' transform='translate(150 215) scale(.93 .955) translate(-150 -215)'/%3E%3C/svg%3E");
-  --arch-tall:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 604 1402'%3E%3Cpath d='M0 1400 V198.0 A56.0 37.0 0 0 1 44.0 137.3 A60.0 39.6 0 0 1 120.0 84.5 A60.0 39.6 0 0 1 216.0 47.5 C256.0 39.6 292.0 23.8 300.0 0.0 C308.0 23.8 344.0 39.6 384.0 47.5 A60.0 39.6 0 0 1 480.0 84.5 A60.0 39.6 0 0 1 556.0 137.3 A56.0 37.0 0 0 1 600.0 198.0 V1400 Z' fill='rgb(22,2,11)' fill-opacity='.42' stroke='rgb(226,194,122)' stroke-opacity='.42' stroke-width='1.5'/%3E%3Cpath d='M0 1400 V198.0 A56.0 37.0 0 0 1 44.0 137.3 A60.0 39.6 0 0 1 120.0 84.5 A60.0 39.6 0 0 1 216.0 47.5 C256.0 39.6 292.0 23.8 300.0 0.0 C308.0 23.8 344.0 39.6 384.0 47.5 A60.0 39.6 0 0 1 480.0 84.5 A60.0 39.6 0 0 1 556.0 137.3 A56.0 37.0 0 0 1 600.0 198.0 V1400 Z' fill='none' stroke='rgb(226,194,122)' stroke-opacity='.2' stroke-width='1' transform='translate(300.0 1400) scale(.955 .985) translate(-300.0 -1400)'/%3E%3C/svg%3E");
+  --arch-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 430' preserveAspectRatio='none'%3E%3Cpath d='M0 430 V150.0 A28.0 28.0 0 0 1 22.0 104.0 A30.0 30.0 0 0 1 60.0 64.0 A30.0 30.0 0 0 1 108.0 36.0 C128.0 30.0 146.0 18.0 150.0 0.0 C154.0 18.0 172.0 30.0 192.0 36.0 A30.0 30.0 0 0 1 240.0 64.0 A30.0 30.0 0 0 1 278.0 104.0 A28.0 28.0 0 0 1 300.0 150.0 V430 Z' transform='translate(150 0) scale(.966 1) translate(-150 0)'/%3E%3C/svg%3E");
+  --arch-line:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 430' preserveAspectRatio='none'%3E%3Cpath d='M0 430 V150.0 A28.0 28.0 0 0 1 22.0 104.0 A30.0 30.0 0 0 1 60.0 64.0 A30.0 30.0 0 0 1 108.0 36.0 C128.0 30.0 146.0 18.0 150.0 0.0 C154.0 18.0 172.0 30.0 192.0 36.0 A30.0 30.0 0 0 1 240.0 64.0 A30.0 30.0 0 0 1 278.0 104.0 A28.0 28.0 0 0 1 300.0 150.0 V430 Z' fill='none' stroke='rgb(236,210,143)' stroke-opacity='.8' stroke-width='1.3' vector-effect='non-scaling-stroke' transform='translate(150 215) scale(.9 .955) translate(-150 -215)'/%3E%3C/svg%3E");
+  --arch-tall:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -4 640 1404'%3E%3Cpath d='M0 1400 V198.0 A56.0 37.0 0 0 1 44.0 137.3 A60.0 39.6 0 0 1 120.0 84.5 A60.0 39.6 0 0 1 216.0 47.5 C256.0 39.6 292.0 23.8 300.0 0.0 C308.0 23.8 344.0 39.6 384.0 47.5 A60.0 39.6 0 0 1 480.0 84.5 A60.0 39.6 0 0 1 556.0 137.3 A56.0 37.0 0 0 1 600.0 198.0 V1400 Z' fill='rgb(22,2,11)' fill-opacity='.42' stroke='rgb(226,194,122)' stroke-opacity='.42' stroke-width='1.5'/%3E%3Cpath d='M0 1400 V198.0 A56.0 37.0 0 0 1 44.0 137.3 A60.0 39.6 0 0 1 120.0 84.5 A60.0 39.6 0 0 1 216.0 47.5 C256.0 39.6 292.0 23.8 300.0 0.0 C308.0 23.8 344.0 39.6 384.0 47.5 A60.0 39.6 0 0 1 480.0 84.5 A60.0 39.6 0 0 1 556.0 137.3 A56.0 37.0 0 0 1 600.0 198.0 V1400 Z' fill='none' stroke='rgb(226,194,122)' stroke-opacity='.2' stroke-width='1' transform='translate(300.0 1400) scale(.955 .985) translate(-300.0 -1400)'/%3E%3C/svg%3E");
   /* gilt corner brackets for framed cards, and the old label shape with inward corners for tiles (border-image) */
   --brackets:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg id='c' fill='none' stroke='rgb(226,194,122)' stroke-opacity='.85' stroke-width='1'%3E%3Cpath d='M.5 39V.5H39'/%3E%3Cpath d='M5.5 30V5.5H30'/%3E%3Crect x='9.5' y='9.5' width='5' height='5'/%3E%3C/g%3E%3Cuse href='%23c' transform='matrix(-1 0 0 1 120 0)'/%3E%3Cuse href='%23c' transform='matrix(1 0 0 -1 0 120)'/%3E%3Cuse href='%23c' transform='matrix(-1 0 0 -1 120 120)'/%3E%3C/svg%3E");
   --brackets-deep:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg id='c' fill='none' stroke='rgb(169,129,58)' stroke-opacity='.8' stroke-width='1'%3E%3Cpath d='M.5 39V.5H39'/%3E%3Cpath d='M5.5 30V5.5H30'/%3E%3Crect x='9.5' y='9.5' width='5' height='5'/%3E%3C/g%3E%3Cuse href='%23c' transform='matrix(-1 0 0 1 120 0)'/%3E%3Cuse href='%23c' transform='matrix(1 0 0 -1 0 120)'/%3E%3Cuse href='%23c' transform='matrix(-1 0 0 -1 120 120)'/%3E%3C/svg%3E");
@@ -98,19 +98,27 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .js .rv.in{opacity:1;transform:none}
 .js .loaded .hero .rv{opacity:1;transform:none}
 
-/* ---------- intro: the logo comes through smoke ---------- */
-/* Smoke rises from below the logo and curls up like incense (drawn on the canvas by main.js); the logo comes through it
-   from soft focus to sharp, the motto follows, and as the smoke thins the whole intro fades away. It lifts after 2.8s.
-   site.js reads that delay (the animation-delay on .intro) to start the page's own entrance as the intro lifts, so it
-   is changed here only. Without the script the logo and motto still come in and the intro still lifts. */
+/* ---------- intro: the logo, in the classic way ---------- */
+/* A warm light comes up behind the logo, the logo fades up into place, a fine gold rule draws out either side of the
+   Pushpa flower beneath it, the motto follows, and after 2.6s the whole intro fades away. site.js reads that delay (the
+   animation-delay on .intro) to start the page's own entrance as the intro lifts, so it is changed here only. */
 .intro{display:none}
-.js .intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 46%,#45102d 0%,var(--plum-3) 80%);animation:introOut .9s var(--ease) 2.8s forwards}
-.intro-smoke{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none}
-.intro-in{position:relative;z-index:1;display:grid;justify-items:center;gap:14px;padding-inline:var(--gut)}
-.intro-logo{width:min(220px,48vw,32svh);height:auto;opacity:0;filter:blur(12px);transform:scale(1.03);animation:emerge 1.8s cubic-bezier(.25,.6,.3,1) .55s forwards}
-.intro-sl{font-family:var(--fancy-it);font-style:italic;font-synthesis:none;font-size-adjust:none;font-size:clamp(18px,1.8vw,22px);line-height:1.2;color:var(--gold-light);opacity:0;filter:blur(6px);transform:translateY(6px);animation:emerge 1.2s var(--ease) 1.5s forwards}
+.js .intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 46%,#45102d 0%,var(--plum-3) 80%);animation:introOut .9s var(--ease) 2.6s forwards}
+.intro::before{content:"";position:absolute;left:50%;top:47%;width:min(620px,130vw);aspect-ratio:1;translate:-50% -50%;background:radial-gradient(closest-side,rgba(226,194,122,.13),rgba(226,194,122,0));opacity:0;animation:glow 1.8s ease-out .1s forwards}
+.intro-in{position:relative;display:grid;justify-items:center;gap:14px;padding-inline:var(--gut);animation:settle 3.5s linear forwards}
+.intro-logo{width:min(220px,48vw,32svh);height:auto;opacity:0;transform:translateY(14px);animation:rise 1.4s cubic-bezier(.22,.61,.36,1) .25s forwards}
+.intro-rule{position:relative;display:grid;place-items:center;width:min(260px,64vw);height:14px}
+.intro-rule::before,.intro-rule::after{content:"";position:absolute;top:50%;width:calc(50% - 16px);height:1px;transform:scaleX(0);animation:draw 1.1s var(--ease) 1.05s forwards}
+.intro-rule::before{left:0;background:linear-gradient(90deg,rgba(226,194,122,0),var(--plum-gold));transform-origin:right}
+.intro-rule::after{right:0;background:linear-gradient(270deg,rgba(226,194,122,0),var(--plum-gold));transform-origin:left}
+.intro-rule .fl{width:13px;height:13px;color:var(--plum-gold);opacity:0;transform:scale(.4) rotate(-45deg);animation:bloom .9s var(--ease) .9s forwards}
+.intro-sl{font-family:var(--fancy-it);font-style:italic;font-synthesis:none;font-size-adjust:none;font-size:clamp(18px,1.8vw,22px);line-height:1.2;color:var(--gold-light);opacity:0;transform:translateY(6px);animation:rise 1.1s var(--ease) 1.45s forwards}
 @media (max-height:420px){.intro-sl{display:none}}
-@keyframes emerge{to{opacity:1;filter:blur(0);transform:none}}
+@keyframes glow{to{opacity:1}}
+@keyframes settle{from{transform:scale(1)}to{transform:scale(1.025)}}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes draw{to{transform:none}}
+@keyframes bloom{to{opacity:1;transform:none}}
 @keyframes introOut{to{opacity:0;visibility:hidden}}
 
 /* ---------- masthead ---------- */
@@ -582,6 +590,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pc i{font-style:normal;font-size:13px;font-weight:600;color:var(--gold-deep);font-variant-numeric:lining-nums tabular-nums}
 .pc i small,.pv-spec small{font-size:.85em;font-weight:500;color:var(--muted)}
 .pc i.no{font-weight:500;color:var(--soft)}
+.pc .pr{font-style:normal;font-family:var(--display);font-size-adjust:none;font-size:14.5px;font-weight:600;letter-spacing:.02em;color:var(--wine);font-variant-numeric:lining-nums}
 .pv-wrap{padding-block:clamp(22px,2.6vw,34px) var(--sec)}
 .pv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start;margin-top:22px}
 .pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
@@ -666,6 +675,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .pc a{gap:4px}
   .pc b{font-size:12.5px}
   .pc .m,.pc i{font-size:11.5px;line-height:1.5}
+  .pc .pr{font-size:13px}
   .pv{gap:22px}
   .pv-h{font-size:27px}
   .pv-d{font-size:15px}
@@ -682,7 +692,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 }
 
 /* ---------- pages: the three services and About (services/<name>/index.html, about/index.html) ---------- */
-.page-head{position:relative;overflow:hidden;text-align:center;padding-block:clamp(70px,8vw,110px) clamp(56px,6vw,84px);border-bottom:0;background:var(--arch-tall) no-repeat 50% clamp(14px,2vw,24px)/min(800px,94vw) auto,var(--damask),var(--velvet),var(--plum)}
+.page-head{position:relative;overflow:hidden;text-align:center;padding-block:clamp(70px,8vw,110px) clamp(56px,6vw,84px);border-bottom:0;background:var(--arch-tall) no-repeat 50% clamp(14px,2vw,24px)/min(853px,100vw) auto,var(--damask),var(--velvet),var(--plum)}
 .page-head::after{content:"";position:absolute;z-index:2;left:0;right:0;bottom:0;height:6px;border-top:1px solid var(--plum-gold);border-bottom:1px solid rgba(226,194,122,.3);background:var(--plum-3)}
 .page-head .wrap{justify-items:center}
 .page-head .crumbs{justify-content:center}
