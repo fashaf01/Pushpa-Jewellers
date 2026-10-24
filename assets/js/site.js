@@ -100,10 +100,11 @@
 
   try { if (d.fonts && d.fonts.load) d.fonts.load('1em "the-seasons"').then(function (f) { if (f && f.length) d.documentElement.classList.add('has-seasons'); }, function () {}); } catch (e) {}
 
-  /* ---------- entrance: after the flower has drawn, where a page has the intro ---------- */
+  /* ---------- entrance: as the intro lifts, where a page has one (it lifts after its animation-delay in styles.css) ---------- */
+  var intro = $('.intro');
   setTimeout(function () {
     d.body.classList.add('loaded');
     isLoaded = true;
     onLoad.forEach(function (fn) { fn(); });
-  }, reduce || !$('.intro') ? 0 : 1900);
+  }, reduce || !intro ? 0 : (parseFloat(getComputedStyle(intro).animationDelay) || 0) * 1000);
 })();

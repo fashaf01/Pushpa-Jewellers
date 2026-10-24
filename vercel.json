@@ -1,5 +1,11 @@
 {
   "redirects": [
-    { "source": "/shop", "destination": "/shop/", "permanent": true }
+    { "source": "/shop", "destination": "/shop/", "permanent": true },
+    { "source": "/about", "destination": "/about/", "permanent": true },
+    { "source": "/services", "destination": "/#services", "permanent": false },
+    { "source": "/services/", "destination": "/#services", "permanent": false },
+    { "source": "/services/pawning", "destination": "/services/pawning/", "permanent": true },
+    { "source": "/services/money-exchange", "destination": "/services/money-exchange/", "permanent": true },
+    { "source": "/services/airline-ticketing", "destination": "/services/airline-ticketing/", "permanent": true }
   ]
 }

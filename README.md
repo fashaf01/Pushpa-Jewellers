@@ -7,7 +7,9 @@ Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
 gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
 frame (the arch).
 
-Two pages: the home page (`index.html`) and the shop (`shop/index.html`, at `/shop/`).
+Six pages: the home page (`index.html`), the shop (`shop/index.html`, at `/shop/`), About us (`/about/`), and one page
+for each of the three counter services: pawning, money exchange and airline ticketing (`/services/<name>/`). Suba Mangala
+and order tracking stay on the home page.
 
 No build step, no dependencies. It is hosted on Vercel at
 **https://pushpa-jewellers.vercel.app**. Locally, serve the folder (the shop needs a server,
@@ -22,17 +24,20 @@ A plain static server has no `/api/gold`, so locally the top bar shows
 
 `node build.js` inlines the CSS, JS, favicon and every image of the home page into a
 single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
-(it too shows the call line in place of the rate, and has no shop).
+(it too shows the call line in place of the rate, and has only the home page, so its links to the shop, About and the
+service pages do not work).
 
 ## Files
 
 ```
 index.html               the home page: markup, the inline SVG icon sprite, JSON-LD
 shop/index.html          the shop
+about/index.html         About us: the story, the marks, how we work, the name, the services, the showrooms
+services/*/index.html    pawning, money-exchange, airline-ticketing: how it works, contact card, the other services
 assets/css/styles.css    design tokens and all layout, both pages
-assets/js/site.js        shared by both pages: header, menus, gold rate bar, copy buttons,
+assets/js/site.js        shared by every page: header, menus, gold rate bar, copy buttons,
                          header shrinking on scroll, reveals, the entrance
-assets/js/main.js        home page only: hero turn, Suba Mangala calculator and enrolment,
+assets/js/main.js        home page only: Suba Mangala calculator and enrolment,
                          order tracking, opening-hours week, the welcome
 assets/js/pieces.js      the shop's catalogue, one line per piece
 assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, shown in the shop alongside pieces.js
@@ -85,9 +90,9 @@ instead, so no background is invented. Watermarks in the uploaded photos are cro
    (`photos: 3` for three, and so on).
    The comments there explain each field.
 
-The shop page shares the home page's header, menus, footer and gold rate panel. They are
-copied into `shop/index.html` with links pointing back to the home page, so a change to any
-of them has to be made in both files.
+Every page shares the home page's header, menus, footer and gold rate panel. They are
+copied into each page with links rewritten for where the page sits, so a change to any of
+them has to be made in all six files (`index.html`, `shop/`, `about/` and the three under `services/`).
 
 ## Today's gold rate
 
@@ -107,42 +112,58 @@ redeploy. Remove them to go back to the market price.
 
 If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
 
+## The intro
+
+The home page opens on the logo, from old to new: a dark page with a gilt frame, the logo first as a tarnished, grainy
+old print, then restored to polished gold with a light passing across it, and the motto, *Forever Quality & Trust*.
+It lifts after 3 seconds. The timing is the `animation-delay` on `.intro` in `styles.css`; `site.js` reads it from
+there to start the hero's entrance as the intro lifts, so change it in the CSS only. Other pages have no intro.
+
+## Logo size
+
+The masthead logo is `--logo` (82px on desktop, 72px on phones and tablets) and `--logo-s` once a desktop page has
+scrolled (58px), at the top of `styles.css`. The header's height, the jump-link landing point and the hero's height
+are all worked out from these, so change the logo size there and nothing else needs to move.
+
 ## Sections
 
-1. **Hero.** Opens on Pushpa in 1967, then turns to today. The 1967 / Today switch moves between them.
-   On phones the photo comes first, with the switch on its bottom edge and the copy centred below:
-   a label, a two-line headline, one button and a text link.
+1. **Hero.** Pushpa today: the bride beside the brass lamp. On phones the photo comes first, with the copy
+   centred below: a label, a two-line headline, one button and a text link.
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
 4. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
 5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
-6. **Services.** Pawning, money exchange and airline ticketing (the menu's Services link lands here).
-7. **About.** 1967, the pride of Negombo.
+6. **Services.** Pawning, money exchange and airline ticketing, each linking to its own page.
+7. **About.** 1967, the pride of Negombo, with a View more button to the About page.
 8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
 
-### Hero photos: one size for desktop, one for phones
+### The About and service pages
 
-Each hero photo (today, and 1967) comes in two sizes, so four files in all. Every
-desktop screen shows the desktop photo in the same shape, and every phone the phone photo.
+They are written only from facts already on the site (1967 on Greens Road, the three showrooms, the 916 and 750
+marks, weighing in front of the customer, the services and their partners). Add the real history (who founded
+Pushpa, milestones, old photographs) to `about/index.html` when the family can share it, and check the steps on
+each service page against how the counter actually works, including what a customer should bring.
+
+### Hero photo: one size for desktop, one for phones
+
+The hero photo comes in two sizes. Every desktop screen shows the desktop photo in the same shape, and every phone
+the phone photo.
 
 | | Desktop (821px and wider) | Phone (820px and narrower) |
 |---|---|---|
 | Shape | 2:1 | 4:5 |
 | Size | **1774 x 887** | **1120 x 1400** |
-| Files | `hero-now.webp`, `hero-then.webp` | `hero-now-mobile.webp`, `hero-then-mobile.webp` |
-| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, with the 1967 / Today switch on its bottom edge. Keep the face and jewellery above that. |
+| File | `hero-now.webp` | `hero-now-mobile.webp` |
+| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, under the copy. Keep the face and jewellery above that. |
 
-To change a photo, replace the file in `assets/img/` with one of the same name and
-size (any size in the same shape works). Today is the bright traditional scene (a white and
-gold saree beside a brass lamp), 1967 the wood-panelled room.
+To change the photo, replace the file in `assets/img/` with one of the same name and size (any size in the same shape
+works).
 
-On a screen tall enough the whole 2:1 photo shows. On a short screen the hero is cut to the
-screen's height, but no lower than 560px, trimming the photo's lower edge, so the whole hero,
-the 1967 / Today switch included, stays on the first screen of most laptops and desktops.
-Between 821px and 1279px wide the headline needs a little more height, so the hero grows and
-trims the photo's sides. Tablets use the phone photo with its height capped at 680px, which
-trims the bottom. The rules are the `desktop: one shape on every screen` block and the
-`phones:` lines in `styles.css`.
+On a screen tall enough the whole 2:1 photo shows. On a short screen the hero is cut to the screen's height, but no
+lower than 560px, trimming the photo's lower edge, so the whole hero stays on the first screen of most laptops and
+desktops. Between 821px and 1279px wide the headline needs a little more height, so the hero grows and trims the
+photo's sides. Tablets use the phone photo with its height capped at 680px, which trims the bottom. The rules are the
+`desktop: one shape on every screen` block and the `phones:` lines in `styles.css`.
 
 ## Suba Mangala figures
 
@@ -201,6 +222,8 @@ licence covers commercial use.
 ## Notes
 
 - Responsive from 320px up, with no horizontal scroll.
+- The ivory pages carry a fine paper grain (`--paper` in `styles.css`), and the steps on the About and service pages
+  are numbered in Roman capitals, ruled like an old account book.
 - The header shrinks on scroll on desktop only. On phones and tablets it keeps one height, so
   nothing moves under the finger and jump links always land just under it (`scroll-margin-top`).
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
@@ -212,7 +235,7 @@ licence covers commercial use.
   the arrow keys and a sideways trackpad swipe work on a computer. Jumping to the top of the page when a product opens switches
   the page's gliding off first, because a glide ignores the user's finger until it is done.
 - The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
-- Motion: the flower intro, the hero's turn from 1967, reveals as sections arrive (headings
+- Motion: the logo intro, the hero's photo and headline arriving as it lifts, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
   medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
   place, photos that slide under the finger, and a card's photo growing into its piece's page

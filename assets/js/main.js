@@ -1,5 +1,5 @@
-/* The home page: the hero's turn from 1967 to today, the Suba Mangala calculator and enrolment, order and repair
-   tracking, this week's hours, the welcome, and the counter photo warming to colour. What every page shares
+/* The home page: the Suba Mangala calculator and enrolment, order and repair tracking, this week's hours, the
+   welcome, the hero's words drifting on scroll, and the counter photo warming to colour. What every page shares
    (header, menus, gold rate, reveals, entrance) is in site.js, which runs first and provides window.PJ. */
 (function () {
   'use strict';
@@ -43,26 +43,7 @@
     this.str = str;
   };
 
-  /* ---------- hero: opens on Pushpa in 1967, then turns to today; the switch moves between them ---------- */
-  var hero = $('#hero'), eraLive = $('#era-live'), thenC = $('#then-c'), nowC = $('#now-c'), eraBtns = $$('[data-era]', hero), firstT = [];
-  function setEra(then, quiet) {
-    hero.classList.toggle('is-then', then);
-    eraBtns.forEach(function (b) { b.setAttribute('aria-pressed', String((b.getAttribute('data-era') === 'then') === then)); });
-    thenC.setAttribute('aria-hidden', String(!then)); nowC.setAttribute('aria-hidden', String(then));
-    if (!quiet) eraLive.textContent = then ? 'Showing Pushpa in 1967.' : 'Showing Pushpa today.';
-  }
-  function endFirst() { firstT.forEach(clearTimeout); firstT = []; hero.classList.remove('is-first'); }
-  eraBtns.forEach(function (b) {
-    b.addEventListener('click', function () { var then = b.getAttribute('data-era') === 'then'; endFirst(); if (then !== hero.classList.contains('is-then')) setEra(then); });
-  });
-  // start on 1967 without animating into it (the flower loader covers this moment)
-  if (!reduce) { hero.classList.add('still'); setEra(true, true); void hero.offsetWidth; requestAnimationFrame(function () { requestAnimationFrame(function () { hero.classList.remove('still'); }); }); }
-  function playFirst() {
-    if (reduce || !hero.classList.contains('is-then')) return;
-    hero.classList.add('is-first');
-    firstT.push(setTimeout(function () { setEra(false, true); }, 2400));
-    firstT.push(setTimeout(function () { hero.classList.remove('is-first'); }, 3400));
-  }
+  var hero = $('#hero');
 
   /* ---------- Suba Mangala: 6 months, gift = half an instalment; 12 months, gift = one instalment ---------- */
   function plan(months, m) { var total = months * m, gift = months === 6 ? m / 2 : m; return { total: total, gift: gift, grand: total + gift }; }
@@ -218,7 +199,4 @@
   } else { tlSeen = true; fillTL(); }
 
   if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { ODOS.forEach(function (o) { o.measure(); var s0 = o.str; o.str = ''; o.set(s0, true); }); });
-
-  /* ---------- entrance: once the flower has drawn, 1967 holds, then turns to today ---------- */
-  PJ.onLoaded(playFirst);
 })();

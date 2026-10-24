@@ -17,16 +17,20 @@
   --si:"Noto Serif Sinhala","Iskoola Pota",serif; --ta:"Noto Serif Tamil",Latha,serif;
   --max:1320px; --gut:clamp(16px,4vw,48px); --sec:clamp(72px,9vw,128px);
   --rate-h:38px; /* the gold rate bar above the masthead */
+  --logo:82px; --logo-s:58px; /* the logo in the masthead, and its size once a desktop page has scrolled */
+  --mast-h:calc(var(--logo) + 17px); /* the masthead: logo, 8px above and below, 1px rule */
+  /* old paper: a fine warm grain, so the ivory pages read as printed rather than flat */
+  --paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .13 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --ease:cubic-bezier(.2,.7,.2,1); --wipe:cubic-bezier(.75,0,.2,1);
   --arch:999px 999px 0 0;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-/* jump links land just under the header (on desktop once it has shrunk on scroll: rate bar + 55px masthead; on phones it
-   never shrinks: rate bar + 77px), a pixel under rather than over, so no strip of the section above shows */
-section[id]{scroll-margin-top:calc(var(--rate-h) + 54px)}
-@media (max-width:1020px){section[id]{scroll-margin-top:calc(var(--rate-h) + 76px)}}
-body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* jump links land just under the header (on desktop once it has shrunk on scroll: rate bar + the small-logo masthead; on
+   phones it never shrinks: rate bar + the full masthead), a pixel under rather than over, so no strip of the section above shows */
+section[id]{scroll-margin-top:calc(var(--rate-h) + var(--logo-s) + 6px)}
+@media (max-width:1020px){section[id]{scroll-margin-top:calc(var(--rate-h) + var(--mast-h) - 1px)}}
+body{margin:0;background:var(--ivory) var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
 h1,h2,h3,h4,p,figure,ul,ol,dl,dd,fieldset{margin:0}
@@ -79,25 +83,52 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .js .rv.in{opacity:1;transform:none}
 .js .loaded .hero .rv{opacity:1;transform:none}
 
-/* ---------- intro: the flower draws itself ---------- */
+/* ---------- intro: the logo, from old to new ---------- */
+/* A dark ledger page. The frame opens; the logo shows as a tarnished old print under film grain and a heavy vignette, then is
+   restored to polished gold with a light passing across it, the grain and the vignette clear, and the motto settles. It then
+   lifts after 3s. site.js reads that delay (the animation-delay on .intro) to start the page's own entrance as the intro
+   lifts, so it is changed here only. */
 .intro{display:none}
-.js .intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--plum);animation:introOut .9s var(--ease) 1.9s forwards}
-.intro-in{display:grid;justify-items:center;gap:18px}
-.intro svg{width:120px;height:120px;color:var(--plum-gold)}
-.intro .md{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s var(--ease) forwards;animation-delay:calc(var(--k) * 70ms)}
-.intro p{font-family:var(--display);font-weight:600;letter-spacing:.3em;font-size:13px;color:var(--plum-gold);opacity:0;animation:fadeIn .8s ease .7s forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-@keyframes fadeIn{to{opacity:1}}
+.js .intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 46%,#4a1030 0%,var(--plum-3) 78%);animation:introOut .9s var(--ease) 3s forwards}
+.intro::before{content:"";position:absolute;inset:-60px;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .86 0 0 0 0 .64 0 0 0 1.1 -.28'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.55;animation:grainOut 2.8s ease-in forwards,grain .6s steps(1) infinite}
+.intro::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 75% 70% at 50% 46%,transparent 22%,rgba(10,2,6,.82) 100%);animation:vignetteOut 3s ease-out forwards}
+.intro-frame{position:absolute;z-index:1;inset:clamp(12px,2.6vw,30px);border:1px solid rgba(226,194,122,.55);outline:1px solid rgba(226,194,122,.24);outline-offset:-7px;clip-path:inset(50% 50% 50% 50%);animation:frameOpen 1.4s var(--wipe) .15s forwards}
+.intro-in{position:relative;z-index:2;display:grid;justify-items:center;gap:8px;padding-inline:var(--gut)}
+.intro-logo{position:relative;width:min(340px,64vw,50svh);aspect-ratio:688/603}
+.intro-logo img{position:absolute;inset:0;width:100%;height:100%}
+.intro-logo .old{opacity:0;animation:restore 2.7s cubic-bezier(.45,0,.2,1) .3s forwards}
+/* the same logo, brightened, seen only through a band that crosses it: a light moving over the gold */
+.intro-logo .gleam{filter:brightness(3.2) saturate(.3);-webkit-mask-image:linear-gradient(105deg,transparent 44%,#000 50%,transparent 56%);mask-image:linear-gradient(105deg,transparent 44%,#000 50%,transparent 56%);-webkit-mask-size:300% 100%;mask-size:300% 100%;-webkit-mask-position:100% 0;mask-position:100% 0;animation:gleam 1.1s ease-in-out 2s both}
+.intro-div{width:min(320px,72vw);height:auto;clip-path:inset(0 50%);animation:unfold 1.3s var(--ease) 1.9s forwards}
+.intro-sl{font-family:var(--fancy-it);font-style:italic;font-synthesis:none;font-size:clamp(22px,2.4vw,28px);line-height:1.2;color:var(--gold-light);opacity:0;transform:translateY(8px);animation:sloganIn 1s var(--ease) 2.15s forwards}
+@media (max-height:480px){.intro-div,.intro-sl{display:none}}
+@keyframes restore{
+  0%{opacity:0;transform:scale(1.05);filter:sepia(1) saturate(1.1) brightness(.72) contrast(.8) blur(3px)}
+  7%{opacity:.6}
+  10%{opacity:.25}
+  15%{opacity:.8}
+  30%{opacity:.9;transform:scale(1.035);filter:sepia(1) saturate(1.1) brightness(.8) contrast(.85) blur(1.4px)}
+  55%{opacity:.95;transform:scale(1.015);filter:sepia(.85) saturate(1.1) brightness(.86) contrast(.92) blur(.4px)}
+  100%{opacity:1;transform:none;filter:none}
+}
+@keyframes gleam{from{-webkit-mask-position:100% 0;mask-position:100% 0}to{-webkit-mask-position:0 0;mask-position:0 0}}
+@keyframes frameOpen{to{clip-path:inset(0 0 0 0)}}
+@keyframes unfold{to{clip-path:inset(0 0)}}
+@keyframes sloganIn{to{opacity:1;transform:none}}
+@keyframes grainOut{to{opacity:.07}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-26px,14px)}40%{transform:translate(18px,-22px)}60%{transform:translate(-12px,-30px)}80%{transform:translate(28px,20px)}}
+@keyframes vignetteOut{0%{opacity:1}100%{opacity:.35}}
 @keyframes introOut{to{opacity:0;visibility:hidden}}
 
 /* ---------- masthead ---------- */
 .mast{position:sticky;top:0;z-index:50;background:var(--plum);border-bottom:1px solid var(--plum-rule);color:var(--on-plum)}
 .mast-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;max-width:1480px;margin-inline:auto;padding:8px var(--gut);transition:padding .5s var(--ease)}
 @media (min-width:1021px){.mast.small .mast-in{padding-block:3px}}
-/* the masthead shrinks on scroll (119px to 93px, 115px to 95px on phones); its bottom margin grows by the same amount at the
-   same pace, so the page under it never shifts and a jump link lands true even on the first jump from the top */
+/* the masthead shrinks on scroll on desktop (the logo goes from --logo to --logo-s, the padding from 8px to 3px); its bottom
+   margin grows by the same amount at the same pace, so the page under it never shifts and a jump link lands true even on the
+   first jump from the top */
 .mast{transition:margin .5s var(--ease)}
-@media (min-width:1021px){.mast.small{margin-bottom:26px}}
+@media (min-width:1021px){.mast.small{margin-bottom:calc(var(--logo) - var(--logo-s) + 10px)}}
 /* today's gold rate: a thin strip above the masthead; tap it for per gram too */
 .rate-row{background:var(--plum-3);border-bottom:1px solid var(--plum-rule)}
 .rate-in{display:flex;justify-content:center;align-items:center;gap:16px;height:calc(var(--rate-h) - 1px);max-width:1480px;margin-inline:auto;padding-inline:var(--gut);font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden}
@@ -116,17 +147,17 @@ button{cursor:pointer;background:none;border:0;padding:0}
 @media (min-width:1021px){.rate-in{justify-content:space-between}.rate-place{display:inline}}
 @media (max-width:400px){.rate-k{display:none}.rate{gap:10px;font-size:12px}}
 .logo{display:block;line-height:0}
-.logo img{height:64px;width:auto;transition:height .5s var(--ease)}
-@media (min-width:1021px){.mast.small .logo img{height:48px}}
+.logo img{height:var(--logo);width:auto;transition:height .5s var(--ease)}
+@media (min-width:1021px){.mast.small .logo img{height:var(--logo-s)}}
 .nav{display:flex;justify-content:center;align-items:center;gap:clamp(16px,2.4vw,40px)}
 .nav>li{position:relative}
 .n{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:13.5px;letter-spacing:.1em;font-weight:600;text-transform:uppercase;text-decoration:none;color:var(--on-plum);padding-block:12px;background:linear-gradient(var(--plum-gold),var(--plum-gold)) 50% 100%/0 1px no-repeat;transition:background-size .4s var(--ease),color .3s}
-.n:hover,.n[aria-expanded="true"],.n[aria-current="page"]{background-size:100% 1px;color:var(--gold-light)}
+.n:hover,.n[aria-expanded="true"],.n[aria-current]{background-size:100% 1px;color:var(--gold-light)}
 .n svg{width:10px;height:10px;transition:transform .3s}
 .n[aria-expanded="true"] svg{transform:rotate(180deg)}
 .dd-m{position:absolute;left:50%;top:100%;transform:translateX(-50%);min-width:280px;padding:10px;background:var(--plum-2);box-shadow:inset 0 0 0 1px var(--plum-rule),0 24px 40px -20px rgba(0,0,0,.6);display:grid}
 .dd-m a{display:grid;gap:2px;padding:12px 14px;text-decoration:none;color:var(--on-plum);transition:background .3s}
-.dd-m a:hover{background:rgba(226,194,122,.08)}
+.dd-m a:hover,.dd-m a[aria-current]{background:rgba(226,194,122,.08)}
 .dd-m b{font-family:var(--display);font-weight:600;letter-spacing:.06em;font-size:14px}
 .dd-m span{font-size:13px;color:var(--on-plum-2)}
 .dd-m[hidden]{display:none}
@@ -146,7 +177,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
   .mast-in{grid-template-columns:1fr auto 1fr;gap:12px}
   .mast-in>.icon-btn{justify-self:start;margin-left:-10px}
   .acts{justify-self:end;margin-right:-10px}
-  .logo img{height:60px}
+  :root{--logo:72px}
 }
 /* the phone menu: its top row mirrors the header (close, logo, call), then the pages in the desktop nav's small capitals,
    the services as a compact group, and Call and WhatsApp side by side at the foot */
@@ -162,117 +193,71 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .menu .icon-btn{display:inline-flex}
 .menu-top .icon-btn:first-child{justify-self:start;margin-left:-10px}
 .menu-top .icon-btn:last-child{justify-self:end;margin-right:-10px}
-.menu-top img{height:50px;width:auto}
+.menu-top img{height:60px;width:auto}
 .menu-nav{display:grid;padding-top:6px}
 .menu-nav a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--on-plum);border-bottom:1px solid var(--plum-rule)}
 .menu-nav svg{width:20px;height:10px;flex:none;color:var(--plum-gold)}
 .menu-svc{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;padding-top:22px}
 .menu-svc a{font-size:14.5px;color:var(--on-plum-2);text-decoration:none;padding-block:9px}
+.menu-nav a[aria-current],.menu-svc a[aria-current]{color:var(--gold-light)}
 .menu-svc .menu-h{grid-column:1/-1;margin:0;padding-block:0 6px;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--plum-gold)}
 .menu-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;padding-top:28px}
 .menu-foot .btn{min-height:48px;padding:0 12px;gap:8px;font-size:12.5px}
 .menu-foot svg{width:16px;height:16px}
 
-/* ---------- hero: Pushpa then (1967) and now; a soft gilt wipe turns one into the other ---------- */
-.hero{position:relative;overflow:hidden;background:var(--plum-3);isolation:isolate;--edge:26vw;--turn:cubic-bezier(.65,.05,.36,1);--turn-d:1.5s}
-.eras{position:absolute;inset:0;z-index:0;overflow:hidden}
-.era{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 0%}
-.era.now{opacity:0;transform:scale(1.08);transition:opacity 1.6s var(--ease),transform 2.8s var(--ease)}
-.loaded .era.now,html:not(.js) .era.now{opacity:1;transform:none}
-.loaded .hero.is-then .era.now{transform:scale(1.05)}
-/* the 1967 photo sits on top; its mask slides off to the left to show today, and back again */
-/* the 1967 photo rides on a layer a little wider than the screen; its soft right edge is the seam.
-   The layer slides one way and the photo inside slides back the same distance, so the photo holds
-   still while the seam crosses it. Only transforms animate, so the turn stays on the GPU. */
-.then-w{position:absolute;top:0;bottom:0;left:0;width:calc(100% + var(--edge));overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - var(--edge)),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - var(--edge)),transparent);transform:translate3d(-100%,0,0);transition:transform var(--turn-d) var(--turn),opacity 1.2s var(--ease);will-change:transform}
-.then-w::after{content:"";position:absolute;top:0;bottom:0;right:0;width:var(--edge);background:linear-gradient(90deg,rgba(236,210,143,0) 0%,rgba(236,210,143,.3) 34%,rgba(236,210,143,0) 70%);pointer-events:none}
-.then-i{position:absolute;top:0;bottom:0;left:0;width:calc(100% - var(--edge));transform:translate3d(calc(100% + var(--edge)),0,0);transition:transform var(--turn-d) var(--turn);will-change:transform}
-.is-then .then-w,.is-then .then-i{transform:none}
-.js .then-w{opacity:0}
-.loaded .then-w{opacity:1}
-.then-i .era{transform:scale(1.04);transition:transform 2.4s var(--ease)}
-.loaded .is-then .then-i .era{transform:none}
+/* ---------- hero: Pushpa today ---------- */
+.hero{position:relative;overflow:hidden;background:var(--plum-3);isolation:isolate}
+.hero-ph{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 0%;opacity:0;transform:scale(1.08);transition:opacity 1.6s var(--ease),transform 2.8s var(--ease)}
+.loaded .hero-ph img,html:not(.js) .hero-ph img{opacity:1;transform:none}
 .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(44,7,27,.9) 0%,rgba(44,7,27,.66) 32%,rgba(44,7,27,0) 60%),linear-gradient(0deg,rgba(44,7,27,.6) 0%,rgba(44,7,27,0) 22%)}
-.hero-in{position:relative;z-index:3;min-height:clamp(560px,calc(100svh - 81px - var(--rate-h)),max(860px,42vw));display:grid;align-content:center;padding-block:clamp(48px,6vw,96px)}
-/* desktop: fewer words, so the two brides carry it */
+.hero-in{position:relative;z-index:3;min-height:clamp(560px,calc(100svh - var(--mast-h) - var(--rate-h)),max(860px,42vw));display:grid;align-content:center;padding-block:clamp(48px,6vw,96px)}
+.hcopy{display:grid;gap:clamp(14px,1.6vw,20px);justify-items:start;align-content:center;max-width:min(580px,48%)}
+/* desktop: few words, so the bride carries it */
 @media (min-width:821px){
-  .hero .now-c{gap:clamp(20px,2.2vw,30px)}
-  .hero .now-c .ctas{margin-top:8px}
+  .hcopy{gap:clamp(20px,2.2vw,30px)}
+  .hero .ctas{margin-top:8px}
 }
-@media (min-width:1200px){.hero .now-c .ctas{flex-wrap:nowrap}}
-@media (min-width:821px) and (max-width:1199px){.hero .now-c .ctas{display:grid;justify-items:stretch}}
-.hcopy{display:grid;max-width:min(580px,48%)}
-.state{grid-area:1/1;display:grid;gap:clamp(14px,1.6vw,20px);justify-items:start;align-content:center;transition:opacity .7s var(--ease),transform .8s var(--ease),visibility 0s 0s}
-.then-c{opacity:0;visibility:hidden;transform:translateY(18px);transition:opacity .7s var(--ease),transform .8s var(--ease),visibility 0s .8s}
-.is-then .now-c{opacity:0;visibility:hidden;transform:translateY(-14px);transition:opacity .5s var(--ease),transform .6s var(--ease),visibility 0s .6s}
-.is-then .then-c{opacity:1;visibility:visible;transform:none;transition:opacity .8s var(--ease) .25s,transform .9s var(--ease) .25s,visibility 0s 0s}
-.then-c>*{opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .6s var(--ease)}
-.loaded .is-then .then-c>*{opacity:1;transform:none;transition:opacity .9s var(--ease),transform 1s var(--ease);transition-delay:calc(var(--i,0) * 120ms + 350ms)}
+@media (min-width:1200px){.hero .ctas{flex-wrap:nowrap}}
+@media (min-width:821px) and (max-width:1199px){.hero .ctas{display:grid;justify-items:stretch}}
 .hero h1{font-family:var(--fancy);font-size:clamp(36px,4.3vw,70px);line-height:1.06;color:var(--on-plum);font-weight:500;font-synthesis:none;max-width:14ch}
 .hero h1 .gilt{font-style:italic;padding-right:.08em}
 .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
 .hero h1 .ln>span{display:block}
-/* the headline lines rise each time today comes back */
+/* the headline lines rise as the intro lifts */
 .js .hero h1 .ln>span{transform:translateY(105%);transition:transform 1.3s var(--wipe);transition-delay:calc(var(--d) * 120ms + 300ms)}
-.js .loaded .hero:not(.is-then) h1 .ln>span{transform:none}
-.js .hero.is-then h1 .ln>span{transition-duration:.6s;transition-delay:0s}
+.js .loaded .hero h1 .ln>span{transform:none}
 .hero .lede{max-width:40ch;color:var(--on-plum)}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
-.hero .now-c .lede{display:none}
-@media (min-width:821px) and (min-height:780px){.hero .now-c .lede{display:block;max-width:44ch;font-size:clamp(15px,1.15vw,17.5px)}}
-.then-year{font-family:var(--fancy);font-weight:600;font-size:clamp(84px,9vw,148px);line-height:.9;letter-spacing:-.01em;padding-right:.04em}
-.then-h{font-family:var(--fancy);font-style:italic;font-synthesis:none;font-size:clamp(28px,2.8vw,44px);line-height:1.1;color:var(--on-plum);max-width:16em;text-wrap:balance}
-/* only on the opening: a thin line fills while 1967 holds, then the page turns to today */
-.timer{width:min(260px,70%);height:2px;background:var(--plum-rule);overflow:hidden;margin-top:6px}
-.timer i{display:block;height:100%;background:var(--plum-gold);transform:scaleX(0);transform-origin:left}
-.hero:not(.is-first) .timer{visibility:hidden}
-.is-first .timer i{animation:countdown 1.8s linear .5s forwards}
-@keyframes countdown{to{transform:scaleX(1)}}
-/* then / now switch */
-.eras-ui{position:absolute;right:var(--gut);bottom:clamp(24px,3vw,40px);display:flex;align-items:center}
-.era-tg{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:4px;background:rgba(44,7,27,.86);box-shadow:inset 0 0 0 1px var(--plum-rule)}
-.era-tg .ind{position:absolute;left:4px;top:4px;bottom:4px;width:calc(50% - 4px);background:linear-gradient(135deg,var(--gold-light),var(--gold));transition:transform .8s var(--wipe)}
-.hero:not(.is-then) .era-tg .ind{transform:translateX(100%)}
-.era-tg button{position:relative;z-index:1;min-height:40px;padding:0 22px;font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.16em;color:var(--on-plum-2);transition:color .5s var(--ease)}
-.era-tg button:hover{color:var(--gold-light)}
-.era-tg button[aria-pressed="true"]{color:var(--plum)}
-.era-tg button:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
-.hero.still,.hero.still *,.hero.still *::before{transition:none!important}
+.hero .lede{display:none}
+@media (min-width:821px) and (min-height:780px){.hero .lede{display:block;max-width:44ch;font-size:clamp(15px,1.15vw,17.5px)}}
 .hero-line{position:relative;z-index:3;height:6px;border-top:1px solid var(--plum-gold);background:var(--plum-3)}
 .hero-line::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--plum-rule)}
-/* desktop: one shape on every screen, 2:1, the shape of the desktop photos (1774 x 887), so the photo is never cropped
+/* desktop: one shape on every screen, 2:1, the shape of the desktop photo (1774 x 887), so the photo is never cropped
    where the screen is tall enough. On a short screen the hero is cut to the screen's height (the photo's lower edge is
-   trimmed, never the bride) but no lower than 560px, so the whole hero, the switch included, stays on the first screen
-   of most laptops. The 6px is the gilt line under the hero. min-height, so on narrower screens the hero grows to fit the
-   copy rather than clip it. */
+   trimmed, never the bride) but no lower than 560px, so the whole hero stays on the first screen of most laptops. The 6px
+   is the gilt line under the hero. min-height, so on narrower screens the hero grows to fit the copy rather than clip it. */
 @media (min-width:821px){
   .hero{container-type:inline-size}
-  .hero-in{min-height:max(560px,min(calc(100cqw / 2 - 6px),calc(100svh - 81px - var(--rate-h))));padding-block:clamp(40px,5vw,80px)}
+  .hero-in{min-height:max(560px,min(calc(100cqw / 2 - 6px),calc(100svh - var(--mast-h) - var(--rate-h))));padding-block:clamp(40px,5vw,80px)}
 }
 @media (max-width:820px){
-  /* phones: the photo is 4:5, the shape of the phone photos (1080 x 1350); tablets cap its height and trim the bottom.
-     The photo's lower part fades through a deep gradient into plum; the 1967 / Today switch and the copy are lifted
-     onto that fade, below the jewellery: label, a two-line headline, one button and a text link */
-  .hero{--ph:min(125vw,680px);--edge:40vw}
-  .eras{bottom:auto;height:var(--ph)}
-  .era{object-position:50% 0%}
+  /* phones: the photo is 4:5, the shape of the phone photo (1120 x 1400); tablets cap its height and trim the bottom.
+     The photo's lower part fades through a deep gradient into plum, and the copy sits on that fade, below the jewellery:
+     label, a two-line headline, one button and a text link */
+  .hero{--ph:min(125vw,680px)}
+  .hero-ph{bottom:auto;height:var(--ph)}
+  .hero-ph img{object-position:50% 0%}
   .scrim{background:linear-gradient(0deg,var(--plum-3) 0%,rgba(44,7,27,.94) 12%,rgba(44,7,27,.6) 25%,rgba(44,7,27,.2) 36%,rgba(44,7,27,0) 46%)}
-  .hero-in{min-height:0;align-content:start;padding-block:calc(var(--ph) * .74) 32px}
-  .hcopy{max-width:none;text-align:center}
-  .state{justify-items:center;align-content:start}
-  .eras-ui{position:static;order:-1;justify-content:center;margin-bottom:20px}
-  .era-tg button{min-height:40px;padding:0 16px;font-size:11.5px}
-  .hero .now-c{gap:12px}
+  .hero-in{min-height:0;align-content:start;padding-block:calc(var(--ph) * .74 + 60px) 32px}
+  .hcopy{max-width:none;text-align:center;justify-items:center;align-content:start;gap:12px}
   .hero h1{max-width:none}
   .hero .ctas{flex-direction:column;align-items:stretch;width:100%;gap:2px;margin-top:8px}
   .hero .ctas .ghost{min-height:46px;background:none;box-shadow:none;color:var(--plum-gold);text-decoration:underline;text-decoration-color:rgba(226,194,122,.45);text-underline-offset:6px}
-  .then-year{font-size:clamp(64px,20vw,92px)}
-  .then-h{font-size:26px}
-  .hero .then-c .lede{max-width:34ch;font-size:15.5px}
 }
 
 /* ---------- marks: four hallmark stamps, struck as they arrive ---------- */
-.marks{background:var(--ivory);border-bottom:1px solid var(--rule)}
+.marks{background:var(--ivory) var(--paper);border-bottom:1px solid var(--rule)}
 .marks-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .mk{display:grid;justify-items:center;align-content:start;text-align:center;gap:16px;padding:clamp(30px,3.6vw,48px) clamp(12px,2vw,28px)}
 .mk+.mk{border-left:1px solid var(--rule)}
@@ -511,7 +496,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 /* ---------- footer ---------- */
 .foot{background:var(--plum-3);color:var(--on-plum-2);padding-block:clamp(48px,6vw,80px) 28px;border-top:1px solid var(--plum-rule)}
 .foot-top{display:grid;justify-items:center;text-align:center;gap:10px;padding-bottom:clamp(28px,3.6vw,44px)}
-.foot-top img{height:92px;width:auto}
+.foot-top img{height:108px;width:auto}
 .foot-top .scr{font-family:var(--fancy-it);font-style:italic;font-synthesis:none;font-size:clamp(30px,3vw,40px);line-height:1.2;color:var(--gold-light)}
 .foot-top .fdiv{width:min(420px,90%);height:auto;margin-top:2px;opacity:.85}
 .foot-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;padding-block:32px;border-top:1px solid var(--plum-rule)}
@@ -561,8 +546,8 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .crumbs [aria-current]{color:var(--gold-deep)}
 .dark .crumbs{color:var(--on-plum-2)}
 .dark .crumbs a:hover,.dark .crumbs [aria-current]{color:var(--plum-gold)}
-.shop-head{padding-block:clamp(32px,4.4vw,64px) clamp(30px,4vw,56px);border-bottom:1px solid var(--plum-rule)}
-.shop-head .wrap{display:grid;gap:14px;justify-items:start}
+.shop-head,.page-head{padding-block:clamp(32px,4.4vw,64px) clamp(30px,4vw,56px);border-bottom:1px solid var(--plum-rule)}
+.shop-head .wrap,.page-head .wrap{display:grid;gap:14px;justify-items:start}
 .shop-body{padding-block:clamp(22px,2.6vw,34px) var(--sec)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
 .shop-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;margin:16px 0 26px}
@@ -628,7 +613,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pv-th:hover{opacity:.9}
 .pv-th[aria-pressed="true"]{opacity:1;box-shadow:0 0 0 1px var(--gold),0 0 0 3px var(--ivory),0 0 0 4px rgba(201,162,74,.6)}
 .sort[hidden]{display:none}
-.pv-c{position:sticky;top:112px;display:grid;gap:20px;justify-items:start}
+.pv-c{position:sticky;top:calc(var(--rate-h) + var(--logo-s) + 26px);display:grid;gap:20px;justify-items:start}
 .pv-h{font-family:var(--fancy);font-size:clamp(32px,3.6vw,54px);line-height:1.06;color:var(--wine)}
 .pv-wt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;border-block:1px solid var(--rule)}
 .pv-wt div{display:grid;gap:4px;padding-block:14px}
@@ -654,8 +639,8 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 }
 @media (max-width:600px){
   .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(var(--gut) * -1);padding-inline:var(--gut)}
-  .shop-head{padding-block:26px 24px}
-  .shop-head .wrap{gap:10px}
+  .shop-head,.page-head{padding-block:26px 24px}
+  .shop-head .wrap,.page-head .wrap{gap:10px}
   .crumbs{font-size:11px}
   .shop-meta{margin:10px 0 18px;font-size:13.5px}
   .chips::-webkit-scrollbar{display:none}
@@ -678,13 +663,79 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .pv-more{margin-top:44px;padding-top:30px}
 }
 
+/* ---------- pages: the three services and About (services/*/index.html, about/index.html) ---------- */
+.page-head{position:relative;overflow:hidden}
+.page-head .wrap{position:relative}
+.page-head .lede{max-width:56ch}
+.page-head .partners{font-size:13.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--plum-gold)}
+.page-head .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+/* a service page carries its medal from the home page, large, at the right of the heading */
+.page-head .medal{position:absolute;right:var(--gut);top:50%;width:164px;height:164px;margin:0;translate:0 -50%}
+.page-head .medal svg{width:66px;height:66px}
+.page-head .mc{position:absolute;right:0;top:0;width:clamp(220px,26vw,380px);height:auto;transform:scaleX(-1);opacity:.18;pointer-events:none}
+@media (max-width:820px){.page-head .medal{display:none}.page-head .mc{width:200px;opacity:.12}}
+.pg{padding-block:var(--sec)}
+.pg-g{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(40px,6vw,96px);align-items:start}
+.pg-g.rev{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.pg-h{display:grid;gap:14px;justify-items:start;margin-bottom:clamp(26px,3.2vw,40px)}
+/* steps, ruled like an old account book and numbered in Roman capitals */
+.steps{display:grid;border-top:1px solid var(--gold);counter-reset:st}
+.steps li{display:grid;grid-template-columns:60px minmax(0,1fr);gap:16px;align-items:baseline;padding-block:22px;border-bottom:1px solid var(--rule)}
+.steps li::before{counter-increment:st;content:counter(st,upper-roman) ".";font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:.04em;color:var(--gold-deep)}
+.steps b{display:block;font-family:var(--fancy);font-weight:500;font-size:clamp(21px,1.9vw,26px);line-height:1.2;color:var(--wine);margin-bottom:6px}
+.steps p{color:var(--muted);max-width:52ch}
+/* the side card, framed like the order ledger */
+.card{position:sticky;top:calc(var(--rate-h) + var(--logo-s) + 26px);display:grid;gap:18px;padding:clamp(26px,3vw,42px);background:#fffaf8;box-shadow:inset 0 0 0 1px var(--gold),0 40px 70px -50px rgba(59,10,37,.35);outline:1px solid rgba(201,162,74,.38);outline-offset:-9px}
+.card h2{font-family:var(--fancy);font-size:clamp(24px,2.2vw,30px);font-weight:500;line-height:1.15}
+.card dl{display:grid;border-top:1px solid var(--rule)}
+.card dl div{display:grid;gap:2px;padding-block:12px;border-bottom:1px solid var(--rule)}
+.card dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.card dd{font-weight:600;color:var(--ink)}
+.card dd a{color:var(--wine);text-decoration:none}
+.card dd a:hover{text-decoration:underline}
+.card .btn{justify-self:stretch}
+@media (max-width:900px){.pg-g,.pg-g.rev{grid-template-columns:minmax(0,1fr)}.card{position:static}}
+/* the other things at our counter */
+.also{padding-block:var(--sec);background:var(--tint) var(--paper);border-top:1px solid var(--rule)}
+.also .pg-h{justify-items:center;text-align:center}
+.also-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:clamp(14px,2vw,26px)}
+.tile{position:relative;display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;align-content:start;padding:clamp(24px,2.6vw,36px);background:#fffaf8;text-decoration:none;box-shadow:inset 0 0 0 1px var(--rule-2);transition:box-shadow .4s var(--ease),transform .4s var(--ease)}
+.tile:hover{box-shadow:inset 0 0 0 1px var(--gold),0 24px 40px -30px rgba(59,10,37,.45);transform:translateY(-3px)}
+.tile .ic{width:44px;height:44px;color:var(--gold-deep)}
+.tile b{font-family:var(--fancy);font-weight:500;font-size:clamp(22px,2vw,27px);line-height:1.15;color:var(--wine)}
+.tile p{font-size:14.5px;color:var(--muted)}
+.tile .alink{justify-self:start;align-self:end;margin-top:6px}
+.tile:hover .alink svg{transform:translateX(4px)}
+.tile:hover .alink::after{transform:scaleX(1);transform-origin:left}
+/* About: the counter photo stays an old print until the pointer warms it */
+.shop-ph.aged img{transition:filter 1.4s var(--ease)}
+.shop-ph.aged:hover img{--gs:0}
+.about-c .h2+.lede{margin-top:-6px}
+.name{padding-block:var(--sec);text-align:center;background:var(--tint) var(--paper);border-block:1px solid var(--rule)}
+.name .wrap{display:grid;justify-items:center;gap:14px}
+.name .lotus{width:clamp(110px,10vw,150px);height:auto}
+.name .si{font-family:var(--si);font-size:clamp(36px,3.6vw,52px);line-height:1.2;color:var(--wine)}
+.name .lede{max-width:46ch}
+.visit .vh{display:grid;gap:14px;justify-items:start;max-width:620px}
+@media (max-width:600px){
+  .page-head .ctas{display:grid;width:100%;gap:10px}
+  .steps li{grid-template-columns:40px minmax(0,1fr);gap:10px;padding-block:16px}
+  .steps li::before{font-size:17px}
+  .steps b{font-size:19px}
+  .steps p{font-size:14px}
+  .card{padding:24px 18px}
+  .tile{padding:20px 18px}
+  .tile p{font-size:13.5px}
+  .name .lotus{width:90px}
+  .name .si{font-size:30px}
+}
+
 /* tuned for The Seasons (mixed case, lighter than Cinzel's capitals); only applies when the kit loads */
 .has-seasons .hero h1{font-size:clamp(40px,5vw,82px);font-weight:400;letter-spacing:0;line-height:1.02}
-.has-seasons .then-year{font-weight:400;letter-spacing:0}
 .has-seasons .h2{font-size:clamp(34px,4.2vw,60px);font-weight:400;letter-spacing:0}
 .has-seasons .suba h2{font-size:clamp(52px,6.2vw,96px);font-weight:400;letter-spacing:0}
 .has-seasons .year{font-weight:400;letter-spacing:0}
-.has-seasons .pv-h{font-weight:400}
+.has-seasons .pv-h,.has-seasons .steps b,.has-seasons .card h2,.has-seasons .tile b{font-weight:400}
 .has-seasons .hello .e{font-weight:400}
 .has-seasons .enrol h2{font-size:clamp(28px,3.4vw,36px);font-weight:400}
 .has-seasons .foot-top .scr{font-size:clamp(20px,1.9vw,26px);letter-spacing:.02em}
@@ -770,7 +821,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .store h3{font-size:19px}
   .store p{font-size:13.5px}
   .lines{gap:2px 24px;padding-top:16px;font-size:13.5px}
-  .foot-top img{height:60px}
+  .foot-top img{height:72px}
   .foot-top .scr,.has-seasons .foot-top .scr{font-size:17px}
   .foot-g{gap:22px;padding-block:26px}
 }
@@ -779,7 +830,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 /* a soft light passes across a button under the pointer, and now and then across the hero's first button */
 .btn::after{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:-55%;width:40%;background:linear-gradient(100deg,rgba(255,241,200,0),rgba(255,241,200,.34),rgba(255,241,200,0));transform:skewX(-18deg);pointer-events:none}
 .btn:hover::after{transform:skewX(-18deg) translateX(380%);transition:transform 1s var(--ease)}
-.loaded .hero .now-c .btn:not(.ghost)::after{animation:sheen 6.5s var(--ease) 2.6s infinite}
+.loaded .hero .btn:not(.ghost)::after{animation:sheen 6.5s var(--ease) 2.6s infinite}
 @keyframes sheen{0%,70%{transform:skewX(-18deg)}100%{transform:skewX(-18deg) translateX(380%)}}
 /* a link's underline is drawn again in gold */
 .alink{position:relative}
@@ -801,9 +852,10 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .js .svc.rv.in .medal{opacity:1;transform:none}
 .svc:hover .medal::before{animation:spin 14s linear infinite}
 /* the shop opens in order: heading, words, then the filters one by one */
-.shop-head .wrap>*{animation:pcIn .9s var(--ease) backwards}
-.shop-head .wrap>:nth-child(2){animation-delay:.08s}
-.shop-head .wrap>:nth-child(3){animation-delay:.16s}
+.shop-head .wrap>*,.page-head .wrap>*{animation:pcIn .9s var(--ease) backwards}
+.shop-head .wrap>:nth-child(2),.page-head .wrap>:nth-child(2){animation-delay:.08s}
+.shop-head .wrap>:nth-child(3),.page-head .wrap>:nth-child(3){animation-delay:.16s}
+.page-head .wrap>:nth-child(n+4){animation-delay:.24s}
 .chips .chip{animation:pcIn .6s var(--ease) backwards;animation-delay:calc(var(--i,0) * 45ms + .2s)}
 /* a piece's page arrives in order */
 .pv-wrap .crumbs,.pv-c>*{animation:pcIn .8s var(--ease) backwards}
@@ -842,7 +894,7 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
   .js .divider.rv{clip-path:none}
   .js .door.rv .ph img,.js .svc.rv .medal{opacity:1;transform:none}
   .js .hero h1 .ln>span{transform:none}
-  .era.now{opacity:1;transform:none}
+  .hero-ph img{opacity:1;transform:none}
   .coin{transform:none;opacity:1}
   .js .mk .stamp{opacity:1;transform:none}
   .js .draw .lotus path{stroke-dashoffset:0}
