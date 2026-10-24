@@ -7,6 +7,75 @@
   if (!PJ || !d.getElementById('hero')) return;
   var $ = PJ.$, $$ = PJ.$$, reduce = PJ.reduce, wa = PJ.wa, clamp = PJ.clamp, rs = PJ.rs, openWA = PJ.openWA;
 
+  /* ---------- intro: smoke drifts up from below, past the logo, and thins away ---------- */
+  // Soft wisps on a canvas drawn at half size (smoke needs no detail, and it keeps the work light on a phone). Each wisp
+  // is a patch of cloudy noise that rises from the lower part of the screen with a slow sway, spreads and fades. Wisps
+  // stop coming after 1.4s, so the smoke has thinned to nothing as the intro lifts; then the loop stops and the canvas goes.
+  (function () {
+    var intro = $('.intro'), cv = intro && $('.intro-smoke', intro);
+    if (!cv || reduce || !cv.getContext) return;
+    var g = cv.getContext('2d'), S = 0.5, W, H, m, wisps = [], made = 0, t0 = 0, prev = 0, seed = 11;
+    function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    function size() { W = innerWidth; H = innerHeight; cv.width = Math.round(W * S); cv.height = Math.round(H * S); m = Math.min(1.2, Math.max(0.6, W / 1100)); }
+    // four wisps of cloudy noise (value noise in three octaves), warm ivory, fading out towards their edges
+    var sprites = [0, 1, 2, 3].map(function () {
+      var N = 128, c = d.createElement('canvas'), x = c.getContext('2d'), img, px, grids = [];
+      c.width = c.height = N; img = x.createImageData(N, N); px = img.data;
+      [4, 8, 16].forEach(function (n) { var gr = []; for (var i = 0; i < (n + 1) * (n + 1); i++) gr.push(rnd()); grids.push([n, gr]); });
+      function noise(u, v) {
+        var sum = 0, w = 0.55;
+        grids.forEach(function (o) {
+          var n = o[0], gr = o[1], X = u * n, Y = v * n, i = Math.floor(X), j = Math.floor(Y), fx = X - i, fy = Y - j;
+          fx = fx * fx * (3 - 2 * fx); fy = fy * fy * (3 - 2 * fy);
+          var a = gr[j * (n + 1) + i], b = gr[j * (n + 1) + i + 1], cc = gr[(j + 1) * (n + 1) + i], dd = gr[(j + 1) * (n + 1) + i + 1];
+          sum += w * (a + (b - a) * fx + (cc - a) * fy + (a - b - cc + dd) * fx * fy); w *= 0.5;
+        });
+        return sum / 0.9625;
+      }
+      for (var y = 0; y < N; y++) for (var xx = 0; xx < N; xx++) {
+        var u = xx / N, v = y / N, dx = u - 0.5, dy = v - 0.5, r = Math.sqrt(dx * dx + dy * dy) * 2;
+        var fall = r >= 1 ? 0 : Math.pow(1 - r, 1.6), n = Math.max(0, (noise(u * 0.999, v * 0.999) - 0.38) * 2.2);
+        var o = (y * N + xx) * 4;
+        px[o] = 246; px[o + 1] = 232; px[o + 2] = 212; px[o + 3] = Math.round(255 * Math.min(1, n * n * fall * 1.6));
+      }
+      x.putImageData(img, 0, 0);
+      return c;
+    });
+    // each wisp rises about a tenth of the screen's height a second, so the smoke reaches the logo on any screen
+    function spawn() {
+      wisps.push({
+        x: W * (0.12 + rnd() * 0.76), y: H * (0.7 + rnd() * 0.32),
+        vx: (rnd() - 0.5) * 20 * m, vy: -(0.055 + rnd() * 0.055) * H, sway: (10 + rnd() * 18) * m, ph: rnd() * 6.3, f: 0.7 + rnd() * 0.8,
+        r0: (70 + rnd() * 50) * m, r1: (230 + rnd() * 150) * m, rot: rnd() * 6.3, vr: (rnd() - 0.5) * 0.35,
+        a: 0.22 + rnd() * 0.2, life: 2.3 + rnd() * 1, age: 0, s: sprites[made++ % 4]
+      });
+    }
+    function frame(now) {
+      if (!t0) t0 = prev = now;
+      var t = (now - t0) / 1000, dt = Math.min(0.05, (now - prev) / 1000);
+      prev = now;
+      // forty wisps in all, most of them early
+      var want = Math.round(40 * (1 - Math.pow(1 - Math.min(t / 1.4, 1), 2)));
+      while (made < want) spawn();
+      g.setTransform(S, 0, 0, S, 0, 0);
+      g.clearRect(0, 0, W, H);
+      for (var i = wisps.length - 1; i >= 0; i--) {
+        var p = wisps[i], k;
+        p.age += dt; k = p.age / p.life;
+        if (k >= 1) { wisps.splice(i, 1); continue; }
+        p.x += (p.vx + Math.sin(p.age * p.f + p.ph) * p.sway) * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+        var r = p.r0 + (p.r1 - p.r0) * (1 - Math.pow(1 - k, 2));
+        g.globalAlpha = p.a * (k < 0.25 ? k / 0.25 : Math.pow((1 - k) / 0.75, 1.3));
+        g.save(); g.translate(p.x, p.y); g.rotate(p.rot); g.drawImage(p.s, -r, -r, r * 2, r * 2); g.restore();
+      }
+      if (t < 4.2 && (wisps.length || t < 1.5)) requestAnimationFrame(frame);
+      else { window.removeEventListener('resize', size); cv.remove(); }
+    }
+    size();
+    window.addEventListener('resize', size);
+    requestAnimationFrame(frame);
+  })();
+
   /* ---------- odometer: digits roll into place ---------- */
   var ODOS = [];
   function Odo(el) { this.el = el; this.cols = []; this.str = ''; this.wd = null; el.style.display = 'inline-flex'; el.style.alignItems = 'baseline'; this.measure(); this.set(el.textContent.trim(), true); ODOS.push(this); }

@@ -260,41 +260,75 @@
       if (t && !t.contains(e.relatedTarget)) t.classList.remove('zoom');
     });
   }
+  /* the price: a fixed one where a piece has it (price in pieces.js); otherwise, for a piece whose weight and karat are
+     known, the gold in it at today's rate, said plainly to be before making charges; otherwise on request. The gold
+     value fills in once today's rate has arrived from site.js. */
+  var gold = null, current = null;
+  function perGram(k) { return k === 22 ? +gold.k22.gram : +gold.k24.gram * k / 24; }
+  function priceHTML(p) {
+    if (p.price) return '<span class="pv-pk">Price</span><b class="pv-pv tab">Rs ' + rs(p.price) + '</b>' +
+      '<p class="pv-pn">Ask us about it on WhatsApp, or call the hotline, and we will have it ready for you to see at the counter.</p>';
+    if (p.grams.length && p.karat && gold) {
+      var g = perGram(p.karat), weights = p.isSet ? [p.grams.reduce(function (a, b) { return a + b; }, 0)] : p.grams;
+      return '<span class="pv-pk">Gold value today</span><b class="pv-pv tab">' + weights.map(function (w) { return 'Rs ' + rs(Math.round(w * g / 100) * 100); }).join(' – ') + '</b>' +
+        '<p class="pv-pn">' + esc(p.weight) + ' of ' + p.karat + 'KT gold at today’s ' + (gold.source === 'showroom' ? 'counter' : 'market') + ' rate, Rs ' + rs(Math.round(g)) +
+        ' a gram. Making charges are added at the counter, so ask us for the final price.</p>';
+    }
+    return '<span class="pv-pk">Price</span><b class="pv-pv">On request</b>' +
+      '<p class="pv-pn">Gold is priced by its weight at the day’s rate, so the price moves with the market. Ask us and we will reply on WhatsApp with today’s price.</p>';
+  }
+  function showPrice() { var el = $('#pv-price'); if (el && current) el.innerHTML = priceHTML(current); }
+  PJ.onGold(function (g) { gold = g; showPrice(); });
+  var PURE = { 22: '91.6% pure, the 916 mark', 18: '75% pure, the 750 mark' };
+  function specHTML(p) {
+    var rows = [];
+    if (p.karat) rows.push(['Gold', p.karat + 'KT' + (PURE[p.karat] ? ', ' + PURE[p.karat] : '')]);
+    rows.push(['Weight', p.weight ? unit(weightText(p)) : 'Confirmed when you ask']);
+    if (p.weight) rows.push(['In pawn', pawnText(p)]);
+    rows.push(['Piece', esc(p.kind)]);
+    rows.push(['Find it in', p.cats.map(function (c) { return '<a href="?cat=' + c + '" data-cat="' + c + '">' + CAT[c] + '</a>'; }).join(', ')]);
+    return '<dl class="pv-spec">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('') + '</dl>';
+  }
   function renderPiece(p) {
     var cat = p.cats[0], more = list(cat, 'new').filter(function (q) { return q !== p; }).slice(0, 4);
     var ask = wa('I’d like to ask about the ' + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website.');
+    var fl = '<svg class="fl" aria-hidden="true"><use href="#flower"/></svg>';
+    current = p;
     pieceView.innerHTML =
       '<div class="wrap">' +
         '<nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span aria-hidden="true">/</span><a href="./" data-cat="all">The collection</a><span aria-hidden="true">/</span><a href="?cat=' + cat + '" data-cat="' + cat + '">' + CAT[cat] + '</a></nav>' +
         '<div class="pv">' +
           gallery(p) +
           '<div class="pv-c">' +
-            '<span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>' + esc(p.kind) + '</span>' +
+            '<span class="label">' + fl + esc(p.kind) + '</span>' +
             '<h1 class="pv-h">' + esc(p.name) + '</h1>' +
-            (p.weight
-              ? '<dl class="pv-wt"><div><dt>Weight</dt><dd>' + unit(weightText(p)) + '</dd></div><div><dt>In pawn</dt><dd>' + pawnText(p) + '</dd></div></dl>'
-              : '<p class="pv-wt none">We will confirm the weight of this piece when you ask.</p>') +
+            '<div class="pv-price" id="pv-price" aria-live="polite">' + priceHTML(p) + '</div>' +
             '<p class="pv-d">' + esc(p.about) + '</p>' +
-            '<p class="pv-price">Gold is priced by its weight at the day’s rate, so the price of a piece moves with the market. Ask us for today’s price and we will reply on WhatsApp.<span id="pv-rate"></span></p>' +
+            specHTML(p) +
             '<div class="pv-ctas">' +
               '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Ask about this piece</a>' +
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
-            (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
+            '<ul class="pv-marks" role="list"><li>' + fl + 'Weighed in front of you</li><li>' + fl + 'Priced at the day’s rate</li><li>' + fl + 'Negombo’s jewellers since 1967</li></ul>' +
+            '<p class="pv-suba">' + fl + '<span>Save for it with <a href="../#suba">Suba Mangala</a>: pay monthly for 6 or 12 months, then choose your jewellery.</span></p>' +
+            '<div class="pv-links">' +
+              (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
+              '<button class="alink" type="button" data-share>Share this piece <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
+            '</div>' +
           '</div>' +
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
       '</div>';
     initGallery();
     reveal(pieceView);
-    showRate();
   }
-  var gold = null;
-  function showRate() {
-    var el = $('#pv-rate');
-    if (el && gold) el.innerHTML = ' Gold today: 22K <b>Rs ' + rs(+gold.k22.pawn) + '</b> a pawn, the market rate.';
-  }
-  PJ.onGold(function (g) { gold = g; showRate(); });
+  // share a piece: the phone's own share sheet where there is one, otherwise copy its address
+  pieceView.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-share]')) return;
+    var url = location.href;
+    if (navigator.share) { navigator.share({ title: d.title, url: url }).catch(function () {}); return; }
+    try { navigator.clipboard.writeText(url).then(function () { PJ.say('Link copied'); }, function () { PJ.say(url); }); } catch (err) { PJ.say(url); }
+  });
 
   /* ---------- show the view the address asks for ---------- */
   // where the browser can, the photo grows out of its card into the piece's page and back (a view transition)

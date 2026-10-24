@@ -11,7 +11,9 @@
    weight: as printed, in grams, or '' when not known. A set lists each piece with '+' ('11.580 g + 18.880 g'),
            a range uses '–' ('1.740 – 2.100 g'). note: what a single weight covers, when not the whole set.
    cats:   any of necklaces, bangles, rings, pendants, bracelets, bridal.
-   ig:     optional, the Instagram post id, from instagram.com/pushpajewellers_official/p/<id>/ */
+   ig:     optional, the Instagram post id, from instagram.com/pushpajewellers_official/p/<id>/
+   karat:  optional, 22 or 18. With a weight, the piece's page shows the gold in it at today's rate for that karat.
+   price:  optional, a fixed price in rupees (price: 185000). It is shown in place of the gold value. */
 window.PIECES = [
   { slug: 'gold-mini-initial-necklace', name: 'Gold mini initial necklace', kind: 'Necklace', cats: ['necklaces'], weight: '', photos: 2,
     about: 'A gold mini initial necklace.' },

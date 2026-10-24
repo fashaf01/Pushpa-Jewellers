@@ -58,11 +58,19 @@ in pawn (8 g) where one is known. Visitors can filter by the categories that hav
 category with none gets no button), and sort by weight (the sort appears once any piece has a weight). Each
 piece has its own page at `/shop/?piece=<slug>`: the large photo with the piece's other photos
 underneath (swipe across the photo on a phone; on a computer use the arrows or the thumbs, and the
-photo zooms in under the pointer), weight, description, today's 22K rate, an "Ask about this piece" button that
-opens WhatsApp with the piece's name filled in, a call button, a link to its Instagram post when
-it has one, and more pieces of the same kind. Filters and sorting are in the address too
+photo zooms in under the pointer), its price, description and details (karat, weight in grams and in pawn, kind,
+categories), an "Ask about this piece" button that opens WhatsApp with the piece's name filled in, a call button, a
+note on saving for it with Suba Mangala, a link to its Instagram post when it has one, a share button, and more
+pieces of the same kind. Filters and sorting are in the address too
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
+
+**The price on a piece's page.** A piece with `price` (rupees) shows that price. A piece with a weight and a `karat`
+shows its gold value today: the weight times today's rate for that karat (from `/api/gold`), rounded to Rs 100, with
+the weight, karat and rate per gram written under it and a plain note that making charges are added at the counter.
+A set adds its pieces' weights; a range of weights gives a range of values. Anything else reads "Price on request".
+The 28 Instagram pieces whose posts print a weight also print 22KT, so they carry `karat: 22`. Setting the showroom's
+own rate in Vercel (see *Today's gold rate*) makes these values use it.
 
 **What it shows now.** 104 pieces from two lists:
 
@@ -115,11 +123,13 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 
 ## The intro
 
-The home page opens on the logo coming through smoke: soft smoke drifts up and thins, the logo comes through it from
-soft focus to sharp, and the motto, *Forever Quality & Trust*, follows. It lifts after 2.8 seconds. The timing is the
-`animation-delay` on `.intro` in `styles.css`; `site.js` reads it from there to start the hero's entrance as the intro
-lifts, so change it in the CSS only. The logo's size there is `.intro-logo` (220px wide on desktop). Other pages have
-no intro.
+The home page opens on the logo coming through smoke. Soft wisps drift up from the lower part of the screen, past
+the logo, and thin away; the logo comes through them from soft focus to sharp, the motto, *Forever Quality & Trust*,
+follows, and the intro fades away after 2.8 seconds. The smoke is drawn on a canvas by `main.js` (cloudy noise in
+warm ivory, at half size, about forty wisps in all; it stops and removes itself once the smoke has gone). The timing is
+the `animation-delay` on `.intro` in `styles.css`; `site.js` reads it from there to start the hero's entrance as the
+intro lifts, so change it in the CSS only. The logo's size is `.intro-logo` (220px wide on desktop). Other pages have
+no intro, and it is skipped for visitors who ask for reduced motion.
 
 ## Logo size
 
@@ -231,8 +241,10 @@ licence covers commercial use.
   as printed velvet, small gold florets on a fine nap (`--damask`, `--velvet`); the cusped arch (`--arch-mask`,
   `--arch-line` on the collection photos, `--arch-tall` behind page titles); gilt corner brackets on framed cards
   (`--brackets`); and the old label shape with inward corners for tiles (`--label`). The line-drawn lotus
-  (`assets/img/orn/lotus-line.svg`) sits at the edges of plum sections and page titles. Steps on the About and service
-  pages are numbered in Roman capitals, ruled like an old account book.
+  (`assets/img/orn/lotus-line.svg`) grows at the foot of the Suba Mangala section and of page titles. Steps on the About and service
+  pages are numbered in Roman capitals, ruled like an old account book. Ornaments stand on something: the lotus's stems
+  run to the bottom of its drawing, so it grows from the lower edge of the section it sits in, and a page title's
+  arch stands on a gilt threshold at the foot of the band, with a lotus either side.
 - The header shrinks on scroll on desktop only. On phones and tablets it keeps one height, so
   nothing moves under the finger and jump links always land just under it (`scroll-margin-top`).
 - Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
