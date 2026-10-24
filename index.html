@@ -13,7 +13,9 @@
 <meta property="og:description" content="Honest 22KT and 18KT gold from a Negombo family of jewellers since 1967, with the weight of every piece shown. Suba Mangala gold purchase plan, pawning and money exchange.">
 <meta property="og:locale" content="en_LK">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<script>document.documentElement.classList.add('js');</script>
+<script>document.documentElement.classList.add('js');
+// the opening plays once a visit: the first time the home page opens in this tab, not each time it is come back to
+try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classList.add('opened'); else sessionStorage.setItem('pj-opened', '1'); } catch (e) {}</script>
 <!-- The Seasons (Adobe Fonts kit tiq7fhn). Add the site's domain to this kit in Adobe Fonts > Web Projects. -->
 <link rel="stylesheet" href="https://use.typekit.net/tiq7fhn.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -86,7 +88,6 @@
 <div class="intro" aria-hidden="true">
   <div class="intro-in">
     <img class="intro-logo" src="assets/img/lockup.webp" alt="" width="688" height="603" fetchpriority="high">
-    <span class="intro-rule"><svg class="fl"><use href="#flower"/></svg></span>
     <p class="intro-sl">Forever Quality &amp; Trust</p>
   </div>
 </div>

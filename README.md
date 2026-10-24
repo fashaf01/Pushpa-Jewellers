@@ -127,12 +127,19 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 
 ## The intro
 
-The home page opens on the logo, in the classic way: a warm light comes up behind it, the logo fades up into place, a
-fine gold rule draws out either side of the Pushpa flower beneath it, the motto, *Forever Quality & Trust*, follows,
-and after 2.6 seconds the intro fades away. It is all CSS (the `intro` block in `styles.css`). The timing is the
-`animation-delay` on `.intro`; `site.js` reads it from there to start the hero's entrance as the intro lifts, so change
-it in the CSS only. The logo's size is `.intro-logo` (220px wide on desktop). Other pages have no intro, and it is
-skipped for visitors who ask for reduced motion.
+The home page opens on the logo like a film going into a flashback: it drifts in out of a soft, bright haze and
+settles sharp, the motto follows, and then both dissolve back into the haze as a gentle light swells and the page
+appears, after about 3 seconds. It is all CSS (the `intro` block in `styles.css`).
+
+It plays **once a visit**: the first time the home page opens in a tab. Coming back to the home page, from another
+page, the back button or a reload, goes straight to the page. A short script in `index.html`'s `<head>` remembers
+this in `sessionStorage` and marks the page `.opened`, so the intro is hidden before anything is drawn. To see it
+again, open the site in a new tab or window.
+
+The intro lifts after the `animation-delay` on `.intro`; `site.js` reads it from there to start the hero's entrance,
+and starts it at once when the intro is not showing, so change the timing in the CSS only. The logo's size is
+`.intro-logo` (220px wide on desktop). Other pages have no intro, and it is skipped for visitors who ask for reduced
+motion.
 
 ## Logo size
 

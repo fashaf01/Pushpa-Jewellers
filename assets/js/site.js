@@ -100,11 +100,12 @@
 
   try { if (d.fonts && d.fonts.load) d.fonts.load('1em "the-seasons"').then(function (f) { if (f && f.length) d.documentElement.classList.add('has-seasons'); }, function () {}); } catch (e) {}
 
-  /* ---------- entrance: as the intro lifts, where a page has one (it lifts after its animation-delay in styles.css) ---------- */
+  /* ---------- entrance: as the intro lifts, where a page shows one (it lifts after its animation-delay in styles.css);
+     at once where there is none, or it has already played this visit, or motion is reduced ---------- */
   var intro = $('.intro');
   setTimeout(function () {
     d.body.classList.add('loaded');
     isLoaded = true;
     onLoad.forEach(function (fn) { fn(); });
-  }, reduce || !intro ? 0 : (parseFloat(getComputedStyle(intro).animationDelay) || 0) * 1000);
+  }, reduce || !intro || getComputedStyle(intro).display === 'none' ? 0 : (parseFloat(getComputedStyle(intro).animationDelay) || 0) * 1000);
 })();
