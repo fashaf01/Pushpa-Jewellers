@@ -410,6 +410,13 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .svc{display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;text-align:center;gap:16px;padding:clamp(40px,4.6vw,64px) clamp(16px,2.2vw,34px)}
 @supports (grid-template-rows:subgrid){.svc-g{grid-template-rows:auto auto 1fr auto}.svc{grid-row:span 4;grid-template-rows:subgrid;row-gap:16px}}
 .svc+.svc{border-left:1px solid var(--plum-rule)}
+.svc{position:relative}
+.svc>a.svc-hit{position:absolute;inset:0;z-index:1;grid-column:auto;grid-row:auto} /* auto: the whole card, even where the phone layout puts the card's text in a second column */
+.svc .alink{z-index:2}
+.svc h3{transition:color .4s var(--ease)}
+.svc:hover h3{color:var(--gold-light)}
+.medal{transition:box-shadow .5s var(--ease)}
+.svc:hover .medal{box-shadow:inset 0 0 0 1px rgba(236,210,143,1),0 0 0 6px rgba(226,194,122,.1),0 22px 44px -22px rgba(0,0,0,.85)}
 .medal{position:relative;display:grid;place-items:center;width:128px;height:128px;border-radius:50%;margin-bottom:8px;background:radial-gradient(circle at 36% 28%,#5e1743,var(--plum-3) 78%);box-shadow:inset 0 0 0 1px rgba(226,194,122,.85),0 22px 44px -22px rgba(0,0,0,.85)}
 .medal::before{content:"";position:absolute;inset:4px;border-radius:50%;background:repeating-conic-gradient(rgba(226,194,122,.6) 0deg 1.2deg,transparent 1.2deg 6deg);-webkit-mask:radial-gradient(circle closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(circle closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));transition:transform 1.6s var(--ease)}
 .medal::after{content:"";position:absolute;inset:15px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(226,194,122,.45)}
@@ -869,9 +876,6 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .alink::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
 .alink:hover::after{transform:scaleX(1);transform-origin:left}
 .dark .alink::after{background:var(--gold-light)}
-/* headings open out as they arrive */
-.js .h2.rv,.js .suba h2.rv{letter-spacing:.06em;transition:opacity 1s var(--ease),transform 1.1s var(--ease),letter-spacing 1.8s var(--ease);transition-delay:calc(var(--d,0) * 90ms)}
-.js .h2.rv.in,.js .suba h2.rv.in{letter-spacing:0}
 /* the ornament under a heading unfolds from its centre */
 .js .divider.rv{clip-path:inset(0 50%);transition:opacity 1s var(--ease),transform 1.1s var(--ease),clip-path 1.8s var(--ease) .2s}
 .js .divider.rv.in{clip-path:inset(0 0)}
@@ -882,7 +886,6 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 /* the service medals turn into place, and their milled edge turns under the pointer */
 .js .svc.rv .medal{opacity:0;transform:rotate(-100deg) scale(.7);transition:opacity .9s var(--ease) .15s,transform 1.5s var(--ease) .15s}
 .js .svc.rv.in .medal{opacity:1;transform:none}
-.svc:hover .medal::before{animation:spin 14s linear infinite}
 /* the shop opens in order: heading, words, then the filters one by one */
 .shop-head .wrap>*,.page-head .wrap>*{animation:pcIn .9s var(--ease) backwards}
 .shop-head .wrap>:nth-child(2),.page-head .wrap>:nth-child(2){animation-delay:.08s}
@@ -922,7 +925,6 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
   *,*::before,*::after{transition:none!important;animation:none!important}
   .js .intro{display:none}
   .js .rv,.js .pc{opacity:1;transform:none}
-  .js .h2.rv,.js .suba h2.rv{letter-spacing:0}
   .js .divider.rv{clip-path:none}
   .js .door.rv .ph img,.js .svc.rv .medal{opacity:1;transform:none}
   .js .hero h1 .ln>span{transform:none}

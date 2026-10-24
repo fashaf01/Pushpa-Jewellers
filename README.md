@@ -266,11 +266,15 @@ licence covers commercial use.
   the arrow keys and a sideways trackpad swipe work on a computer. Jumping to the top of the page when a product opens switches
   the page's gliding off first, because a glide ignores the user's finger until it is done.
 - The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
-- Motion: the logo through smoke, the hero's photo and headline arriving as it lifts, reveals as sections arrive (headings
-  open out, ornaments unfold, the collection's photos settle into their arches, the service
-  medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
+- Motion: the opening logo (once a visit), the hero's photo and headline arriving as it lifts, reveals as sections
+  arrive (ornaments unfold, the collection's photos settle into their arches, the service medals turn in), a light
+  across buttons, gold underlines, and in the shop, cards rising into
   place, photos that slide under the finger, and a card's photo growing into its piece's page
   and back (view transitions, only on screens with a mouse, in browsers that have them).
 - Honours `prefers-reduced-motion`: all of that switches off.
+- Nothing moves the page while it scrolls: reveals only fade and rise (they never change a heading's size or letter
+  spacing, which would rewrap it and push what is below), so the layout stays put as sections arrive.
+- Each service card on the home page is one link to its page: the medal, the title and the words all open it
+  (`.svc-hit`, a link over the card that screen readers and the Tab key skip, since the card's own link is there).
 - Focus states, ARIA labels and live regions throughout. The Sinhala and Tamil
   lines carry `lang` attributes.
