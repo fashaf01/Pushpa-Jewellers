@@ -114,10 +114,11 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 
 ## The intro
 
-The home page opens on the logo, from old to new: a dark page with a gilt frame, the logo first as a tarnished, grainy
-old print, then restored to polished gold with a light passing across it, and the motto, *Forever Quality & Trust*.
-It lifts after 3 seconds. The timing is the `animation-delay` on `.intro` in `styles.css`; `site.js` reads it from
-there to start the hero's entrance as the intro lifts, so change it in the CSS only. Other pages have no intro.
+The home page opens on the logo coming through smoke: soft smoke drifts up and thins, the logo comes through it from
+soft focus to sharp, and the motto, *Forever Quality & Trust*, follows. It lifts after 2.8 seconds. The timing is the
+`animation-delay` on `.intro` in `styles.css`; `site.js` reads it from there to start the hero's entrance as the intro
+lifts, so change it in the CSS only. The logo's size there is `.intro-logo` (220px wide on desktop). Other pages have
+no intro.
 
 ## Logo size
 
@@ -235,7 +236,7 @@ licence covers commercial use.
   the arrow keys and a sideways trackpad swipe work on a computer. Jumping to the top of the page when a product opens switches
   the page's gliding off first, because a glide ignores the user's finger until it is done.
 - The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
-- Motion: the logo intro, the hero's photo and headline arriving as it lifts, reveals as sections arrive (headings
+- Motion: the logo through smoke, the hero's photo and headline arriving as it lifts, reveals as sections arrive (headings
   open out, ornaments unfold, the collection's photos settle into their arches, the service
   medals turn in), a light across buttons, gold underlines, and in the shop, cards rising into
   place, photos that slide under the finger, and a card's photo growing into its piece's page
