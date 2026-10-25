@@ -8,8 +8,9 @@ gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and on
 frame (the cusped arch of an old doorway). It is meant to feel like a house that has been here since 1967:
 book type, old paper, plum like printed velvet, gilt line ornament.
 
-Six pages: the home page (`index.html`), the shop (`shop/index.html`, at `/shop/`), About us (`/about/`), and one page
-for each of the three counter services: pawning, money exchange and airline ticketing (`/services/<name>/`). Suba Mangala
+Nine pages: the home page (`index.html`), the shop (`shop/index.html`, at `/shop/`), About us (`/about/`), one page
+for each of the three counter services: pawning, money exchange and airline ticketing (`/services/<name>/`), and the
+legal pages: the privacy policy (`/privacy/`), cookies (`/cookies/`) and terms of use (`/terms/`). Suba Mangala
 and order tracking stay on the home page.
 
 No build step, no dependencies. It is hosted on Vercel at
@@ -34,6 +35,9 @@ service pages do not work).
 index.html               the home page: markup, the inline SVG icon sprite, JSON-LD
 shop/index.html          the shop
 about/index.html         About us: the story, the marks, how we work, the name, the services, the showrooms
+privacy/index.html       Privacy policy
+cookies/index.html       Cookies
+terms/index.html         Terms of use
 services/*/index.html    pawning, money-exchange, airline-ticketing: how it works, contact card, the other services
 assets/css/styles.css    design tokens and all layout, both pages
 assets/js/site.js        shared by every page: header, menus, gold rate bar, copy buttons,
@@ -140,6 +144,23 @@ The intro lifts after the `animation-delay` on `.intro`; `site.js` reads it from
 and starts it at once when the intro is not showing, so change the timing in the CSS only. The logo's size is
 `.intro-logo` (220px wide on desktop). Other pages have no intro, and it is skipped for visitors who ask for reduced
 motion.
+
+## Legal pages
+
+`privacy/`, `cookies/` and `terms/` are plain HTML, like the rest of the site, so edit the text in each page. They are
+drafts written from what the site actually does: it has no
+accounts, no analytics and no cookies of its own, one browser item (`pj-opened`, a flag for the opening animation),
+forms that open WhatsApp, and two third-party font services. **They are not legal advice. Have a lawyer in Sri Lanka
+check them before the site goes live, and confirm these with the client:**
+
+- the company's registration details and an email address for privacy requests (the site gives a phone number,
+  WhatsApp and the showrooms' addresses; add an email when one exists);
+- the return and exchange wording in the terms (it points customers to the counter and their receipt rather than
+  stating a policy);
+- how long transaction records are kept, and any identity checks the counter carries out;
+- that the policy matches practice if anything changes, such as adding analytics or a booking form.
+
+Every page's footer links to all three. When you change one, update its "Last updated" date at the top.
 
 ## Logo size
 
