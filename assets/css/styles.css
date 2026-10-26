@@ -597,9 +597,13 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pc i small,.pv-spec small{font-size:.85em;font-weight:500;color:var(--muted)}
 .pc i.no{font-weight:500;color:var(--soft)}
 .pc .pr{font-style:normal;font-family:var(--display);font-size-adjust:none;font-size:14.5px;font-weight:600;letter-spacing:.02em;color:var(--wine);font-variant-numeric:lining-nums}
-/* a "Best seller" label in the photo's top corner: a small plum plaque with a gold hairline, like the stamps on old jewellery boxes */
-.pc .bs{position:absolute;z-index:2;top:14px;left:14px;display:inline-flex;align-items:center;gap:6px;padding:6px 10px 5px 8px;background:var(--plum);color:var(--gold-light);font-style:normal;font-family:var(--display);font-size-adjust:none;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1;box-shadow:inset 0 0 0 1px rgba(226,194,122,.75),0 6px 14px -6px rgba(44,7,27,.6);pointer-events:none}
-.pc .bs::before{content:"";width:9px;height:9px;flex:none;background:var(--gold-light);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+/* a "Best seller" ribbon: a gilded tab off the photo's left edge with a swallowtail end and plum lettering, and a light that
+   sweeps across it every few seconds. The gold is the ribbon's own layer (::before) so the swallowtail can be cut out of
+   it while the shadow still follows the cut; the star is its own sparkle. Reduced motion stops the sweep, leaving plain gold. */
+.pc .bs{position:absolute;z-index:2;top:16px;left:0;isolation:isolate;display:inline-flex;align-items:center;gap:8px;padding:9px 26px 8px 12px;color:var(--plum);font-style:normal;font-family:var(--display);font-size-adjust:none;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1;pointer-events:none;filter:drop-shadow(0 7px 9px rgba(44,7,27,.5))}
+.pc .bs::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,#d6ad52 0%,#f3dc9f 24%,#fff6d4 35%,#f3dc9f 46%,#dbb458 60%,#c39a3d 100%) 100% 0/280% 100%;clip-path:polygon(0 0,100% 0,calc(100% - 11px) 50%,100% 100%,0 100%);animation:bsShine 3.8s ease-in-out 1s infinite}
+.pc .bs::after{content:"";order:-1;width:11px;height:11px;flex:none;background:var(--plum);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+@keyframes bsShine{0%,52%{background-position:100% 0}100%{background-position:0 0}}
 .pv-wrap{padding-block:clamp(22px,2.6vw,34px) var(--sec)}
 .pv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start;margin-top:22px}
 .pv-ph{position:relative;margin:0;aspect-ratio:4/5;background:var(--tint);overflow:hidden}
@@ -685,8 +689,9 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .pc b{font-size:12.5px}
   .pc .m,.pc i{font-size:11.5px;line-height:1.5}
   .pc .pr{font-size:13px}
-  .pc .bs{top:10px;left:10px;padding:5px 8px 4px 6px;font-size:9px;letter-spacing:.12em;gap:5px}
-  .pc .bs::before{width:7px;height:7px}
+  .pc .bs{top:11px;padding:6px 18px 5px 8px;font-size:9px;letter-spacing:.11em;gap:5px}
+  .pc .bs::before{clip-path:polygon(0 0,100% 0,calc(100% - 8px) 50%,100% 100%,0 100%)}
+  .pc .bs::after{width:8px;height:8px}
   .pv{gap:22px}
   .pv-h{font-size:27px}
   .pv-d{font-size:15px}

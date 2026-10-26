@@ -69,8 +69,9 @@ pieces of the same kind. Filters and sorting are in the address too
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
-**Best seller labels.** A piece with `bestseller: true` in `pieces.js` or `pieces-instagram.js` shows a small "Best
-seller" plaque in the corner of its photo in the collection. Six pieces carry it now (the stacked bar bangle, the gold
+**Best seller labels.** A piece with `bestseller: true` in `pieces.js` or `pieces-instagram.js` shows a gold "Best
+seller" ribbon off the left edge of its photo in the collection (gilded, with a swallowtail end and plum
+lettering; a light sweeps across it every few seconds, and stops for visitors who ask for reduced motion). Six pieces carry it now (the stacked bar bangle, the gold
 leaf bridal necklace, the five-stone ring, the cross pendant, the solid gold initial necklace and the pave huggies):
 **they were picked to show the design, not from sales figures, so set the label on the pieces that really sell best
 before the site goes live.** Delete the field to remove a label.
