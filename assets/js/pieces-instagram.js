@@ -4,13 +4,13 @@
    are explained at the top of pieces.js. Each post that shows a weight also shows the karat, 22KT, so those pieces carry
    karat: 22. Their prices are SAMPLE FIGURES, as in pieces.js: replace them with the real ones before going live. */
 window.PIECES_INSTAGRAM = [
-  { slug: 'stacked-bar-bangle', name: 'Stacked bar bangle', kind: 'Bangle', cats: ['bangles'], weight: '12.470 g', karat: 22, ig: 'DeCPWHHgKD8', photos: 2, price: 452000,
+  { slug: 'stacked-bar-bangle', name: 'Stacked bar bangle', kind: 'Bangle', cats: ['bangles'], weight: '12.470 g', karat: 22, ig: 'DeCPWHHgKD8', photos: 2, bestseller: true, price: 452000,
     about: 'Five slim bars of gold, the upper rows set with small stones, shown here with a cream saree.' },
-  { slug: 'five-stone-ring', name: 'Five-stone ring', kind: 'Ring', cats: ['rings'], weight: '1.120 g', karat: 22, ig: 'Dd9FajfDB2q', photos: 2, price: 40500,
+  { slug: 'five-stone-ring', name: 'Five-stone ring', kind: 'Ring', cats: ['rings'], weight: '1.120 g', karat: 22, ig: 'Dd9FajfDB2q', photos: 2, bestseller: true, price: 40500,
     about: 'A slim band with five small claw-set stones along the top.' },
-  { slug: 'gold-leaf-bridal-necklace', name: 'Gold leaf bridal necklace', kind: 'Necklace', cats: ['necklaces', 'bridal'], weight: '24.380 g', karat: 22, ig: 'Dd2_cGXCTjA', photos: 2, price: 884000,
+  { slug: 'gold-leaf-bridal-necklace', name: 'Gold leaf bridal necklace', kind: 'Necklace', cats: ['necklaces', 'bridal'], weight: '24.380 g', karat: 22, ig: 'Dd2_cGXCTjA', photos: 2, bestseller: true, price: 884000,
     about: 'A collar of tapered gold leaves with stone-set veins and a single drop at the centre.' },
-  { slug: 'cross-pendant', name: 'Cross pendant', kind: 'Pendant', cats: ['pendants'], weight: '12.020 g', karat: 22, ig: 'DdwJSBmCT2E', photos: 2, price: 435500,
+  { slug: 'cross-pendant', name: 'Cross pendant', kind: 'Pendant', cats: ['pendants'], weight: '12.020 g', karat: 22, ig: 'DdwJSBmCT2E', photos: 2, bestseller: true, price: 435500,
     about: 'A plain polished cross, shown on a curb chain.' },
   { slug: 'blue-stone-clover-pendant', name: 'Blue stone clover pendant', kind: 'Pendant', cats: ['pendants'], weight: '2.550 g', karat: 22, ig: 'Ddf7V7-jVXh', photos: 2, price: 92500,
     about: 'A four-petal clover frame holding a blue stone, on a fine chain.' },

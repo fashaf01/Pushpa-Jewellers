@@ -14,6 +14,8 @@
    ig:     optional, the Instagram post id, from instagram.com/pushpajewellers_official/p/<id>/
    karat:  optional, 22 or 18. With a weight, the piece's page shows the gold in it at today's rate for that karat.
    price:  optional, a price in rupees (price: 185000), shown on the piece's card and page.
+   bestseller: optional, true to show a "Best seller" label on the piece's card in the collection. The six set now are
+           SAMPLES chosen to show the design, not from sales figures: set it on the pieces that really sell best.
            THE PRICES IN THIS LIST ARE SAMPLE FIGURES, put in to show the design. Replace them with the real prices
            before the site goes live, or delete a piece's price: it then shows its gold value at today's rate (when its
            weight and karat are known) or "Price on request". */
@@ -34,9 +36,9 @@ window.PIECES = [
     about: 'A mini deco october birthstone necklace with opal.' },
   { slug: 'spiral-small-hoop-earrings-gold', name: 'Spiral small hoop earrings gold', kind: 'Earrings', cats: ['earrings'], weight: '', photos: 2, price: 55000,
     about: 'A pair of spiral small hoop gold earrings.' },
-  { slug: 'solid-gold-initial-necklace', name: 'Solid gold initial necklace', kind: 'Necklace', cats: ['necklaces'], weight: '', photos: 2, price: 158000,
+  { slug: 'solid-gold-initial-necklace', name: 'Solid gold initial necklace', kind: 'Necklace', cats: ['necklaces'], weight: '', photos: 2, bestseller: true, price: 158000,
     about: 'A solid gold initial necklace.' },
-  { slug: 'pave-huggies-yellow-gold', name: 'Pave huggies yellow gold', kind: 'Earrings', cats: ['earrings'], weight: '', photos: 2, price: 64000,
+  { slug: 'pave-huggies-yellow-gold', name: 'Pave huggies yellow gold', kind: 'Earrings', cats: ['earrings'], weight: '', photos: 2, bestseller: true, price: 64000,
     about: 'A pair of pave huggies yellow gold earrings.' },
   { slug: 'diamond-initial-pendant-necklace', name: 'Diamond initial pendant necklace', kind: 'Necklace', cats: ['necklaces'], weight: '', photos: 2, price: 224000,
     about: 'An initial necklace with diamond.' },

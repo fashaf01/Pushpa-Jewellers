@@ -69,6 +69,12 @@ pieces of the same kind. Filters and sorting are in the address too
 (`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
 open the shop filtered this way.
 
+**Best seller labels.** A piece with `bestseller: true` in `pieces.js` or `pieces-instagram.js` shows a small "Best
+seller" plaque in the corner of its photo in the collection. Six pieces carry it now (the stacked bar bangle, the gold
+leaf bridal necklace, the five-stone ring, the cross pendant, the solid gold initial necklace and the pave huggies):
+**they were picked to show the design, not from sales figures, so set the label on the pieces that really sell best
+before the site goes live.** Delete the field to remove a label.
+
 **The price on a piece's card and page.** A piece with `price` (rupees) shows that price. **Every piece now has a
 sample price, put in to show the design: replace them with the real prices before the site goes live** (the sample
 figures are the weight at about Rs 31,250 a gram plus 16% where the weight is known, and a typical figure for the

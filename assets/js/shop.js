@@ -62,7 +62,7 @@
   function card(p) {
     var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
-      '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async"></div>' +
+      '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async">' + (p.bestseller ? '<em class="bs">Best seller</em>' : '') + '</div>' +
       '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt +
       (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : '') + '</a></li>';
   }
