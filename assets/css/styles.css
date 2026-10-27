@@ -288,6 +288,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .rules{display:grid;width:100%;border-top:1px solid var(--plum-rule)}
 .rules li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:16px;align-items:start;padding-block:14px;border-bottom:1px solid var(--plum-rule);font-size:15px;color:var(--on-plum)}
 .rules .fl{width:14px;height:14px;margin-top:5px;color:var(--plum-gold)}
+.suba-fine{max-width:52ch;font-size:13.5px;color:var(--on-plum-2)}
 .suba-ctas{display:flex;flex-wrap:wrap;gap:12px}
 details.tbl{width:100%;border-top:1px solid var(--plum-rule);padding-top:4px}
 details.tbl summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--plum-gold);list-style:none;font-family:var(--display);font-size-adjust:none}
@@ -342,6 +343,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .plus{font-family:var(--display);font-weight:600;color:var(--plum-gold);font-size:18px;margin-left:4px;font-size-adjust:none}
 .sums{display:grid;border-top:1px solid var(--plum-rule)}
 .sums div{display:flex;justify-content:space-between;gap:12px;padding-block:11px;border-bottom:1px solid var(--plum-rule);font-size:15px}
+.sums div[hidden]{display:none}
 .sums dt{color:var(--on-plum-2)}
 .sums dd{font-weight:600;font-variant-numeric:lining-nums tabular-nums;color:var(--on-plum)}
 .sums .g dd{color:var(--gold-light)}
@@ -834,7 +836,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .rules li{font-size:13.5px;padding-block:10px;gap:12px}
   .rules .fl{margin-top:4px}
   .suba-ctas{display:none}
-  .calc{gap:18px;padding:22px 16px}
+  .calc{gap:18px;padding:22px 16px 54px}
   .calc h3{font-size:16px}
   .amt-h output{font-size:18px}
   .grand .fig{font-size:34px}

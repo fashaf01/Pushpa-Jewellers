@@ -229,13 +229,18 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
       <h2 class="rv" id="suba-h"><span class="gilt">Suba Mangala</span></h2>
       <p class="sub rv">A gold purchase plan over 6 or 12 months</p>
       <div class="tri rv"><span class="si" lang="si">සුබ මංගල &middot; රත්තරන් මිලදී ගැනීමේ සැලැස්ම</span><span class="ta" lang="ta">சுப மங்களா &middot; தங்க நகை கொள்வனவு திட்டம்</span></div>
-      <p class="lede rv">Own exquisite 22KT gold through easy monthly instalments. Choose an amount from Rs 1,000 to Rs 10,000 a month, save for 6 or 12 months, and Pushpa adds a cash gift at the end.</p>
+      <p class="lede rv">Save for gold a little each month. Every monthly payment is converted into gold weight at that month&rsquo;s gold rate, and when your 6 or 12 months are done you choose your jewellery with the gold you have saved, and take home a special gift from Pushpa.</p>
+      <span class="label rv"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Terms and conditions</span>
       <ul class="rules rv" role="list">
-        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>At the end of your 6 or 12 months, choose jewellery for the full amount.</span></li>
-        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>Pay your instalment on time each month.</span></li>
-        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>If you stop early, you can still buy jewellery for what you have paid, without the cash gift.</span></li>
-        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>Payments are not refunded in cash.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>Your monthly payments are converted into gold weight.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>The minimum scheme amount is Rs 10,000.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>After the 6 or 12 months, you can purchase any jewellery with your gold. Wastage is added to the weight.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>If you purchase jewellery before your 6 or 12 months are over, you will not be eligible for the offer.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>Special gifts are issued at the end of the plan.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>No cash refund.</span></li>
+        <li><svg class="fl" aria-hidden="true"><use href="#flower"/></svg><span>Management has complete right over jewellery pricing and distribution.</span></li>
       </ul>
+      <p class="suba-fine rv">You agree to these terms and conditions when you sign for your plan at the showroom.</p>
       <div class="suba-ctas rv">
         <button class="btn" type="button" data-enrol>Enrol in Suba Mangala</button>
         <a class="btn ghost" href="tel:+94312238822">Hotline 031 223 8822</a>
@@ -255,30 +260,30 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
         <input type="radio" name="plan" id="p12" value="12"><label for="p12">12 months</label>
       </fieldset>
       <div>
-        <div class="amt-h"><label for="amt">Monthly instalment</label><output id="amt-o" for="amt">Rs 5,000</output></div>
+        <div class="amt-h"><label for="amt">Monthly payment</label><output id="amt-o" for="amt">Rs 5,000</output></div>
         <div class="amt-row">
           <button class="step" type="button" id="amt-dn" aria-label="Rs 1,000 less">&minus;</button>
-          <input class="range" type="range" id="amt" min="1000" max="10000" step="1000" value="5000">
+          <input class="range" type="range" id="amt" min="2000" max="10000" step="1000" value="5000">
           <button class="step" type="button" id="amt-up" aria-label="Rs 1,000 more">+</button>
         </div>
-        <div class="ticks" aria-hidden="true"><span>Rs 1,000</span><span>Rs 10,000</span></div>
+        <div class="ticks" aria-hidden="true"><span id="t-min">Rs 2,000</span><span>Rs 10,000</span></div>
       </div>
       <div class="coins-w">
-        <span class="cap" id="coins-cap">6 monthly instalments, then a gift from Pushpa</span>
+        <span class="cap" id="coins-cap">6 monthly payments of Rs 5,000, then special gifts from Pushpa</span>
         <div class="coins" id="coins" aria-hidden="true"></div>
       </div>
       <dl class="sums">
-        <div><dt>You pay in total</dt><dd id="c-total">Rs 30,000</dd></div>
-        <div class="g"><dt>Cash gift from Pushpa</dt><dd id="c-gift">+ Rs 2,500</dd></div>
+        <div id="c-total-row" hidden><dt>You pay in total</dt><dd id="c-total">Rs 30,000</dd></div>
+        <div class="g"><dt>At the end of the plan</dt><dd>Special gifts</dd></div>
       </dl>
       <div class="grand">
         <img class="mand" src="assets/img/orn/mandala-plum.svg" alt="" aria-hidden="true" width="340" height="340">
-        <span class="label">Gold you can buy</span>
-        <div class="fig"><span class="rs">Rs</span><span class="odo" id="c-grand">32,500</span></div>
+        <span class="label" id="c-label">You pay in total</span>
+        <div class="fig"><span class="rs" id="c-pre">Rs</span><span class="odo" id="c-grand">30,000</span><span class="rs" id="c-suf" hidden>g</span></div>
       </div>
       <p class="sr" aria-live="polite" id="c-live"></p>
       <button class="btn" type="button" data-enrol>Enrol in this plan</button>
-      <p class="fine">Figures from the Suba Mangala plan table. On the 6 month plan the gift is half of one instalment; on the 12 month plan it is one full instalment.</p>
+      <p class="fine" id="c-fine">Each month&rsquo;s payment is converted into gold weight at that month&rsquo;s gold rate.</p>
     </div>
   </div>
 </section>
@@ -435,10 +440,10 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
     <div class="field"><label for="e-mb">Mobile number</label><input id="e-mb" type="tel" required autocomplete="tel" inputmode="tel"></div>
     <div class="two">
       <div class="field"><label for="e-pl">Plan</label><select id="e-pl"><option value="6">6 months</option><option value="12">12 months</option></select></div>
-      <div class="field"><label for="e-am">Monthly instalment</label><select id="e-am"></select></div>
+      <div class="field"><label for="e-am">Monthly payment</label><select id="e-am"></select></div>
     </div>
     <div class="field"><label for="e-st">Showroom</label><select id="e-st"><option>Greens Road, Negombo</option><option>Sea Street, Negombo</option><option>Averiwatte, Katunayake</option></select></div>
-    <p class="note">We will reply on WhatsApp to set a time. Bring your NIC and your nominee&rsquo;s details (name, NIC and relationship) when you come in to sign and pay your first instalment.</p>
+    <p class="note">We will reply on WhatsApp to set a time. Bring your NIC and your nominee&rsquo;s details (name, NIC and relationship) when you come in to sign and pay your first instalment. You agree to the plan&rsquo;s terms and conditions when you sign.</p>
     <p class="hint" id="e-err" role="alert" style="color:var(--wine);font-size:14px;min-height:1.4em;margin:0"></p>
     <button class="btn" type="submit"><svg aria-hidden="true"><use href="#i-wa"/></svg>Send on WhatsApp</button>
   </form>

@@ -45,18 +45,45 @@
 
   var hero = $('#hero');
 
-  /* ---------- Suba Mangala: 6 months, gift = half an instalment; 12 months, gift = one instalment ---------- */
-  function plan(months, m) { var total = months * m, gift = months === 6 ? m / 2 : m; return { total: total, gift: gift, grand: total + gift }; }
+  /* ---------- Suba Mangala, as set out on the plan card ----------
+     Monthly payments are converted into gold weight at each month's gold rate; the minimum scheme amount is Rs 10,000;
+     after 6 or 12 months the customer buys any jewellery with the gold (wastage added to its weight); special gifts at the
+     end. The weight shown here is only an illustration at today's 22K rate: the real weight is set by each month's rate.
+     MIN_TOTAL is read as the least the whole plan may add up to, so a 6 month plan starts at Rs 2,000 a month and a 12
+     month plan at Rs 1,000. Change the three numbers below if the plan changes. */
+  var MIN_TOTAL = 10000, STEP = 1000, MAX_MONTHLY = 10000, gold = null;
+  function minMonthly(mo) { return Math.max(STEP, Math.ceil(MIN_TOTAL / mo / STEP) * STEP); }
+  function plan(mo, m) { var total = mo * m; return { total: total, grams: gold ? total / +gold.k22.gram : null }; }
+  function g2(n) { return n.toFixed(2); }
   var amt = $('#amt'), coins = $('#coins'), gOdo = new Odo($('#c-grand')), months = 6;
-  function renderCalc(animate) {
-    var m = +amt.value, p = plan(months, m);
-    amt.style.setProperty('--fill', ((m - 1000) / 9000 * 100) + '%');
+  function lo() { return minMonthly(months); }
+  function fillOf(m) { return ((m - lo()) / (MAX_MONTHLY - lo()) * 100) + '%'; }
+  // the least a month may be depends on the plan's length
+  function applyBounds() {
+    amt.min = lo(); amt.max = MAX_MONTHLY;
+    amt.value = clamp(+amt.value, lo(), MAX_MONTHLY);
+    $('#t-min').textContent = 'Rs ' + rs(lo());
+  }
+  // the figures: with today's rate to hand the big figure is the gold weight and the total sits in the list; without it
+  // the big figure is the total
+  function renderNumbers() {
+    var m = +amt.value, p = plan(months, m), known = p.grams !== null;
+    amt.style.setProperty('--fill', fillOf(m));
     $('#amt-o').textContent = 'Rs ' + rs(m);
     $('#c-total').textContent = 'Rs ' + rs(p.total);
-    $('#c-gift').textContent = '+ Rs ' + rs(p.gift);
-    gOdo.set(rs(p.grand));
-    $('#coins-cap').textContent = months + ' monthly instalments of Rs ' + rs(m) + ', then a gift from Pushpa';
-    $('#c-live').textContent = months + ' months at Rs ' + rs(m) + ': you pay Rs ' + rs(p.total) + ', gift Rs ' + rs(p.gift) + ', gold you can buy Rs ' + rs(p.grand) + '.';
+    $('#c-total-row').hidden = !known;
+    $('#c-label').textContent = known ? 'Gold weight you could save' : 'You pay in total';
+    $('#c-pre').textContent = known ? '≈' : 'Rs';
+    $('#c-suf').hidden = !known;
+    gOdo.set(known ? g2(p.grams) : rs(p.total));
+    $('#coins-cap').textContent = months + ' monthly payments of Rs ' + rs(m) + ', then special gifts from Pushpa';
+    $('#c-fine').textContent = 'Each month’s payment is converted into gold weight at that month’s gold rate' +
+      (known ? ', so this is an illustration at today’s 22K rate of Rs ' + rs(Math.round(+gold.k22.gram)) + ' a gram (about ' + g2(p.grams / 8) + ' pawn), not a promise.' : '.');
+    $('#c-live').textContent = months + ' months at Rs ' + rs(m) + ' a month: you pay Rs ' + rs(p.total) + ' in total' +
+      (known ? ', about ' + g2(p.grams) + ' grams of gold at today’s rate' : '') + ', and special gifts at the end.';
+  }
+  function renderCalc(animate) {
+    renderNumbers();
     var h = '';
     for (var i = 0; i < months; i++) h += '<span class="coin" style="--i:' + i + '">' + (i + 1) + '</span>';
     h += '<span class="plus">+</span><span class="coin gift" style="--i:' + (months + 1) + '"><svg class="fl"><use href="#flower"/></svg></span>';
@@ -67,29 +94,39 @@
     else requestAnimationFrame(function () { cs.forEach(function (c) { c.classList.add('in'); }); });
   }
   var amtT;
-  amt.addEventListener('input', function () { clearTimeout(amtT); var m = +amt.value; $('#amt-o').textContent = 'Rs ' + rs(m); amt.style.setProperty('--fill', ((m - 1000) / 9000 * 100) + '%'); amtT = setTimeout(function () { renderCalc(true); }, 120); });
-  $('#amt-dn').addEventListener('click', function () { amt.value = clamp(+amt.value - 1000, 1000, 10000); renderCalc(true); });
-  $('#amt-up').addEventListener('click', function () { amt.value = clamp(+amt.value + 1000, 1000, 10000); renderCalc(true); });
-  $$('input[name="plan"]').forEach(function (r) { r.addEventListener('change', function () { months = +r.value; renderCalc(true); }); });
+  amt.addEventListener('input', function () { clearTimeout(amtT); var m = +amt.value; $('#amt-o').textContent = 'Rs ' + rs(m); amt.style.setProperty('--fill', fillOf(m)); amtT = setTimeout(function () { renderCalc(true); }, 120); });
+  $('#amt-dn').addEventListener('click', function () { amt.value = clamp(+amt.value - STEP, lo(), MAX_MONTHLY); renderCalc(true); });
+  $('#amt-up').addEventListener('click', function () { amt.value = clamp(+amt.value + STEP, lo(), MAX_MONTHLY); renderCalc(true); });
+  $$('input[name="plan"]').forEach(function (r) { r.addEventListener('change', function () { months = +r.value; applyBounds(); renderCalc(true); }); });
+  applyBounds();
   renderCalc(false);
 
-  // the leaflet's two tables, generated from the same rule
-  (function () {
+  // the plan table: what each month adds up to over the plan, and the gold weight at today's rate once it is known
+  function renderTables() {
     var html = '';
     [6, 12].forEach(function (mo) {
-      html += '<table><caption>' + mo + ' month plan</caption><thead><tr><th scope="col">Monthly</th><th scope="col">Total</th><th scope="col">Gift</th><th scope="col">You can buy</th></tr></thead><tbody>';
-      for (var m = 1000; m <= 10000; m += 1000) { var p = plan(mo, m); html += '<tr><td>' + rs(m) + '</td><td>' + rs(p.total) + '</td><td>' + rs(p.gift) + '</td><td>' + rs(p.grand) + '</td></tr>'; }
+      html += '<table><caption>' + mo + ' month plan</caption><thead><tr><th scope="col">Monthly</th><th scope="col">You pay</th>' + (gold ? '<th scope="col">Gold today</th>' : '') + '</tr></thead><tbody>';
+      for (var m = minMonthly(mo); m <= MAX_MONTHLY; m += STEP) { var p = plan(mo, m); html += '<tr><td>' + rs(m) + '</td><td>' + rs(p.total) + '</td>' + (gold ? '<td>' + g2(p.grams) + ' g</td>' : '') + '</tr>'; }
       html += '</tbody></table>';
     });
     $('#tables').innerHTML = html;
-  })();
+  }
+  renderTables();
+  PJ.onGold(function (g) { gold = g; renderNumbers(); renderTables(); });
 
   /* ---------- enrol: reserve a plan on WhatsApp; no NIC online ---------- */
-  var enrol = $('#enrol'), eAm = $('#e-am');
-  for (var m = 1000; m <= 10000; m += 1000) { var o = d.createElement('option'); o.value = m; o.textContent = 'Rs ' + rs(m); eAm.appendChild(o); }
+  var enrol = $('#enrol'), eAm = $('#e-am'), ePl = $('#e-pl');
+  // the amounts offered follow the plan's length, as in the calculator
+  function fillAmounts(mo, keep) {
+    eAm.innerHTML = '';
+    for (var m = minMonthly(mo); m <= MAX_MONTHLY; m += STEP) { var o = d.createElement('option'); o.value = m; o.textContent = 'Rs ' + rs(m); eAm.appendChild(o); }
+    if (keep >= minMonthly(mo)) eAm.value = String(keep);
+  }
+  fillAmounts(6, 5000);
+  ePl.addEventListener('change', function () { fillAmounts(+ePl.value, +eAm.value); });
   $$('[data-enrol]').forEach(function (b) {
     b.addEventListener('click', function () {
-      $('#e-pl').value = String(months); eAm.value = amt.value; $('#e-err').textContent = '';
+      ePl.value = String(months); fillAmounts(months, +amt.value); $('#e-err').textContent = '';
       if (enrol.showModal) enrol.showModal(); else enrol.setAttribute('open', '');
       $('#e-nm').focus();
     });
@@ -100,8 +137,8 @@
     e.preventDefault();
     var nm = $('#e-nm').value.trim(), mb = $('#e-mb').value.trim();
     if (!nm || mb.replace(/\D/g, '').length < 9) { $('#e-err').textContent = !nm ? 'Please add your name.' : 'Please add a mobile number we can reach you on.'; (!nm ? $('#e-nm') : $('#e-mb')).focus(); return; }
-    var mo = +$('#e-pl').value, mm = +eAm.value, p = plan(mo, mm);
-    openWA(wa('I’d like to join the Suba Mangala plan. Name: ' + nm + '. Mobile: ' + mb + '. Plan: ' + mo + ' months at Rs ' + rs(mm) + ' a month (gold value Rs ' + rs(p.grand) + '). Showroom: ' + $('#e-st').value + '.'));
+    var mo = +ePl.value, mm = +eAm.value, p = plan(mo, mm);
+    openWA(wa('I’d like to join the Suba Mangala plan. Name: ' + nm + '. Mobile: ' + mb + '. Plan: ' + mo + ' months at Rs ' + rs(mm) + ' a month (Rs ' + rs(p.total) + ' in total). Showroom: ' + $('#e-st').value + '.'));
     enrol.close();
   });
 

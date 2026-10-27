@@ -311,7 +311,7 @@
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
             '<ul class="pv-marks" role="list"><li>' + fl + 'Weighed in front of you</li><li>' + fl + 'Priced at the day’s rate</li><li>' + fl + 'Negombo’s jewellers since 1967</li></ul>' +
-            '<p class="pv-suba">' + fl + '<span>Save for it with <a href="../#suba">Suba Mangala</a>: pay monthly for 6 or 12 months, then choose your jewellery.</span></p>' +
+            '<p class="pv-suba">' + fl + '<span>Save for it with <a href="../#suba">Suba Mangala</a>: your monthly payments over 6 or 12 months are converted into gold weight, and you then choose your jewellery.</span></p>' +
             '<div class="pv-links">' +
               (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
               '<button class="alink" type="button" data-share>Share this piece <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +

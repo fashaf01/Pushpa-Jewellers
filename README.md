@@ -181,7 +181,7 @@ are all worked out from these, so change the logo size there and nothing else ne
    centred below: a label, a two-line headline, one button and a text link.
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
-4. **Suba Mangala.** The 6 and 12 month gold purchase plan, with a calculator and the full plan table.
+4. **Suba Mangala.** The 6 and 12 month gold purchase plan: its terms and conditions, a calculator and the plan table.
 5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
 6. **Services.** Pawning, money exchange and airline ticketing, each linking to its own page.
 7. **About.** 1967, the pride of Negombo, with a View more button to the About page.
@@ -215,11 +215,29 @@ desktops. Between 821px and 1279px wide the headline needs a little more height,
 photo's sides. Tablets use the phone photo with its height capped at 680px, which trims the bottom. The rules are the
 `desktop: one shape on every screen` block and the `phones:` lines in `styles.css`.
 
-## Suba Mangala figures
+## Suba Mangala
 
-On the 6 month plan the cash gift is half of one instalment. On the 12 month plan
-it is one full instalment. Instalments run Rs 1,000 to Rs 10,000 in steps of 1,000.
-The calculator and both plan tables come from the one `plan()` function in `main.js`.
+The plan follows the printed plan card (its terms and conditions, a photo of which the client supplied):
+
+- each monthly payment is converted into gold weight at that month's gold rate;
+- the minimum scheme amount is Rs 10,000;
+- after 6 or 12 months the customer can purchase any jewellery with the gold, and wastage is added to the weight;
+- buying jewellery before the 6 or 12 months are over makes the customer ineligible for the offer;
+- special gifts are issued at the end of the plan; no cash refund; management has complete right over jewellery
+  pricing and distribution; the customer agrees to the terms by signing.
+
+The card's terms are the seven items under "Terms and conditions" in the Suba Mangala section of `index.html`, and
+section 4 of `terms/index.html` says the same. **Two choices were made that the client should confirm:**
+
+1. **"The minimum scheme amount is Rs 10,000"** is read as the least the whole plan may add up to. So the calculator and
+   the enrolment form start a 6 month plan at Rs 2,000 a month and a 12 month plan at Rs 1,000, and go up to Rs 10,000 a
+   month (the old range's top; the card gives no maximum). If it means the least *monthly* payment instead, change
+   `MIN_TOTAL`, `STEP` and `MAX_MONTHLY` at the top of the Suba Mangala block in `assets/js/main.js`.
+2. **The gold weight shown is an illustration.** The calculator divides what you would pay by today's 22K rate (the
+   `/api/gold` one) to show about how much gold it would be, and says plainly that each month's real rate sets the real
+   weight. It assumes the card's "gold rate" is the 22K rate. Without a rate (offline, or the rate service down) it shows
+   the total to pay instead. The old cash gift and "gold you can buy in rupees" are gone: the card says special gifts,
+   with no figure, so none is shown.
 
 ## WhatsApp
 
