@@ -79,8 +79,8 @@ before the site goes live.** Delete the field to remove a label.
 **Watches.** Six Casio MTP men's quartz watches are in `pieces.js` with `cats: ['watches']`, and the **Watches**
 filter appears because there are pieces in it. They come from the "W. A. De Silva Selected 6 Casio" set the client
 supplied (details checked 30 October 2026): the prices are the Sri Lankan rupee prices that W. A. De Silva & Co. list
-for them, one 600 px photograph each, and Casio's specifications. They sit after the first eight pieces so the
-collection still opens on jewellery; move them up the list to lead with them. A watch's page differs from a piece of
+for them, one 600 px photograph each, and Casio's specifications. They always come last in the collection, after all
+the jewellery (`shop.js` puts them there, wherever they are in the list). A watch's page differs from a piece of
 jewellery's: it has no gold weight, karat, pawn weight or gold value and no Suba Mangala note; it has a specifications
 list (the first six rows show, the rest fold under "Full specifications") and a `credit` line under the photograph.
 Watches 03 and 04 (MTP-1253SG-9ADF, MTP-1192A-7ADF) came with design details only, so they show four rows and no
@@ -198,8 +198,9 @@ are all worked out from these, so change the logo size there and nothing else ne
 
 ## Sections
 
-1. **Hero.** Pushpa today: the bride beside the brass lamp. On phones the photo comes first, with the copy
-   centred below: a label, a two-line headline, one button and a text link.
+1. **Hero.** Two photographs of a bride in Pushpa gold, one beside the brass lamp and one in the wood-panelled room,
+   that dissolve into each other (see "Hero photos" below). On phones the photo comes first, with the copy centred
+   below: a label, a two-line headline, one button and a text link.
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
 4. **Suba Mangala.** The 6 and 12 month gold purchase plan: its terms and conditions, a calculator and the plan table.
@@ -215,20 +216,23 @@ marks, weighing in front of the customer, the services and their partners). Add 
 Pushpa, milestones, old photographs) to `about/index.html` when the family can share it, and check the steps on
 each service page against how the counter actually works, including what a customer should bring.
 
-### Hero photo: one size for desktop, one for phones
+### Hero photos: two, each in one size for desktop and one for phones
 
-The hero photo comes in two sizes. Every desktop screen shows the desktop photo in the same shape, and every phone
-the phone photo.
+The hero shows two photographs that dissolve into each other: each arrives over two seconds, stays for about five, and
+settles slowly from a slight zoom while it shows. There is no button and no label; it starts as the opening logo
+lifts, and it is plain CSS (`heroSlide` in `styles.css`; the round is 14s and the second photo starts 7s after the
+first). Visitors who ask for reduced motion, and browsers without scripts, see the first photo only. Each photograph
+comes in two sizes: every desktop screen shows the desktop photo in the same shape, and every phone the phone photo.
 
 | | Desktop (821px and wider) | Phone (820px and narrower) |
 |---|---|---|
 | Shape | 2:1 | 4:5 |
 | Size | **1774 x 887** | **1120 x 1400** |
-| File | `hero-now.webp` | `hero-now-mobile.webp` |
+| Files | `hero-1.webp`, `hero-2.webp` | `hero-1-mobile.webp`, `hero-2-mobile.webp` |
 | Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, under the copy. Keep the face and jewellery above that. |
 
-To change the photo, replace the file in `assets/img/` with one of the same name and size (any size in the same shape
-works).
+To change a photo, replace its file in `assets/img/` with one of the same name and size (any size in the same shape
+works). To use one photo only, delete the second `<picture class="slide s2">` in `index.html`.
 
 On a screen tall enough the whole 2:1 photo shows. On a short screen the hero is cut to the screen's height, but no
 lower than 560px, trimming the photo's lower edge, so the whole hero stays on the first screen of most laptops and

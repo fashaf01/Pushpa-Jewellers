@@ -1,8 +1,8 @@
 /* The shop's own pieces, in the order they show (newest first). Pushpa's 32 Instagram pieces are in
    pieces-instagram.js and are shown alongside these, one in every row of four.
 
-   The Casio watches sit after the first eight pieces, so the collection still opens on jewellery (move them up to lead
-   with them). To add a piece, put a line at the top of this list and its photo in assets/img/shop/:
+   The watches (cats: ['watches']) always come last in the collection, after all the jewellery, wherever they are in
+   this list. To add a piece, put a line at the top of this list and its photo in assets/img/shop/:
      - the photo is 1080 x 1350, named after the slug: assets/img/shop/rose-ring.webp. A photo of any other size
        can be framed to fit with: python3 tools/frame-photos.py <photo> rose-ring
      - a 540 x 675 copy goes in assets/img/shop/small/ for the grid (frame-photos.py makes it, or run

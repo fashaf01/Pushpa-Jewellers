@@ -17,7 +17,10 @@
     for (k = 0, pos = 0; pos < total; pos++) out.push(slots[pos] || rest[k++]);
     return out;
   }
-  var P = mix(window.PIECES_INSTAGRAM || [], window.PIECES || []);
+  // the watches come after all the jewellery, so the whole collection ends with them (pieces.js order, within the watches)
+  function isWatch(p) { return p.cats.indexOf('watches') > -1; }
+  var own = window.PIECES || [];
+  var P = mix(window.PIECES_INSTAGRAM || [], own.filter(function (p) { return !isWatch(p); })).concat(own.filter(isWatch));
   if (!PJ || !P.length || !d.getElementById('grid')) return;
   var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa, reduce = PJ.reduce;
   var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;

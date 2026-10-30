@@ -205,11 +205,23 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .menu-foot .btn{min-height:48px;padding:0 12px;gap:8px;font-size:12.5px}
 .menu-foot svg{width:16px;height:16px}
 
-/* ---------- hero: Pushpa today ---------- */
+/* ---------- hero: two photographs, each dissolving into the other ---------- */
 .hero{position:relative;overflow:hidden;background:var(--plum-3);isolation:isolate}
 .hero-ph{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 0%;opacity:0;transform:scale(1.08);transition:opacity 1.6s var(--ease),transform 2.8s var(--ease)}
-.loaded .hero-ph img,html:not(.js) .hero-ph img{opacity:1;transform:none}
+.hero-ph .slide{position:absolute;inset:0;display:block;opacity:0}
+.hero-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 0%}
+/* a 14s round: each photograph arrives over 2s, stays, and is gone by 9s while the other arrives (the second starts 7s
+   after the first); it settles slowly from a slight zoom as it shows. Starts as the intro lifts. */
+.loaded .hero-ph .slide{animation:heroSlide 14s infinite both}
+.loaded .hero-ph .s2{animation-delay:7s}
+@keyframes heroSlide{
+  0%{opacity:0;transform:scale(1.06)}
+  14.3%,50%{opacity:1}
+  64.3%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(1)}
+}
+html:not(.js) .hero-ph .s1{opacity:1}
+html:not(.js) .hero-ph .s2{display:none}
 .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(44,7,27,.9) 0%,rgba(44,7,27,.66) 32%,rgba(44,7,27,0) 60%),linear-gradient(0deg,rgba(44,7,27,.6) 0%,rgba(44,7,27,0) 22%)}
 .hero-in{position:relative;z-index:3;min-height:clamp(560px,calc(100svh - var(--mast-h) - var(--rate-h)),max(860px,42vw));display:grid;align-content:center;padding-block:clamp(48px,6vw,96px)}
 .hcopy{display:grid;gap:clamp(14px,1.6vw,20px);justify-items:start;align-content:center;max-width:min(580px,48%)}
@@ -964,7 +976,8 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
   .js .divider.rv{clip-path:none}
   .js .door.rv .ph img,.js .svc.rv .medal{opacity:1;transform:none}
   .js .hero h1 .ln>span{transform:none}
-  .hero-ph img{opacity:1;transform:none}
+  .hero-ph .s1{opacity:1;transform:none}
+  .hero-ph .s2{display:none}
   .coin{transform:none;opacity:1}
   .js .mk .stamp{opacity:1;transform:none}
   .js .draw .lotus path{stroke-dashoffset:0}
