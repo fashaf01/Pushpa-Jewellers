@@ -330,7 +330,7 @@
               (p.casio ? '<a class="alink" href="' + p.casio + '" target="_blank" rel="noopener">See it on Casio’s website <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
               '<button class="alink" type="button" data-share>Share this piece <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
             '</div>' +
-            (p.watch ? '<p class="pv-credit">Photographs and specifications: Casio.</p>' : '') +
+            (p.credit ? '<p class="pv-credit">' + esc(p.credit) + '</p>' : '') +
           '</div>' +
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +
