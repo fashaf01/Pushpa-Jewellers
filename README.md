@@ -159,9 +159,11 @@ If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold
 
 ## The intro
 
-The home page opens on the logo like a film going into a flashback: it drifts in out of a soft, bright haze and
-settles sharp, the motto follows, and then both dissolve back into the haze as a gentle light swells and the page
-appears, after about 3 seconds. It is all CSS (the `intro` block in `styles.css`).
+The home page opens on the plum with the logo coming into focus under a soft warm light. A single glint of gold
+light then crosses the logo (a band of light cut to the logo's shape with a CSS mask of `lockup.webp`) and the motto
+rises beneath it. At 3 seconds the logo lifts away and the plum is drawn up off the page with a curved edge, like a
+curtain going up, as the hero arrives; the whole thing is over in about 4 seconds. It is all CSS (the `intro` block in
+`styles.css`).
 
 It plays **once a visit**: the first time the home page opens in a tab. Coming back to the home page, from another
 page, the back button or a reload, goes straight to the page. A short script in `index.html`'s `<head>` remembers
