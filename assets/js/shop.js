@@ -22,7 +22,7 @@
   var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa, reduce = PJ.reduce;
   var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
   var IMG = '../assets/img/shop/', IG = 'https://www.instagram.com/pushpajewellers_official/p/';
-  var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['earrings', 'Earrings'], ['rings', 'Rings'], ['bracelets', 'Bracelets'], ['bangles', 'Bangles'], ['pendants', 'Pendants'], ['bridal', 'Bridal']];
+  var CATS = [['all', 'All'], ['necklaces', 'Necklaces'], ['earrings', 'Earrings'], ['rings', 'Rings'], ['bracelets', 'Bracelets'], ['bangles', 'Bangles'], ['pendants', 'Pendants'], ['bridal', 'Bridal'], ['watches', 'Watches']];
   var CAT = {}; CATS.forEach(function (c) { CAT[c[0]] = c[1]; });
   var SORTS = { 'new': 1, light: 1, heavy: 1 };
 
@@ -33,6 +33,7 @@
   var BY = {};
   P.forEach(function (p, i) {
     p.i = i;
+    p.watch = p.cats.indexOf('watches') > -1; // watches have no gold weight, karat or gold value: they get their own price and details
     p.grams = (p.weight.match(/\d+(?:\.\d+)?/g) || []).map(Number);
     p.isSet = p.weight.indexOf('+') > -1;
     p.sortG = !p.grams.length ? null : p.isSet ? p.grams.reduce(function (a, b) { return a + b; }, 0) : p.grams[0];
@@ -63,8 +64,8 @@
     var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
       '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async">' + (p.bestseller ? '<em class="bs">Best seller</em>' : '') + '</div>' +
-      '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.kind) + '</span>' + wt +
-      (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : '') + '</a></li>';
+      '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.watch && p.brand ? p.brand + ' · ' + p.line : p.kind) + '</span>' + wt +
+      (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : p.watch ? '<em class="pr ask">Price on request</em>' : '') + '</a></li>';
   }
   function list(cat, sort) {
     var out = P.filter(function (p) { return cat === 'all' || p.cats.indexOf(cat) > -1; });
@@ -268,7 +269,10 @@
   function perGram(k) { return k === 22 ? +gold.k22.gram : +gold.k24.gram * k / 24; }
   function priceHTML(p) {
     if (p.price) return '<span class="pv-pk">Price</span><b class="pv-pv tab">Rs ' + rs(p.price) + '</b>' +
-      '<p class="pv-pn">Gold moves with the day’s rate, so we confirm the price when you ask. Message us on WhatsApp or call the hotline.</p>';
+      '<p class="pv-pn">' + (p.watch ? 'Message us on WhatsApp or call the hotline to confirm the price and whether it is in stock.'
+        : 'Gold moves with the day’s rate, so we confirm the price when you ask. Message us on WhatsApp or call the hotline.') + '</p>';
+    if (p.watch) return '<span class="pv-pk">Price</span><b class="pv-pv">On request</b>' +
+      '<p class="pv-pn">Message us on WhatsApp or call the hotline, and we will reply with the price and whether this watch is in stock.</p>';
     if (p.grams.length && p.karat && gold) {
       var g = perGram(p.karat), weights = p.isSet ? [p.grams.reduce(function (a, b) { return a + b; }, 0)] : p.grams;
       return '<span class="pv-pk">Gold value today</span><b class="pv-pv tab">' + weights.map(function (w) { return 'Rs ' + rs(Math.round(w * g / 100) * 100); }).join(' – ') + '</b>' +
@@ -281,7 +285,14 @@
   function showPrice() { var el = $('#pv-price'); if (el && current) el.innerHTML = priceHTML(current); }
   PJ.onGold(function (g) { gold = g; showPrice(); });
   var PURE = { 22: '91.6% pure, the 916 mark', 18: '75% pure, the 750 mark' };
+  function row(r) { return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }
+  function watchSpecHTML(p) {
+    var s = p.specs || [], cats = '<div><dt>Find it in</dt><dd>' + p.cats.map(function (c) { return '<a href="?cat=' + c + '" data-cat="' + c + '">' + CAT[c] + '</a>'; }).join(', ') + '</dd></div>';
+    return '<dl class="pv-spec">' + s.slice(0, 6).map(row).join('') + cats + '</dl>' +
+      (s.length > 6 ? '<details class="pv-full"><summary>Full specifications</summary><dl class="pv-spec">' + s.slice(6).map(row).join('') + '</dl></details>' : '');
+  }
   function specHTML(p) {
+    if (p.watch) return watchSpecHTML(p);
     var rows = [];
     if (p.karat) rows.push(['Gold', p.karat + 'KT' + (PURE[p.karat] ? ', ' + PURE[p.karat] : '')]);
     rows.push(['Weight', p.weight ? unit(weightText(p)) : 'Confirmed when you ask']);
@@ -310,12 +321,16 @@
               '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Ask about this piece</a>' +
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
-            '<ul class="pv-marks" role="list"><li>' + fl + 'Weighed in front of you</li><li>' + fl + 'Priced at the day’s rate</li><li>' + fl + 'Negombo’s jewellers since 1967</li></ul>' +
-            '<p class="pv-suba">' + fl + '<span>Save for it with <a href="../#suba">Suba Mangala</a>: your monthly payments over 6 or 12 months are converted into gold weight, and you then choose your jewellery.</span></p>' +
+            (p.watch
+              ? '<ul class="pv-marks" role="list"><li>' + fl + 'Negombo’s jewellers since 1967</li><li>' + fl + 'Price and stock confirmed when you ask</li></ul>'
+              : '<ul class="pv-marks" role="list"><li>' + fl + 'Weighed in front of you</li><li>' + fl + 'Priced at the day’s rate</li><li>' + fl + 'Negombo’s jewellers since 1967</li></ul>' +
+                '<p class="pv-suba">' + fl + '<span>Save for it with <a href="../#suba">Suba Mangala</a>: your monthly payments over 6 or 12 months are converted into gold weight, and you then choose your jewellery.</span></p>') +
             '<div class="pv-links">' +
               (p.ig ? '<a class="alink" href="' + IG + p.ig + '/" target="_blank" rel="noopener">See it on Instagram <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
+              (p.casio ? '<a class="alink" href="' + p.casio + '" target="_blank" rel="noopener">See it on Casio’s website <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>' : '') +
               '<button class="alink" type="button" data-share>Share this piece <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
             '</div>' +
+            (p.watch ? '<p class="pv-credit">Photographs and specifications: Casio.</p>' : '') +
           '</div>' +
         '</div>' +
         (more.length ? '<section class="pv-more" aria-labelledby="more-h"><h2 class="h2" id="more-h">More ' + CAT[cat].toLowerCase() + '</h2><ul class="grid">' + more.map(card).join('') + '</ul></section>' : '') +

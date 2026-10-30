@@ -599,6 +599,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pc i small,.pv-spec small{font-size:.85em;font-weight:500;color:var(--muted)}
 .pc i.no{font-weight:500;color:var(--soft)}
 .pc .pr{font-style:normal;font-family:var(--display);font-size-adjust:none;font-size:14.5px;font-weight:600;letter-spacing:.02em;color:var(--wine);font-variant-numeric:lining-nums}
+.pc .pr.ask{font-family:var(--text);font-size-adjust:var(--text-adjust);font-size:14px;font-weight:500;letter-spacing:0;color:var(--muted)}
 /* a "Best seller" ribbon: a gilded tab off the photo's left edge with a swallowtail end and plum lettering, and a light that
    sweeps across it every few seconds. The gold is the ribbon's own layer (::before) so the swallowtail can be cut out of
    it while the shadow still follows the cut; the star is its own sparkle. Reduced motion stops the sweep, leaving plain gold. */
@@ -655,6 +656,13 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .pv-spec dt{font-family:var(--display);font-size-adjust:none;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .pv-spec dd{font-size:16px;color:var(--ink);font-variant-numeric:lining-nums}
 .pv-spec .u{color:var(--muted)}
+.pv-full{width:100%;border-bottom:1px solid var(--rule)}
+.pv-full summary{display:flex;align-items:center;gap:10px;min-height:46px;cursor:pointer;list-style:none;font-family:var(--display);font-size-adjust:none;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+.pv-full summary::-webkit-details-marker{display:none}
+.pv-full summary::before{content:"";width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .3s}
+.pv-full[open] summary::before{transform:rotate(45deg)}
+.pv-full .pv-spec{border-top:1px solid var(--rule)}
+.pv-credit{font-size:13px;color:var(--muted)}
 .pv-spec a{color:var(--wine);text-underline-offset:3px}
 .pv-marks{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px;color:var(--muted)}
 .pv-marks li{display:inline-flex;align-items:center;gap:8px}
@@ -691,6 +699,7 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
   .pc b{font-size:12.5px}
   .pc .m,.pc i{font-size:11.5px;line-height:1.5}
   .pc .pr{font-size:13px}
+  .pc .pr.ask{font-size:12.5px}
   .pc .bs{top:11px;padding:6px 18px 5px 8px;font-size:9px;letter-spacing:.11em;gap:5px}
   .pc .bs::before{clip-path:polygon(0 0,100% 0,calc(100% - 8px) 50%,100% 100%,0 100%)}
   .pc .bs::after{width:8px;height:8px}

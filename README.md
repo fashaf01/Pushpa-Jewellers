@@ -76,6 +76,28 @@ leaf bridal necklace, the five-stone ring, the cross pendant, the solid gold ini
 **they were picked to show the design, not from sales figures, so set the label on the pieces that really sell best
 before the site goes live.** Delete the field to remove a label.
 
+**Watches.** Ten Casio G-SHOCK watches (three MR-G, seven MT-G) are in `pieces.js` with `cats: ['watches']`, and the
+**Watches** filter appears because there are pieces in it. The specifications, descriptions and photographs come from
+Casio India's official product pages (each watch links to its page), compiled by the client on 30 October 2026. They
+sit after the first eight pieces so the collection still opens on jewellery; move them up the list to lead with them.
+A watch's page differs from a piece of jewellery's: it has no gold weight, karat, pawn weight or gold value, no Suba
+Mangala note, and a specifications list (the first six rows show, the rest fold under "Full specifications"). **Things
+to confirm with the client:**
+
+- **Prices.** The zip's prices are Casio's *India* list prices in Indian rupees, not Sri Lankan rupees, so they are
+  not shown (a watch reads "Price on request"). They are kept as `mrpInr` for reference. Give a watch its Sri Lankan
+  price with `price: 185000` and it shows like any other.
+- **Photographs.** They are Casio's own product photographs and the page credits Casio. Confirm that Pushpa is an
+  authorised Casio dealer, or has Casio's permission to use them, before relying on them.
+- **Stock and warranty.** Stock was not checked, so each page says price and stock are confirmed when asked. The
+  warranty Casio India lists on some watches is not shown, since the Sri Lankan warranty may differ.
+- **Watch 03 (MRG-B2000R-1A)** came with small photographs (about 500 px), so its pictures are softer than the others.
+  Replace them if a larger set can be had.
+
+The photographs were framed like the rest. Casio's white-background shots go through `tools/frame-photos.py`; its
+close-ups and styled shots fill the whole frame, so they were cut to a plain centred 4:5 window instead (the tool
+smears streaks where a photo leaves no background to extend).
+
 **The price on a piece's card and page.** A piece with `price` (rupees) shows that price. **Every piece now has a
 sample price, put in to show the design: replace them with the real prices before the site goes live** (the sample
 figures are the weight at about Rs 31,250 a gram plus 16% where the weight is known, and a typical figure for the
