@@ -19,6 +19,65 @@ index.html              markup + the inline SVG sprite that draws every illustra
 assets/css/styles.css   design tokens and all layout
 assets/js/main.js       drawer, carousel, scroll reveal, form handling
 assets/img/favicon.svg  tab icon
+admin/                  the shop admin panel (below)
+docs/API.md             the REST API the admin needs from the Hostinger backend
+```
+
+## Shop admin (`admin/`)
+
+A back-office for the staff, in the same emerald-and-gold look as the site.
+It works on a shop PC and on a phone.
+
+| Screen | What it does |
+|---|---|
+| **Dashboard** | Today's sales, open orders, low stock, today's gold rate. Nudges when the rate hasn't been entered today. 14-day sales chart, orders needing attention, best sellers. |
+| **Orders** | Every order from the counter, WhatsApp, phone or social. Tracking from *New → Confirmed → In the workshop → Ready → Out for delivery → Completed*. Advance and balance payments (including old-gold exchange). A one-tap **WhatsApp update** to the customer, worded for the order's stage. Counter sales can be marked completed straight away. |
+| **Products** | Upload photos (resized in the browser, camera on a phone), reorder and pick the main one. Name, SKU, category, metal, karat, weight, stones. Price on **today's gold rate** (weight × rate + making charge + stones, with the working shown) or a fixed price, with *Price on enquiry* if wanted. Publish, draft or archive. |
+| **Stock** | Per-showroom counts for Negombo and Katunayake. Record deliveries, removals and stock counts, and move pieces between showrooms. Sales come off automatically and go back if an order is cancelled. Full history, and stock value at today's rate. |
+| **Gold rate** | Enter 24/22/18kt once a morning, per pawn or per gram. Shows which pieces reprice and by how much before you save. 30-day history. |
+| **Best sellers** | Ranked by pieces sold over 30 days, 90 days, 12 months or all time. Choose and order the 8 pieces in the homepage Favourites carousel, or fill them from the best sellers in one click. |
+| **Settings** | Showroom names, phones and addresses; price rounding, default making charge, low-stock alert. |
+
+### Try it
+
+```bash
+python3 -m http.server 8000
+```
+
+Open <http://localhost:8000/admin/> and sign in with anything. Until it's
+connected, the panel runs in **demo mode** on sample data kept in your browser.
+The eight carousel pieces carry the same photos as the website. Settings →
+*Reset demo data* starts again.
+
+### Connecting it to Hostinger
+
+1. Build the API in [`docs/API.md`](docs/API.md) (PHP 8 + MySQL on the Hostinger plan).
+   It lists every endpoint, the exact JSON shapes, the price formula, the stock
+   rules, and an `.htaccess` that keeps the `Authorization` header alive on Apache.
+2. Set the address in `admin/assets/js/config.js`:
+
+   ```js
+   API_BASE_URL: 'https://pushpa-jewellers.com/api'
+   ```
+
+3. Upload `admin/` next to the website. Hosting the panel and the API on the same domain
+   avoids CORS setup entirely.
+
+Every screen goes through `PJ.api` in `admin/assets/js/api.js`, which has a live
+(HTTP) adapter and a demo adapter with the same shape. The demo adapter is the
+reference implementation of the business rules, so check against it whenever
+the backend's behaviour is in doubt.
+
+```
+admin/index.html               shell + icon sprite
+admin/assets/admin.css         all styling
+admin/assets/js/config.js      API_BASE_URL — the one line to change
+admin/assets/js/api.js         live + demo adapters, session
+admin/assets/js/pricing.js     vocabulary and the price formula
+admin/assets/js/seed.js        demo data
+admin/assets/js/charts.js      sales and gold-rate charts
+admin/assets/js/app.js         sidebar, routing
+admin/assets/js/views/*.js     one file per screen
 ```
 
 ## Business details used on the page
