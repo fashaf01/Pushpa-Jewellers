@@ -1,0 +1,6 @@
+# Files in the repo that are not part of the website
+*.zip
+tools/
+docs/
+build.js
+README.md
