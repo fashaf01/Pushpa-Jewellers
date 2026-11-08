@@ -257,6 +257,19 @@
      outright (503, code no_database), and only then the panel opens on
      sample data. Any other failure keeps it live, so a hiccup can never
      send real orders into a browser's sample store. */
+  /* Sample data on the live address still gets today's real market rate */
+  async function fillMarketRate() {
+    try {
+      const today = PJ.isoDay();
+      const have = await PJ.api.rates.list({ limit: 1 });
+      if (have[0] && have[0].date === today) return;
+      const res = await fetch('/api/public/market-rate', { cache: 'no-store' });
+      if (!res.ok) return;
+      const m = await res.json();
+      await PJ.api.rates.save({ date: today, per_gram: m.per_gram, by: 'Automatic (market rate)' });
+    } catch (e) { /* no market rate: the panel asks for one as usual */ }
+  }
+
   let apiChecked = false;
   async function checkApi() {
     if (apiChecked || PJ.api.mode !== 'live') return;
@@ -268,6 +281,7 @@
         PJ.api = PJ.makeDemoApi();
         PJ.sampleOnly = true;
         PJ.session.clear();
+        await fillMarketRate();
       }
     }
   }

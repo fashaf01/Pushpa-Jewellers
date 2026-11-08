@@ -40,7 +40,10 @@
             <header class="card__head">
               <div>
                 <h2 class="card__title" id="rateTitle">${hasToday ? 'Today’s rate' : 'Enter today’s rate'} · ${fmt.date(new Date())}</h2>
-                <p class="card__sub">${hasToday ? `Saved ${fmt.when(latest.updated_at)}${latest.updated_by ? ' by ' + latest.updated_by : ''}. Save again to correct it.` : latest ? `The last rate saved was for ${fmt.day(latest.date)}. The boxes start from it.` : 'No rate has been saved yet.'}</p>
+                <p class="card__sub">${hasToday && PJ.pricing.isAutoRate(latest)
+                  ? `Filled in automatically ${fmt.when(latest.updated_at)}: the international gold price plus the ${(PJ.ctx.settings && PJ.ctx.settings.market_premium_percent) || 5.12}% Sri Lankan market premium. If your counter rate differs, type it and save.`
+                  : hasToday ? `Saved ${fmt.when(latest.updated_at)}${latest.updated_by ? ' by ' + latest.updated_by : ''}. Save again to correct it.`
+                  : latest ? `The last rate saved was for ${fmt.day(latest.date)}. The boxes start from it.` : 'No rate has been saved yet.'}</p>
               </div>
             </header>
             <div class="card__body">

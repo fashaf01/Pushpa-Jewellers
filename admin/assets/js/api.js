@@ -462,7 +462,7 @@
               date: d.date || PJ.isoDay(),
               per_gram: { 24: Math.round(g[24] * 1000) / 1000, 22: Math.round(g[22] * 1000) / 1000, 18: Math.round(g[18] * 1000) / 1000 },
               updated_at: nowIso(),
-              updated_by: who()
+              updated_by: d.by || who()
             };
             db.rates = db.rates.filter((r) => r.date !== entry.date);
             db.rates.push(entry);
@@ -606,7 +606,7 @@
           run(() => {
             const s = db.settings;
             if (d.shop_name !== undefined) s.shop_name = d.shop_name || s.shop_name;
-            ['price_rounding', 'default_making_percent', 'low_stock_default', 'featured_limit'].forEach((k) => {
+            ['price_rounding', 'default_making_percent', 'low_stock_default', 'featured_limit', 'market_premium_percent', 'k22_percent_of_24k', 'k18_percent_of_24k'].forEach((k) => {
               if (d[k] != null && !isNaN(d[k])) s[k] = Number(d[k]);
             });
             if (Array.isArray(d.showrooms)) {

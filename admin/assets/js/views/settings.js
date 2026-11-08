@@ -48,6 +48,15 @@
                   <label class="field"><span class="field__label">Default low-stock alert</span>
                     <input class="input" name="low_stock_default" type="number" min="0" step="1" value="${s.low_stock_default}"></label>
                 </div>
+                <div class="row row--3">
+                  <label class="field"><span class="field__label">Market premium</span>
+                    <span class="input-group"><input class="input" name="market_premium_percent" type="number" min="0" max="30" step="0.01" value="${s.market_premium_percent == null ? 5.12 : s.market_premium_percent}"><span class="input-group__addon">%</span></span></label>
+                  <label class="field"><span class="field__label">22K as a share of 24K</span>
+                    <span class="input-group"><input class="input" name="k22_percent_of_24k" type="number" min="80" max="100" step="0.01" value="${s.k22_percent_of_24k || 92}"><span class="input-group__addon">%</span></span></label>
+                  <label class="field"><span class="field__label">18K as a share of 24K</span>
+                    <span class="input-group"><input class="input" name="k18_percent_of_24k" type="number" min="60" max="90" step="0.01" value="${s.k18_percent_of_24k || 75}"><span class="input-group__addon">%</span></span></label>
+                </div>
+                <p class="field__hint">Every morning the gold rate fills in by itself: the international gold price, converted to rupees, plus this premium for the Sri Lankan market. 5.12% matches the market on 8 November 2026 (24K Rs 366,000, 22K Rs 336,700 a pawn). Typing a counter rate on the Gold rate page always wins for that day.</p>
                 <label class="field"><span class="field__label">Homepage favourites to show</span>
                   <input class="input input--narrow" name="featured_limit" type="number" min="1" max="24" step="1" value="${s.featured_limit}"></label>
                 <p class="field__hint">The website’s Favourites carousel is laid out for 8.</p>
@@ -105,6 +114,9 @@
           default_making_percent: d.default_making_percent,
           low_stock_default: d.low_stock_default,
           featured_limit: d.featured_limit,
+          market_premium_percent: d.market_premium_percent,
+          k22_percent_of_24k: d.k22_percent_of_24k,
+          k18_percent_of_24k: d.k18_percent_of_24k,
           showrooms: s.showrooms.map((r) => ({
             id: r.id,
             name: d[`room_${r.id}_name`],

@@ -88,7 +88,10 @@
       price_rounding: 100,
       default_making_percent: 12,
       low_stock_default: 1,
-      featured_limit: 8
+      featured_limit: 8,
+      market_premium_percent: 5.12,
+      k22_percent_of_24k: 92,
+      k18_percent_of_24k: 75
     };
 
     /* No gold rate is seeded. A made-up rate that looks real is worse than

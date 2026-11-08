@@ -81,7 +81,7 @@
           <a class="kpi ${rateToday ? '' : 'kpi--warn'}" href="#/pricing">
             <span class="kpi__label">22kt gold, per pawn</span>
             <span class="kpi__value">${fmt.money(pawn22)}</span>
-            <span class="kpi__sub">${rateToday ? 'Updated today' : html`${ui.icon('alert', 'icon--inline')} Not updated today`}</span>
+            <span class="kpi__sub">${rateToday ? (PJ.pricing.isAutoRate(rate) ? 'Today’s market rate, automatic' : 'Updated today') : html`${ui.icon('alert', 'icon--inline')} Not updated today`}</span>
           </a>
         </section>
 

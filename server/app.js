@@ -39,8 +39,16 @@ const DEFAULT_SETTINGS = {
   price_rounding: 100,
   default_making_percent: 12,
   low_stock_default: 1,
-  featured_limit: 8
+  featured_limit: 8,
+  /* Sri Lankan market rate = international price × (1 + premium). Calibrated
+     8 Nov 2026 against the market's 24K Rs 366,000 / 22K Rs 336,700 a pawn. */
+  market_premium_percent: 5.12,
+  k22_percent_of_24k: 92,
+  k18_percent_of_24k: 75
 };
+
+const GRAMS_PER_OUNCE = 31.1034768;
+const round100 = (n) => Math.round(n / 100) * 100;
 
 const PRODUCT_COLS = `id, sku, name, category, badge, description, metal, karat,
   weight_g::float8 as weight_g, stones, pricing_mode, making_type,
@@ -130,7 +138,13 @@ function priceOf(p, rate, rounding) {
   return Math.round((metal + making + (Number(p.stone_value) || 0)) / step) * step;
 }
 
-module.exports = function createApp({ db, blob, ownerEmail }) {
+async function defaultFetchJson(url) {
+  const res = await fetch(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
+  if (!res.ok) throw new Error(`${url} answered ${res.status}`);
+  return res.json();
+}
+
+module.exports = function createApp({ db, blob, ownerEmail, fetchJson = defaultFetchJson }) {
   /* ------------------------------------------------------------------
      Schema — created on first use after a deploy
      ------------------------------------------------------------------ */
@@ -185,6 +199,70 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
              where id = $1`, [productId, room, delta]);
     await q(`insert into stock_movements (product_id, showroom, delta, reason, note, order_number, by_name)
              values ($1, $2, $3, $4, $5, $6, $7)`, [productId, room, delta, reason, str(note), orderNumber || '', by]);
+  }
+
+  /* ------------------------------------------------------------------
+     Market gold rate — worked out automatically, every day
+     International gold (gold-api.com, USD an ounce) × USD→LKR (open.er-api.com)
+     × the Sri Lankan market premium; 22K and 18K as a share of 24K; pawns
+     rounded to Rs 100 as the shops quote them. Cached for 30 minutes.
+     ------------------------------------------------------------------ */
+  let marketCache = null;
+  let marketFailedAt = 0;
+  async function fetchMarket() {
+    if (marketCache && Date.now() - marketCache.at < 30 * 60000) return marketCache;
+    if (Date.now() - marketFailedAt < 10 * 60000 && !marketCache) throw new HttpError(503, 'The market gold price could not be fetched just now.');
+    try {
+      const [gold, fx] = await Promise.all([
+        fetchJson('https://api.gold-api.com/price/XAU'),
+        fetchJson('https://open.er-api.com/v6/latest/USD')
+      ]);
+      const usdOz = Number(gold && gold.price);
+      const usdLkr = Number(fx && fx.rates && fx.rates.LKR);
+      if (!(usdOz > 0) || !(usdLkr > 0)) throw new Error('gold or exchange rate missing');
+      marketCache = { at: Date.now(), usdOz, usdLkr, updated: typeof gold.updatedAt === 'string' ? gold.updatedAt : nowIso() };
+      return marketCache;
+    } catch (e) {
+      marketFailedAt = Date.now();
+      if (marketCache) return marketCache; /* keep the last good figures */
+      console.error('market gold price failed:', e.message);
+      throw new HttpError(503, 'The market gold price could not be fetched just now.');
+    }
+  }
+
+  async function marketRate(s) {
+    const m = await fetchMarket();
+    const premium = num(s.market_premium_percent) != null ? num(s.market_premium_percent) : DEFAULT_SETTINGS.market_premium_percent;
+    const k22 = num(s.k22_percent_of_24k) || DEFAULT_SETTINGS.k22_percent_of_24k;
+    const k18 = num(s.k18_percent_of_24k) || DEFAULT_SETTINGS.k18_percent_of_24k;
+    const pawn24 = round100((m.usdOz / GRAMS_PER_OUNCE) * m.usdLkr * 8 * (1 + premium / 100));
+    const pawn = { 24: pawn24, 22: round100((pawn24 * k22) / 100), 18: round100((pawn24 * k18) / 100) };
+    const perGram = (p) => Math.round((p / 8) * 1000) / 1000;
+    return {
+      pawn,
+      per_gram: { 24: perGram(pawn[24]), 22: perGram(pawn[22]), 18: perGram(pawn[18]) },
+      premium_percent: premium,
+      usd_per_ounce: Math.round(m.usdOz * 100) / 100,
+      usd_lkr: Math.round(m.usdLkr * 100) / 100,
+      updated: m.updated
+    };
+  }
+
+  const AUTO_BY = 'Automatic (market rate)';
+
+  /* If nobody has entered today's rate, put the market rate in for the day.
+     A rate a person saves replaces it. Never breaks the request it runs in. */
+  async function ensureTodayRate() {
+    const today = colomboDay(new Date());
+    try {
+      const have = await db.query('select 1 from gold_rates where date = $1', [today]);
+      if (have.length) return;
+      const r = await marketRate(await getSettings());
+      await db.query(`insert into gold_rates (date, per_gram, updated_at, updated_by) values ($1, $2::jsonb, now(), $3)
+                      on conflict (date) do nothing`, [today, json(r.per_gram), AUTO_BY]);
+    } catch (e) {
+      if (!(e instanceof HttpError)) console.error('automatic gold rate failed:', e.message);
+    }
   }
 
   /* ------------------------------------------------------------------
@@ -491,7 +569,10 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
      ------------------------------------------------------------------ */
   const RATE_COLS = 'date::text as date, per_gram, updated_at, updated_by';
   const rates = {
-    list: (p) => db.query(`select ${RATE_COLS} from gold_rates order by date desc limit $1`, [Math.min(400, Math.max(1, Math.round(num(p.limit) || 60)))]),
+    async list(p) {
+      await ensureTodayRate();
+      return db.query(`select ${RATE_COLS} from gold_rates order by date desc limit $1`, [Math.min(400, Math.max(1, Math.round(num(p.limit) || 60)))]);
+    },
     async save(d, user) {
       const g = d.per_gram || {};
       const per = {};
@@ -750,6 +831,10 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
         const v = num(d[k]);
         if (v != null && v >= 0) s[k] = v;
       });
+      const inRange = (k, lo, hi) => { const v = num(d[k]); if (v != null) { if (v < lo || v > hi) bad(`Keep that between ${lo} and ${hi}.`); s[k] = v; } };
+      inRange('market_premium_percent', 0, 30);
+      inRange('k22_percent_of_24k', 80, 100);
+      inRange('k18_percent_of_24k', 60, 90);
       if (Array.isArray(d.showrooms)) {
         d.showrooms.forEach((u) => {
           const room = s.showrooms.find((r) => r.id === u.id);
@@ -776,6 +861,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
      gold strip reads (24K and 22K per gram and per pawn). is_today tells the
      website whether staff have entered today's rate yet (Sri Lankan date). */
   async function publicGoldRate() {
+    await ensureTodayRate();
     const [r] = await db.query(`select ${RATE_COLS} from gold_rates order by date desc limit 1`);
     if (!r) fail(404, 'No gold rate has been entered yet.');
     const k = (karat) => {
@@ -783,7 +869,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
       return { gram: Math.round(gram), pawn: Math.round(gram * 8) };
     };
     return {
-      source: 'showroom',
+      source: r.updated_by === AUTO_BY ? 'market' : 'showroom',
       currency: 'LKR',
       date: r.date,
       is_today: r.date === colomboDay(new Date()),
@@ -791,6 +877,24 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
       k22: k(22),
       k18: k(18),
       updated: new Date(r.updated_at).toISOString()
+    };
+  }
+
+  async function publicMarketRate() {
+    let s = DEFAULT_SETTINGS;
+    try { s = Object.assign({}, DEFAULT_SETTINGS, await getSettings()); } catch (e) { /* no database yet: defaults */ }
+    const r = await marketRate(s);
+    const k = (karat) => ({ gram: Math.round(r.per_gram[karat]), pawn: r.pawn[karat] });
+    return {
+      source: 'market',
+      currency: 'LKR',
+      date: colomboDay(new Date()),
+      k24: k(24), k22: k(22), k18: k(18),
+      per_gram: r.per_gram,
+      premium_percent: r.premium_percent,
+      usd_per_ounce: r.usd_per_ounce,
+      usd_lkr: r.usd_lkr,
+      updated: r.updated
     };
   }
 
@@ -822,6 +926,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
     ['GET', 'auth/me', {}, (r) => publicUser(r.user)],
     ['GET', 'public/products', { public: true }, (r) => publicProducts(r.query)],
     ['GET', 'public/gold-rate', { public: true }, () => publicGoldRate()],
+    ['GET', 'public/market-rate', { public: true, noDb: true }, () => publicMarketRate()],
 
     ['GET', 'staff', { owner: true }, () => staff.list()],
     ['POST', 'staff/invites', { owner: true }, (r) => staff.invite(r.body)],
@@ -852,7 +957,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
     ['GET', 'reports/sales', {}, (r) => reports.sales(r.query)],
     ['GET', 'reports/best-sellers', {}, (r) => reports.bestSellers(r.query)],
     ['PUT', 'homepage/featured', {}, (r) => setFeatured(r.body)],
-    ['GET', 'settings', {}, () => getSettings()],
+    ['GET', 'settings', {}, async () => Object.assign({}, DEFAULT_SETTINGS, await getSettings())],
     ['PUT', 'settings', {}, (r) => updateSettings(r.body)]
   ];
 
@@ -877,7 +982,8 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
       const path = String(request.path || '').replace(/^\/+|\/+$/g, '');
       const route = match(method, path);
       if (!route) fail(404, 'No such API route.');
-      await ensureSchema();
+      if (!route.opts.noDb) await ensureSchema();
+      else await ensureSchema().catch(() => null); /* works before the database is connected */
 
       let body = {};
       const type = request.contentType || '';

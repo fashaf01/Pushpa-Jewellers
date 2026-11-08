@@ -146,7 +146,10 @@
     return 'ok';
   }
 
-  PJ.pricing = { PAWN_G, PURITY, isGold, deriveFrom22, roundTo, priceOf, totalStock, stockState };
+  /* Rates the system filled in from the market rather than a person */
+  const isAutoRate = (r) => Boolean(r && /^Automatic/.test(r.updated_by || ''));
+
+  PJ.pricing = { PAWN_G, PURITY, isGold, deriveFrom22, roundTo, priceOf, totalStock, stockState, isAutoRate };
 
   /* Shared context loaded once after sign-in: settings and the latest rate */
   PJ.ctx = {
