@@ -772,6 +772,28 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
     return { url };
   }
 
+  /* The shop's counter rate for the website, in the shape the website's
+     gold strip reads (24K and 22K per gram and per pawn). is_today tells the
+     website whether staff have entered today's rate yet (Sri Lankan date). */
+  async function publicGoldRate() {
+    const [r] = await db.query(`select ${RATE_COLS} from gold_rates order by date desc limit 1`);
+    if (!r) fail(404, 'No gold rate has been entered yet.');
+    const k = (karat) => {
+      const gram = Number(r.per_gram[karat]);
+      return { gram: Math.round(gram), pawn: Math.round(gram * 8) };
+    };
+    return {
+      source: 'showroom',
+      currency: 'LKR',
+      date: r.date,
+      is_today: r.date === colomboDay(new Date()),
+      k24: k(24),
+      k22: k(22),
+      k18: k(18),
+      updated: new Date(r.updated_at).toISOString()
+    };
+  }
+
   async function publicProducts(p) {
     const s = await getSettings();
     const [rate] = await db.query(`select ${RATE_COLS} from gold_rates order by date desc limit 1`);
@@ -799,6 +821,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
     ['POST', 'auth/logout', { public: true }, (r) => auth.logout(r.headers)],
     ['GET', 'auth/me', {}, (r) => publicUser(r.user)],
     ['GET', 'public/products', { public: true }, (r) => publicProducts(r.query)],
+    ['GET', 'public/gold-rate', { public: true }, () => publicGoldRate()],
 
     ['GET', 'staff', { owner: true }, () => staff.list()],
     ['POST', 'staff/invites', { owner: true }, (r) => staff.invite(r.body)],

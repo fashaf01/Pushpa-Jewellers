@@ -56,8 +56,9 @@
         ${!rateToday ? html`
           <div class="notice notice--warn notice--action">
             ${ui.icon('alert')}
-            <p><strong>Today’s gold rate hasn’t been entered.</strong> Gold-rate prices are still using
-            ${rate ? fmt.day(rate.date) : 'no rate at all'}.</p>
+            ${rate
+              ? html`<p><strong>Today’s gold rate hasn’t been entered.</strong> Gold-rate prices are still using ${fmt.day(rate.date)}’s rate.</p>`
+              : html`<p><strong>No gold rate has been entered yet.</strong> Gold pieces have no price until you enter today’s rate.</p>`}
             <a class="btn btn--sm btn--primary" href="#/pricing">Enter today’s rate</a>
           </div>` : ''}
 

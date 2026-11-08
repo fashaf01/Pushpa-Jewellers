@@ -175,7 +175,7 @@
       if (db) return db;
       const raw = PJ.storage.get(KEY);
       if (raw) { try { db = JSON.parse(raw); } catch (e) { db = null; } }
-      if (!db || db.version !== 1) { db = PJ.seed(); persist(); }
+      if (!db || db.version !== 2) { db = PJ.seed(); persist(); } /* v2: no invented gold rates */
       return db;
     }
 

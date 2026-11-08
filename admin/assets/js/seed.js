@@ -91,22 +91,11 @@
       featured_limit: 8
     };
 
-    /* 30 days of gold rates — a gentle random walk ending today */
+    /* No gold rate is seeded. A made-up rate that looks real is worse than
+       none: the panel asks for today's rate and every price follows what
+       the person types. This reference only sizes the sample orders' prices. */
     const rates = [];
-    let per22pawn = 334000;
-    for (let i = 30; i >= 0; i--) {
-      per22pawn *= 1 + (r() - 0.46) * 0.012;
-      let d = at(i, 9, 20 + Math.floor(r() * 20));
-      if (d > now) d = new Date(now.getTime() - 25 * 60000);
-      rates.push({
-        date: PJ.isoDay(d),
-        per_gram: PJ.pricing.deriveFrom22(Math.round(per22pawn / 8 / 10) * 10),
-        updated_at: iso(d),
-        updated_by: 'Owner'
-      });
-    }
-    rates.reverse(); /* newest first */
-    const rate = rates[0];
+    const rate = { date: PJ.isoDay(now), per_gram: PJ.pricing.deriveFrom22(366000 / 8) };
 
     const products = PRODUCTS.map((p, i) => {
       const created = at(12 + i * 6, 11, 0); /* the carousel pieces are the newest */
@@ -243,6 +232,6 @@
 
     orders.sort((a, b) => b.created_at.localeCompare(a.created_at));
 
-    return { version: 1, settings, products, orders, movements, rates, next_order: number };
+    return { version: 2, settings, products, orders, movements, rates, next_order: number };
   };
 })();

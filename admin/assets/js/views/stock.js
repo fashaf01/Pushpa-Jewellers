@@ -31,7 +31,7 @@
           <div class="kpi"><span class="kpi__label">Pieces in stock</span><span class="kpi__value">${fmt.num(pieces)}</span>
             <span class="kpi__sub">${rooms.map((r) => `${r.name} ${products.reduce((s, p) => s + (Number(p.stock[r.id]) || 0), 0)}`).join(' · ')}</span></div>
           <div class="kpi"><span class="kpi__label">Stock value at today’s rate</span><span class="kpi__value">${fmt.money(value)}</span>
-            <span class="kpi__sub">Gold pieces at ${PJ.ctx.rate ? fmt.day(PJ.ctx.rate.date) : 'no'} rate</span></div>
+            <span class="kpi__sub">${PJ.ctx.rate ? `Gold pieces at the ${fmt.day(PJ.ctx.rate.date)} rate` : 'Enter today’s gold rate to value gold pieces'}</span></div>
           <button class="kpi ${lowCount ? 'kpi--warn' : ''}" type="button" data-filter="low"><span class="kpi__label">Running low</span><span class="kpi__value">${fmt.num(lowCount)}</span><span class="kpi__sub">At or below their alert level</span></button>
           <button class="kpi ${outCount ? 'kpi--warn' : ''}" type="button" data-filter="out"><span class="kpi__label">Out of stock</span><span class="kpi__value">${fmt.num(outCount)}</span><span class="kpi__sub">None in any showroom</span></button>
         </section>

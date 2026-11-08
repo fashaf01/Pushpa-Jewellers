@@ -82,14 +82,14 @@
         <section class="card" aria-labelledby="histTitle">
           <header class="card__head">
             <div>
-              <h2 class="card__title" id="histTitle">22kt per pawn, last ${Math.min(rates.length, 30)} rates</h2>
-              <p class="card__sub">Hover the line for any day.</p>
+              <h2 class="card__title" id="histTitle">${rates.length > 1 ? `22kt per pawn, last ${Math.min(rates.length, 30)} rates` : 'Rate history'}</h2>
+              <p class="card__sub">${rates.length > 1 ? 'Hover the line for any day.' : 'A chart builds up here as you save the rate each day.'}</p>
             </div>
           </header>
-          <div class="card__body"><div data-chart></div></div>
+          ${rates.length > 1 ? html`<div class="card__body"><div data-chart></div></div>` : ''}
           <div class="table-wrap"><table class="table">
             <thead><tr><th>Date</th><th class="num">24kt / pawn</th><th class="num">22kt / pawn</th><th class="num">Change</th><th class="num">18kt / pawn</th><th>Entered by</th></tr></thead>
-            <tbody>${rates.slice(0, 14).map((r, i) => {
+            <tbody>${rates.length ? '' : html`<tr><td colspan="6" class="muted">No rates saved yet. Today’s will be the first.</td></tr>`}${rates.slice(0, 14).map((r, i) => {
               const prev = rates[i + 1];
               const ch = prev ? (r.per_gram[22] - prev.per_gram[22]) * PAWN : 0;
               return html`<tr>
@@ -189,7 +189,7 @@
       });
 
       const series = rates.slice(0, 30).reverse().map((r) => ({ date: r.date, value: r.per_gram[22] * PAWN }));
-      PJ.charts.rate($('[data-chart]', el), series, '22kt gold per pawn');
+      if ($('[data-chart]', el)) PJ.charts.rate($('[data-chart]', el), series, '22kt gold per pawn');
       drawHints();
       drawImpact();
     }
