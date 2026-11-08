@@ -872,7 +872,7 @@ module.exports = function createApp({ db, blob, ownerEmail }) {
       return out == null ? { status: 204, body: null } : { status: method === 'POST' && /^(products|orders)$/.test(path) ? 201 : 200, body: out };
     } catch (e) {
       if (e instanceof HttpError) return { status: e.status, body: { error: e.message } };
-      if (e && e.status === 503) return { status: 503, body: { error: e.message } };
+      if (e && e.status === 503) return { status: 503, body: { error: e.message, code: e.publicCode || 'unavailable' } };
       if (e && e.code === '23505') return { status: 409, body: { error: 'That already exists.' } };
       console.error(e);
       return { status: 500, body: { error: 'Something went wrong on the server. Please try again.' } };

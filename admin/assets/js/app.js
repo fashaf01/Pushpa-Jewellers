@@ -91,7 +91,7 @@
             <div class="whoami">
               <span class="whoami__avatar" aria-hidden="true">${(user.name || 'S').slice(0, 1)}</span>
               <span class="whoami__text"><strong>${user.name || 'Staff'}</strong><span>${demo ? 'Demo mode' : user.role || ''}</span></span>
-              <button class="btn btn--icon btn--ghost" type="button" data-signout aria-label="Sign out" title="Sign out">${ui.icon('logout')}</button>
+              ${demo ? '' : html`<button class="btn btn--icon btn--ghost" type="button" data-signout aria-label="Sign out" title="Sign out">${ui.icon('logout')}</button>`}
             </div>
           </div>
         </aside>
@@ -103,7 +103,9 @@
             <a class="brand brand--sm" href="#/"><span class="brand__mark">Pushpa</span><span class="brand__sub">Admin</span></a>
             <a class="rate-chip rate-chip--top" href="#/pricing" data-rate-chip></a>
           </header>
-          ${demo ? html`<div class="demo-bar">${ui.icon('alert')}<span><strong>Demo mode.</strong> Sample data, saved in this browser only. <a href="#/settings">How to go live</a></span></div>` : ''}
+          ${demo ? html`<div class="demo-bar">${ui.icon('alert')}<span>${PJ.sampleOnly
+            ? html`<strong>Sample data.</strong> The shop’s database isn’t connected yet, so nothing you change here is saved for the shop.`
+            : html`<strong>Demo mode.</strong> Sample data, saved in this browser only. <a href="#/settings">How to go live</a>`}</span></div>` : ''}
           <div class="view" id="view"></div>
         </div>
       </div>`);
@@ -251,7 +253,31 @@
     drawRateChip();
   }
 
+  /* The live shop until its database is connected: the API says so
+     outright (503, code no_database), and only then the panel opens on
+     sample data. Any other failure keeps it live, so a hiccup can never
+     send real orders into a browser's sample store. */
+  let apiChecked = false;
+  async function checkApi() {
+    if (apiChecked || PJ.api.mode !== 'live') return;
+    apiChecked = true;
+    try {
+      await PJ.api.health();
+    } catch (e) {
+      if (e.status === 503 && e.details && e.details.code === 'no_database') {
+        PJ.api = PJ.makeDemoApi();
+        PJ.sampleOnly = true;
+        PJ.session.clear();
+      }
+    }
+  }
+
   async function start() {
+    await checkApi();
+    /* Sample data needs no sign-in: open straight in */
+    if (PJ.api.mode === 'demo' && !PJ.session.token()) {
+      PJ.session.set('demo', { id: 'u_demo', name: 'Owner', email: '', role: 'owner' });
+    }
     if (!PJ.session.token()) { showLogin(); return; }
     root().innerHTML = String(ui.loading('Opening the shop'));
     try {

@@ -61,7 +61,10 @@
               <header class="card__head"><h2 class="card__title" id="sConn">Connection</h2>
                 <span class="pill ${demo ? 'pill--in_making' : 'pill--ready'}">${demo ? 'Demo data' : 'Live'}</span></header>
               <div class="card__body prose">
-                ${demo ? html`
+                ${demo && PJ.sampleOnly ? html`
+                  <p>This is the live shop’s address, but its <strong>database isn’t connected yet</strong>, so the panel is showing sample data kept in this browser.</p>
+                  <p>Once the database is connected, this page asks for a sign-in and everything you enter is saved for the whole shop.</p>` : ''}
+                ${demo && !PJ.sampleOnly ? html`
                   <p>The panel is running on <strong>demo data saved in this browser</strong>. Nothing is sent anywhere, and another computer will not see these changes.</p>
                   <p>To go live, set <code>API_BASE_URL</code> in <code>admin/assets/js/config.js</code> to the Hostinger API address — the endpoints are listed in <code>docs/API.md</code>.</p>`
                 : html`

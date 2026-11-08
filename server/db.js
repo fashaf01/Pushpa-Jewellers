@@ -15,6 +15,7 @@ function getPool() {
   if (!url) {
     const err = new Error('The shop database is not connected yet. Connect a Neon database to this project in Vercel.');
     err.status = 503;
+    err.publicCode = 'no_database';
     throw err;
   }
   if (!pool) pool = new Pool({ connectionString: url, max: 3, idleTimeoutMillis: 10000 });

@@ -628,5 +628,6 @@
   }
 
   const base = String(cfg.API_BASE_URL || '').trim().replace(/\/+$/, '');
+  PJ.makeDemoApi = demoAdapter;
   PJ.api = base ? httpAdapter(base) : demoAdapter();
 })();
