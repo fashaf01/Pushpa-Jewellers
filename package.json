@@ -1,0 +1,10 @@
+{
+  "name": "pushpa-jewellers",
+  "private": true,
+  "description": "Pushpa Jewellers website, shop admin panel and its API",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@vercel/blob": "2.8.2",
+    "pg": "8.23.1"
+  }
+}

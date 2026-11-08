@@ -101,11 +101,8 @@
      shop can overwrite with the rate it actually buys at. */
   function deriveFrom22(per22) {
     const pure = per22 / PURITY[22];
-    return {
-      24: Math.round(pure * PURITY[24]),
-      22: Math.round(per22),
-      18: Math.round(pure * PURITY[18])
-    };
+    const r3 = (n) => Math.round(n * 1000) / 1000;
+    return { 24: r3(pure * PURITY[24]), 22: r3(per22), 18: r3(pure * PURITY[18]) };
   }
 
   function roundTo(n, step) {

@@ -13,6 +13,8 @@
       const s = await PJ.api.settings.get();
       if (!ctx.alive()) return;
       const demo = PJ.api.mode === 'demo';
+      const me = PJ.session.user() || {};
+      const owner = me.role === 'owner';
 
       el.innerHTML = String(html`
         ${ui.pageHead({ title: 'Settings' })}
@@ -63,7 +65,7 @@
                   <p>The panel is running on <strong>demo data saved in this browser</strong>. Nothing is sent anywhere, and another computer will not see these changes.</p>
                   <p>To go live, set <code>API_BASE_URL</code> in <code>admin/assets/js/config.js</code> to the Hostinger API address — the endpoints are listed in <code>docs/API.md</code>.</p>`
                 : html`
-                  <p>Connected to <code>${PJ.api.base}</code>.</p>
+                  <p>Connected to the shop’s database. Everyone signed in sees the same pieces, orders, stock and gold rate, on any computer or phone.</p>
                   <button class="btn btn--sm" type="button" data-act="test">Test the connection</button>
                   <p class="field__hint" data-test-result role="status"></p>`}
               </div>
@@ -82,11 +84,10 @@
               </section>` : ''}
 
             <section class="card" aria-labelledby="sYou">
-              <header class="card__head"><h2 class="card__title" id="sYou">Signed in</h2></header>
-              <div class="card__body">
-                <p class="strong">${(PJ.session.user() || {}).name || 'Staff'}</p>
-                <p class="muted">${(PJ.session.user() || {}).email || ''}</p>
-                <p class="field__hint">Staff accounts and passwords are managed on the server.</p>
+              <header class="card__head"><h2 class="card__title" id="sYou">${!demo && owner ? 'Staff' : 'Signed in'}</h2></header>
+              <div class="card__body" data-staff>
+                <p class="strong">${me.name || 'Staff'}</p>
+                <p class="muted">${me.email || ''}</p>
               </div>
             </section>
           </div>
@@ -125,6 +126,55 @@
           out.textContent = 'The server answered. All good.';
         } catch (err) { out.textContent = err.message; }
       });
+
+      /* ---------- staff (live shop, owner only) ---------- */
+      async function drawStaff() {
+        const box = $('[data-staff]', el);
+        if (!box || demo || !owner) return;
+        let list;
+        try { list = await PJ.api.staff.list(); } catch (err) { box.innerHTML = String(html`<p class="muted">${err.message}</p>`); return; }
+        if (!el.isConnected) return;
+        box.innerHTML = String(html`
+          <ul class="mini-list" style="margin-top:0">
+            ${list.users.map((u) => html`<li>
+              <span><strong>${u.name || u.email}</strong><span class="cell-sub">${u.email} · ${u.role === 'owner' ? 'Owner' : 'Staff'}</span></span>
+              ${u.id === me.id ? html`<span class="muted small">You</span>` : html`<button class="btn btn--sm btn--ghost btn--danger-text" type="button" data-remove-user="${u.id}" data-name="${u.name || u.email}">Remove</button>`}
+            </li>`)}
+            ${list.invites.map((i) => html`<li>
+              <span><strong>${i.name || i.email}</strong><span class="cell-sub">${i.email} · invited, not signed up yet</span></span>
+              <button class="btn btn--sm btn--ghost" type="button" data-uninvite="${i.email}">Cancel invite</button>
+            </li>`)}
+          </ul>
+          <form class="stack" data-invite style="gap:0;margin-top:1rem" novalidate>
+            <div class="row row--2">
+              <label class="field"><span class="field__label">Name</span><input class="input" name="name" autocomplete="off"></label>
+              <label class="field"><span class="field__label">Email</span><input class="input" name="email" type="email" autocomplete="off"></label>
+            </div>
+            <label class="check" style="margin-bottom:0.75rem"><input type="checkbox" name="owner"><span>Owner — can also invite and remove staff</span></label>
+            <div><button class="btn btn--sm" type="submit">Invite</button></div>
+          </form>
+          <p class="field__hint" style="margin-top:0.75rem">After inviting, send them the admin link. They choose “Invited by the shop? Create your account” and set their own password.</p>`);
+
+        $('[data-invite]', box).addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const d = PJ.formData(e.target);
+          try {
+            await PJ.api.staff.invite({ name: d.name, email: d.email, role: d.owner ? 'owner' : 'staff' });
+            ui.toast(`${d.name || d.email} invited`);
+            drawStaff();
+          } catch (err) { ui.fail(err); }
+        });
+      }
+
+      on(el, 'click', '[data-uninvite]', async (e, btn) => {
+        try { await PJ.api.staff.uninvite(btn.dataset.uninvite); drawStaff(); } catch (err) { ui.fail(err); }
+      });
+      on(el, 'click', '[data-remove-user]', async (e, btn) => {
+        const ok = await ui.confirm({ title: `Remove ${btn.dataset.name}?`, message: 'They will be signed out and can no longer open the admin. Their past orders and stock changes stay.', confirmLabel: 'Remove', danger: true });
+        if (!ok) return;
+        try { await PJ.api.staff.remove(btn.dataset.removeUser); ui.toast('Removed'); drawStaff(); } catch (err) { ui.fail(err); }
+      });
+      drawStaff();
 
       on(el, 'click', '[data-act="export"]', async () => {
         const data = await PJ.api.demo.exportAll();

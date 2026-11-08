@@ -5,6 +5,8 @@
   const PJ = window.PJ;
   const { html, ui, fmt, $, $$, on } = PJ;
   const PAWN = PJ.pricing.PAWN_G;
+  /* per gram to 3 decimals, so a per-pawn figure comes back exactly as typed */
+  const round3 = (n) => Math.round(n * 1000) / 1000;
 
   PJ.views.pricing = {
     nav: 'pricing',
@@ -173,7 +175,7 @@
         const btn = form.querySelector('[type="submit"]');
         btn.disabled = true;
         try {
-          const saved = await PJ.api.rates.save({ date: today, per_gram: { 24: Math.round(entry[24]), 22: Math.round(entry[22]), 18: Math.round(entry[18]) } });
+          const saved = await PJ.api.rates.save({ date: today, per_gram: { 24: round3(entry[24]), 22: round3(entry[22]), 18: round3(entry[18]) } });
           PJ.ctx.rate = saved;
           PJ.bus.emit('rates:changed', saved);
           ui.toast(`Today’s rate saved — ${fmt.plural(goldPieces.length, 'piece')} repriced`);

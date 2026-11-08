@@ -109,8 +109,17 @@
       base,
       health: () => req('GET', '/health'),
       auth: {
+        status: () => req('GET', '/auth/status', undefined, { login: true }),
+        setup: (d) => req('POST', '/auth/setup', { name: d.name, email: d.email, password: d.password }, { login: true }),
+        register: (d) => req('POST', '/auth/register', { name: d.name, email: d.email, password: d.password }, { login: true }),
         login: (email, password) => req('POST', '/auth/login', { email, password }, { login: true }),
         logout: () => req('POST', '/auth/logout').catch(() => null)
+      },
+      staff: {
+        list: () => req('GET', '/staff'),
+        invite: (d) => req('POST', '/staff/invites', d),
+        uninvite: (email) => req('DELETE', '/staff/invites/' + enc(email)),
+        remove: (id) => req('DELETE', '/staff/' + enc(id))
       },
       products: {
         list: (p) => req('GET', '/products' + qs(p)),
@@ -451,7 +460,7 @@
             PJ.KARATS.forEach((k) => { if (!(Number(g[k]) > 0)) fail(`Enter the ${k}kt rate.`); });
             const entry = {
               date: d.date || PJ.isoDay(),
-              per_gram: { 24: Math.round(g[24]), 22: Math.round(g[22]), 18: Math.round(g[18]) },
+              per_gram: { 24: Math.round(g[24] * 1000) / 1000, 22: Math.round(g[22] * 1000) / 1000, 18: Math.round(g[18] * 1000) / 1000 },
               updated_at: nowIso(),
               updated_by: who()
             };

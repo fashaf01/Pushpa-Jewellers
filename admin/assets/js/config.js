@@ -16,8 +16,15 @@
                    Host this admin folder on the same domain (for example at
                    /admin) and the browser needs no CORS setup at all.
    ========================================================================== */
+/* The live shop runs on these addresses, with the API at /api on the same
+   site (api/main.js + server/ in this repo, deployed on Vercel). Anywhere
+   else — a laptop, a preview link — the panel opens in demo mode, so a
+   test can never write into the real shop. Add a custom domain here when
+   the shop gets one. */
+var PJ_LIVE_HOSTS = ['pushpa-jewellers-admin.vercel.app'];
+
 window.PJ_CONFIG = {
-  API_BASE_URL: '',
+  API_BASE_URL: PJ_LIVE_HOSTS.indexOf(window.location.hostname) !== -1 ? '/api' : '',
 
   /* Photos are shrunk in the browser before upload, so a 12 MB phone photo
      goes up as a few hundred KB. Longest edge in pixels, and JPEG quality. */
