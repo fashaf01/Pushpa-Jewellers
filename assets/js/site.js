@@ -57,7 +57,7 @@
       '<tr><th scope="row">22K</th><td>Rs ' + rs(+gold.k22.gram) + '</td><td>Rs ' + rs(+gold.k22.pawn) + '</td></tr></tbody>';
     $('#rate-note').innerHTML = (gold.source === 'showroom'
       ? '<p>Today’s rate at our counter.</p>'
-      : '<p>The international gold market price, converted to rupees at today’s exchange rate and refreshed every hour. Our counter rate can differ, so call to confirm before you visit.</p>') +
+      : '<p>Today’s Sri Lankan market rate, worked out from the international gold price and kept up to date through the day. Our counter rate can differ slightly, so call to confirm before you visit.</p>') +
       (time ? '<p class="tab">Updated ' + time + ', Sri Lanka time</p>' : '');
     if (rateD.showModal) rateD.showModal(); else rateD.setAttribute('open', '');
     rateD.focus();

@@ -1,25 +1,74 @@
 // Today's gold rate for the bar at the top of the page: 24K and 22K in Sri Lankan rupees,
 // per gram and per pawn (8 g). Served at /api/gold as a Vercel function.
 //
-// By default the price is the international gold spot price (gold-api.com) converted to rupees
-// with the day's USD/LKR rate (open.er-api.com). Vercel's CDN keeps each answer for an hour.
-// To show the showroom's own counter rate instead, set GOLD_24K_PAWN_LKR and GOLD_22K_PAWN_LKR
-// (whole rupees per pawn) in the Vercel project's environment variables and redeploy; remove them
-// to go back to the market price.
+// Where the rate comes from, first match wins:
+//   1. GOLD_24K_PAWN_LKR and GOLD_22K_PAWN_LKR in the Vercel project's environment variables
+//      (whole rupees per pawn): a fixed override, for emergencies only.
+//   2. The shop admin (pushpa-jewellers-admin): today's counter rate if staff have entered one,
+//      otherwise the admin's automatic Sri Lankan market rate, worked out with the premium the
+//      owner sets in the admin's Settings. Set ADMIN_URL to point somewhere else.
+//   3. If the admin cannot be reached: the same market rate worked out here — the international
+//      gold price (gold-api.com) in rupees (open.er-api.com) plus the Sri Lankan market premium
+//      (GOLD_MARKET_PREMIUM_PERCENT, default 5.12), 22K at 92% of 24K, pawns rounded to Rs 100.
+//      At those figures it matched the market on 8 Nov 2026: 24K Rs 366,000, 22K Rs 336,700.
+//
+// The international price alone is never shown: Sri Lankan counters sit about 5% above it.
 
 const GRAMS_PER_TROY_OUNCE = 31.1034768;
 const GRAMS_PER_PAWN = 8;
+const ADMIN = (process.env.ADMIN_URL || 'https://pushpa-jewellers-admin.vercel.app').replace(/\/+$/, '');
+const PREMIUM = Number.isFinite(Number(process.env.GOLD_MARKET_PREMIUM_PERCENT)) && process.env.GOLD_MARKET_PREMIUM_PERCENT !== undefined
+  ? Number(process.env.GOLD_MARKET_PREMIUM_PERCENT) : 5.12;
+const K22_OF_24 = Number(process.env.GOLD_22K_PERCENT_OF_24K) || 92;
 
 let lastGood = null; // the last good answer, kept while this function instance stays warm
 
-function rate(perGram) {
-  return { gram: Math.round(perGram), pawn: Math.round(perGram * GRAMS_PER_PAWN) };
-}
+const round100 = (n) => Math.round(n / 100) * 100;
+const fromPawn = (pawn) => ({ gram: Math.round(pawn / GRAMS_PER_PAWN), pawn: Math.round(pawn) });
 
 async function getJson(url) {
   const res = await fetch(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`${url} answered ${res.status}`);
   return res.json();
+}
+
+function fromAdminShape(r) {
+  if (!r || !r.k24 || !r.k22 || !(r.k24.pawn > 0) || !(r.k22.pawn > 0)) throw new Error('admin rate incomplete');
+  return {
+    source: r.source === 'showroom' ? 'showroom' : 'market',
+    currency: 'LKR',
+    k24: fromPawn(r.k24.pawn),
+    k22: fromPawn(r.k22.pawn),
+    updated: r.updated || new Date().toISOString(),
+  };
+}
+
+async function fromAdmin() {
+  // today's counter rate (or the admin's automatic market rate for today) …
+  try {
+    const r = await getJson(ADMIN + '/api/public/gold-rate');
+    if (r && r.is_today) return fromAdminShape(r);
+  } catch (e) { /* no database yet, or no rate today: ask for the market rate */ }
+  // … else the admin's market rate, which works even before its database is connected
+  return fromAdminShape(await getJson(ADMIN + '/api/public/market-rate'));
+}
+
+async function marketHere() {
+  const [gold, fx] = await Promise.all([
+    getJson('https://api.gold-api.com/price/XAU'),
+    getJson('https://open.er-api.com/v6/latest/USD'),
+  ]);
+  const usdPerOunce = Number(gold && gold.price);
+  const usdLkr = Number(fx && fx.rates && fx.rates.LKR);
+  if (!(usdPerOunce > 0) || !(usdLkr > 0)) throw new Error('gold or exchange rate missing from upstream');
+  const pawn24 = round100((usdPerOunce / GRAMS_PER_TROY_OUNCE) * usdLkr * GRAMS_PER_PAWN * (1 + PREMIUM / 100));
+  return {
+    source: 'market',
+    currency: 'LKR',
+    k24: fromPawn(pawn24),
+    k22: fromPawn(round100((pawn24 * K22_OF_24) / 100)),
+    updated: typeof gold.updatedAt === 'string' ? gold.updatedAt : new Date().toISOString(),
+  };
 }
 
 async function build() {
@@ -29,28 +78,17 @@ async function build() {
     return {
       source: 'showroom',
       currency: 'LKR',
-      k24: rate(pawn24 / GRAMS_PER_PAWN),
-      k22: rate(pawn22 / GRAMS_PER_PAWN),
+      k24: fromPawn(pawn24),
+      k22: fromPawn(pawn22),
       updated: process.env.GOLD_RATE_UPDATED || new Date().toISOString(),
     };
   }
-  const [gold, fx] = await Promise.all([
-    getJson('https://api.gold-api.com/price/XAU'),
-    getJson('https://open.er-api.com/v6/latest/USD'),
-  ]);
-  const usdPerOunce = Number(gold && gold.price);
-  const usdLkr = Number(fx && fx.rates && fx.rates.LKR);
-  if (!(usdPerOunce > 0) || !(usdLkr > 0)) throw new Error('gold or exchange rate missing from upstream');
-  const gram24 = (usdPerOunce / GRAMS_PER_TROY_OUNCE) * usdLkr;
-  return {
-    source: 'international',
-    currency: 'LKR',
-    k24: rate(gram24),
-    k22: rate((gram24 * 22) / 24),
-    updated: typeof gold.updatedAt === 'string' ? gold.updatedAt : new Date().toISOString(),
-    usd_per_ounce: Math.round(usdPerOunce * 100) / 100,
-    usd_lkr: Math.round(usdLkr * 100) / 100,
-  };
+  try {
+    return await fromAdmin();
+  } catch (err) {
+    console.error('admin gold rate unavailable, working it out here:', err.message);
+    return marketHere();
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -66,6 +104,7 @@ module.exports = async function handler(req, res) {
       return res.end(JSON.stringify({ error: 'Gold rate unavailable' }));
     }
   }
-  res.setHeader('cache-control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+  // Ten minutes at the edge, so a counter rate saved in the admin shows within ten minutes
+  res.setHeader('cache-control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=86400');
   res.end(lastGood);
 };

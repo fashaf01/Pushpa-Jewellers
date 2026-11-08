@@ -105,8 +105,8 @@ shows its gold value today: the weight times today's rate for that karat (from `
 the weight, karat and rate per gram written under it and a plain note that making charges are added at the counter.
 A set adds its pieces' weights; a range of weights gives a range of values. Anything else reads "Price on request".
 Delete a piece's `price` to fall back to these.
-The 28 Instagram pieces whose posts print a weight also print 22KT, so they carry `karat: 22`. Setting the showroom's
-own rate in Vercel (see *Today's gold rate*) makes these values use it.
+The 28 Instagram pieces whose posts print a weight also print 22KT, so they carry `karat: 22`. They use the same rate as
+the bar (see *Today's gold rate*).
 
 **What it shows now.** 104 pieces from two lists:
 
@@ -144,16 +144,26 @@ them has to be made in all six files (`index.html`, `shop/`, `about/` and the th
 The bar at the top of the page shows 24K and 22K per pawn (8 g); tapping it shows
 per gram too. It stays at the top while the page scrolls.
 
-The page calls `/api/gold` (`api/gold.js`). That function converts the international
-gold price (gold-api.com) into rupees with the day's USD/LKR rate (open.er-api.com),
-and Vercel's CDN keeps each answer for an hour. 22K is 22/24 of the 24K price. The
-page reloads the rate every 30 minutes and whenever the tab comes back into view.
+The page calls `/api/gold` (`api/gold.js`), which never shows the bare international
+price: Sri Lankan counters sit about 5% above it. It answers with, first match wins:
 
-This is the market price, not the counter price, and the two can differ; the
-details panel says so. To show the showroom's own counter rate instead, set
-`GOLD_24K_PAWN_LKR` and `GOLD_22K_PAWN_LKR` (whole rupees per pawn, for example
-`360000`) in the Vercel project under Settings > Environment Variables, then
-redeploy. Remove them to go back to the market price.
+1. **The shop admin's rate** (`pushpa-jewellers-admin`): today's counter rate if staff
+   entered one on the admin's Gold rate page, otherwise the admin's **automatic Sri Lankan
+   market rate** for today. Changing the premium in the admin's Settings changes both.
+2. **The same market rate worked out here**, if the admin cannot be reached: the
+   international gold price (gold-api.com) in rupees (open.er-api.com) plus a
+   **5.12% Sri Lankan market premium**, 22K at **92%** of 24K, pawns rounded to Rs 100.
+   On 8 Nov 2026 that gave 24K Rs 366,000 and 22K Rs 336,700 a pawn, the market's figures.
+   Override with `GOLD_MARKET_PREMIUM_PERCENT` and `GOLD_22K_PERCENT_OF_24K`.
+
+Vercel's CDN keeps each answer for ten minutes, so a counter rate saved in the admin
+shows on the site within ten minutes. The page reloads the rate every 30 minutes and
+whenever the tab comes back into view. The details panel says whether the figure is
+the counter rate or the market rate.
+
+For an emergency fixed rate, set `GOLD_24K_PAWN_LKR` and `GOLD_22K_PAWN_LKR` (whole
+rupees per pawn) in the Vercel project's environment variables and redeploy; remove
+them to go back to the automatic rate.
 
 If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
 
