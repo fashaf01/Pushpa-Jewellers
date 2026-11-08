@@ -38,18 +38,42 @@ It works on a shop PC and on a phone.
 | **Best sellers** | Ranked by pieces sold over 30 days, 90 days, 12 months or all time. Choose and order the 8 pieces in the homepage Favourites carousel, or fill them from the best sellers in one click. |
 | **Settings** | Showroom names, phones and addresses; price rounding, default making charge, low-stock alert. |
 
-### Try it
+### The live shop
+
+**<https://pushpa-jewellers-admin.vercel.app/admin/>**, where the shop's data lives:
+
+| Piece | Where |
+|---|---|
+| Admin panel and website | Vercel project `pushpa-jewellers-admin` (Singapore) |
+| API | `api/main.js` → `server/app.js`, one Vercel function at `/api/*` |
+| Database | Postgres on Neon, connected to the project as `DATABASE_URL`; tables are created on first use (`server/schema.js`) |
+| Product photos | Vercel Blob store `pushpa-jewellers-photos` (`BLOB_READ_WRITE_TOKEN`) |
+| Owner email | `OWNER_EMAIL` project variable: the only email that can create the first account |
+
+**Sign-in.** On a fresh database the panel opens on *Set up the shop*: the
+owner creates the first account with the `OWNER_EMAIL` address. Staff are then
+invited from **Settings → Staff**, open the same link, choose *Invited by the
+shop? Create your account* and pick their own password.
+
+The panel only talks to the live API on the hostnames listed in
+`admin/assets/js/config.js` (`PJ_LIVE_HOSTS`). Everywhere else (your laptop,
+Vercel preview links) it opens in demo mode, so testing never writes into the
+real shop. Add the shop's own domain to that list when it gets one.
+
+### Try it locally (demo mode)
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Open <http://localhost:8000/admin/> and sign in with anything. Until it's
-connected, the panel runs in **demo mode** on sample data kept in your browser.
-The eight carousel pieces carry the same photos as the website. Settings →
-*Reset demo data* starts again.
+Open <http://localhost:8000/admin/> and sign in with anything. The panel runs
+on sample data kept in your browser. The eight carousel pieces carry the same
+photos as the website. Settings → *Reset demo data* starts again.
 
-### Connecting it to Hostinger
+### Moving the API to Hostinger later
+
+The API in `server/` is plain Node with Postgres. To move it, either run it on a
+Hostinger plan with Node.js, or rebuild the same contract in PHP + MySQL:
 
 1. Build the API in [`docs/API.md`](docs/API.md) (PHP 8 + MySQL on the Hostinger plan).
    It lists every endpoint, the exact JSON shapes, the price formula, the stock
@@ -69,6 +93,11 @@ reference implementation of the business rules, so check against it whenever
 the backend's behaviour is in doubt.
 
 ```
+api/main.js                    the Vercel function: hands /api/* to server/app.js
+server/app.js                  every API route and business rule
+server/db.js                   Postgres connection (DATABASE_URL)
+server/schema.js               the tables, created on first use
+vercel.json                    routes /api/* to the function; hides server source
 admin/index.html               shell + icon sprite
 admin/assets/admin.css         all styling
 admin/assets/js/config.js      API_BASE_URL — the one line to change

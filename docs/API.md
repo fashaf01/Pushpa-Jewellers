@@ -1,5 +1,9 @@
 # Shop admin — the API the backend must provide
 
+> **Running now:** `server/app.js` implements this whole contract in Node on
+> Vercel with Postgres (Neon) and Vercel Blob. See the README's *The live shop*.
+> A PHP + MySQL port for Hostinger must match it route for route.
+
 The admin panel in `admin/` is finished front end. It talks to one REST API,
 described here. Build these endpoints on the Hostinger plan (PHP 8 + MySQL is
 what the shared plans give you), set `API_BASE_URL` in
@@ -64,6 +68,31 @@ On a wrong password, return `401` with `{"error": "That email and password do no
 
 ### `POST /auth/logout`
 Invalidate the token. → `204`
+
+### `GET /auth/status` (no auth)
+→ `{"needs_setup": true}` while the shop has no accounts yet. The sign-in page
+then shows *Set up the shop* instead of *Sign in*.
+
+### `POST /auth/setup` (no auth)
+`{name, email, password}`. Creates the **first** account, as owner. Only works
+while there are no accounts, and only for the configured owner email
+(`OWNER_EMAIL`). → the same shape as login.
+
+### `POST /auth/register` (no auth)
+`{name, email, password}`. For staff the owner has invited: the email must be on
+the invite list. Creates the account with the invited role, removes the invite.
+→ the same shape as login.
+
+Passwords: at least 8 characters.
+
+### Staff (owner only)
+
+| Method | Path | |
+|---|---|---|
+| `GET` | `/staff` | `{users: [{id, email, name, role, created_at}], invites: [{email, name, role, created_at}]}` |
+| `POST` | `/staff/invites` | `{email, name, role: "staff" \| "owner"}` → the lists |
+| `DELETE` | `/staff/invites/{email}` | cancel an invite → the lists |
+| `DELETE` | `/staff/{id}` | remove an account (not your own, not the last owner) → the lists |
 
 ### `GET /health`
 → `200 {"ok": true}`. Settings → *Test the connection* uses it.
