@@ -17,9 +17,30 @@ python3 -m http.server 8000
 ```
 index.html              markup + the inline SVG sprite that draws every illustration
 assets/css/styles.css   design tokens and all layout
+assets/css/antique.css  the antique layer — paper, arches, lace border, script accents
 assets/js/main.js       drawer, carousel, scroll reveal, form handling
 assets/img/favicon.svg  tab icon
+tools/make-ornaments.js draws the antique ornaments into the page and stylesheet
 ```
+
+## The antique layer
+
+`assets/css/antique.css` loads after `styles.css` and carries everything that
+makes the page read as old paper: the aged palette, serif titles with a script
+line above them, the scalloped-arch frames on the category tiles and bridal
+panels, the beaded lace border on the hero, the oxblood bridal band, the seal
+and the arcade sketch. Remove its `<link>` from `index.html` and the page goes
+back to the plain look.
+
+The ornaments are computed, not traced. To change a shape — more lobes on the
+arch, a different lace — edit `tools/make-ornaments.js` and run it:
+
+```bash
+node tools/make-ornaments.js
+```
+
+It rewrites the blocks between the `ornaments:start` / `ornaments:end` markers
+in `index.html` and `antique.css`; do not edit those blocks by hand.
 
 ## Business details used on the page
 
@@ -130,7 +151,7 @@ submit handler with your `fetch`.
 
 ## Notes
 
-- Fonts load from Google Fonts (Cormorant Garamond + Jost) with system fallbacks.
+- Fonts load from Google Fonts (Cormorant Garamond, Archivo and Pinyon Script) with system fallbacks.
 - Responsive from 320px up; no horizontal overflow at any width tested.
 - Honours `prefers-reduced-motion`; skip link, focus states and ARIA labels throughout.
 - `JewelryStore` JSON-LD in `<head>` carries both showrooms for local search.

@@ -6,12 +6,14 @@ const path = require('path');
 const root = __dirname;
 let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'assets/css/styles.css'), 'utf8');
+const antique = fs.readFileSync(path.join(root, 'assets/css/antique.css'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/main.js'), 'utf8');
 const favicon = fs.readFileSync(path.join(root, 'assets/img/favicon.svg'), 'utf8');
 
 html = html
-  .replace('<link rel="stylesheet" href="assets/css/styles.css">', `<style>\n${css}\n</style>`)
-  .replace('<script src="assets/js/main.js" defer></script>', `<script>\n${js}\n</script>`)
+  .replace('<link rel="stylesheet" href="assets/css/styles.css">', () => `<style>\n${css}\n</style>`)
+  .replace('<link rel="stylesheet" href="assets/css/antique.css">', () => `<style>\n${antique}\n</style>`)
+  .replace('<script src="assets/js/main.js" defer></script>', () => `<script>\n${js}\n</script>`)
   .replace('<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">',
            `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,${Buffer.from(favicon).toString('base64')}">`);
 

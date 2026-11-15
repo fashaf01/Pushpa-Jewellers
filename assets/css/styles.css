@@ -1259,6 +1259,9 @@ section[id],
   aspect-ratio: 3 / 4.2;
   overflow: hidden;
 }
+/* The photograph slot fills its panel */
+.bridal__media { position: absolute; inset: 0; }
+
 .bridal__panel:nth-child(2) { transform: translateY(clamp(0.75rem, 2vw, 1.75rem)); }
 
 @media (max-width: 560px) {
