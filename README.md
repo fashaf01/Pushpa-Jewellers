@@ -12,6 +12,25 @@ python3 -m http.server 8000
 `node build.js` inlines the CSS, JS and favicon into a single self-contained
 `dist/pushpa-jewellers.html`, for hosting that serves one file.
 
+## Deploying to Hostinger
+
+The site is static, so any Hostinger plan works. No Node, PHP or database needed.
+
+1. `sh tools/package-hostinger.sh` builds `dist/hostinger-upload.zip`
+   (only `index.html`, `.htaccess` and `assets/`).
+2. hPanel → **Websites** → your domain → **File Manager** → open `public_html`.
+   Delete the placeholder `default.php` / `index.php` if present.
+3. Upload the zip, right-click → **Extract** into `public_html`, then delete the zip.
+   `index.html` must sit directly in `public_html`, not in a subfolder.
+4. hPanel → **Security → SSL**: install the free SSL. `.htaccess` then forces HTTPS
+   and sends `pushpa-jewellers.com` to `www.pushpa-jewellers.com` (the canonical URL).
+5. If the domain was bought elsewhere, point its nameservers to
+   `ns1.dns-parking.com` / `ns2.dns-parking.com` (shown in hPanel → Domains).
+
+**Updating later:** re-run the script and upload/extract again, overwriting files.
+Or use hPanel → **Advanced → Git** to pull this repository straight into
+`public_html`. `.htaccess` blocks the repo-only files (README, tools, zips) from being served.
+
 ## Files
 
 ```
