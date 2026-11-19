@@ -23,7 +23,7 @@ The site is static, so any Hostinger plan works. No Node, PHP or database needed
 3. Upload the zip, right-click → **Extract** into `public_html`, then delete the zip.
    `index.html` must sit directly in `public_html`, not in a subfolder.
 4. hPanel → **Security → SSL**: install the free SSL. `.htaccess` then forces HTTPS
-   and sends `pushpa-jewellers.com` to `www.pushpa-jewellers.com` (the canonical URL).
+   and sends `pushpajewelers.com` to `www.pushpajewelers.com` (the canonical URL).
 5. If the domain was bought elsewhere, point its nameservers to
    `ns1.dns-parking.com` / `ns2.dns-parking.com` (shown in hPanel → Domains).
 

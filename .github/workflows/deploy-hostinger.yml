@@ -1,8 +1,8 @@
 # Uploads the site to Hostinger over FTP whenever the live branch changes.
 #
 # One-time setup — GitHub repo → Settings → Secrets and variables → Actions:
-#   Secrets:   FTP_SERVER    e.g. ftp.pushpa-jewellers.com (or the IP hPanel shows)
-#              FTP_USERNAME  e.g. u123456789 or u123456789.pushpa-jewellers.com
+#   Secrets:   FTP_SERVER    e.g. ftp.pushpajewelers.com (or the IP hPanel shows)
+#              FTP_USERNAME  e.g. u123456789 or u123456789.pushpajewelers.com
 #              FTP_PASSWORD  the FTP account's password
 #   Variables (optional):
 #              FTP_SERVER_DIR  folder to upload into; default "public_html/".
