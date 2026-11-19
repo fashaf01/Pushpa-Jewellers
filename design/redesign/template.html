@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pushpa Redesign</title>
+<meta name="description" content="Design preview: Pushpa Jewellers home page in EB Garamond and Outfit, with the shop's hot pink and the money exchange section.">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+@font-face{font-family:"EB Garamond";src:url({{FONT:ebg}}) format("woff2");font-weight:400 800;font-style:normal;font-display:swap}
+@font-face{font-family:"EB Garamond";src:url({{FONT:ebg-italic}}) format("woff2");font-weight:400 800;font-style:italic;font-display:swap}
+@font-face{font-family:"Outfit";src:url({{FONT:outfit}}) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  /* Pushpa: plum and gold, with the hot pink from the shop's own print */
+  --ivory:#fbf5f0; --cream:#f6ebdd; --blush:#fce8f1;
+  --ink:#2b0c1c; --muted:#6e4a5c; --line:#ecdcd6;
+  --plum:#3b0a25; --plum-2:#2a0619; --plum-3:#4b1131;
+  --pink:#db0a73; --pink-deep:#a8005a; --pink-soft:#f8c9de;
+  --gold:#c9a24a; --gold-light:#ecd28f; --gold-deep:#8a6418;
+  --serif:"EB Garamond",Garamond,"Iowan Old Style",Georgia,serif;
+  --sans:"Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --wrap:1240px; --gut:clamp(16px,4vw,48px); --sec:clamp(72px,9vw,128px);
+  /* motion */
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gut)}
+.label{display:inline-flex;align-items:center;gap:10px;font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+.label::before{content:"";width:22px;height:1px;background:currentColor}
+.dark .label{color:var(--gold-light)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* buttons: press feedback only (tens of times a day, so small and quick) */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 26px;border:1px solid transparent;border-radius:999px;font:500 14px/1 var(--sans);letter-spacing:.06em;text-decoration:none;cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.pink{background:var(--pink);color:#fff}
+.btn.line{border-color:currentColor;color:var(--plum)}
+.btn.gold{background:var(--gold-light);color:var(--plum)}
+.dark .btn.line{color:var(--gold-light)}
+@media (hover:hover) and (pointer:fine){
+  .btn.pink:hover{background:var(--pink-deep)}
+  .btn.line:hover{background:var(--plum);border-color:var(--plum);color:#fff}
+  .dark .btn.line:hover{background:var(--gold-light);border-color:var(--gold-light);color:var(--plum)}
+  .btn.gold:hover{background:#fff}
+}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+
+/* ---------- the gold rate and the masthead ---------- */
+.rate{background:var(--plum-2);color:#d9b9c8;font-size:13px}
+.rate .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:38px}
+.rate b{font-weight:500;color:#fff}
+.rate .k{color:var(--gold-light);font-weight:500;margin:0 6px 0 14px}
+.rate .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--pink);margin-right:8px;vertical-align:1px}
+.mast{position:sticky;top:0;z-index:20;background:var(--plum);color:#f6e3ea}
+.mast::after{content:"";position:absolute;inset:auto 0 -18px;height:18px;background:linear-gradient(rgba(42,6,25,.28),transparent);opacity:0;transition:opacity 200ms ease;pointer-events:none}
+.mast.scrolled::after{opacity:1}
+.mast .wrap{display:flex;align-items:center;gap:28px;min-height:88px}
+.logo img{height:68px;width:auto}
+.nav{display:flex;gap:26px;margin-inline:auto;list-style:none;padding:0}
+.nav a{position:relative;display:block;padding:8px 0;font:400 14px/1 var(--sans);letter-spacing:.08em;text-decoration:none}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold-light);transform:scaleX(0);transform-origin:left;transition:transform 250ms var(--ease-out)}
+.nav a[aria-current]::after{transform:scaleX(1)}
+@media (hover:hover) and (pointer:fine){.nav a:hover::after{transform:scaleX(1)}}
+.hot{text-align:right;font-size:12px;line-height:1.2;color:#d9b9c8;text-decoration:none}
+.hot b{display:block;font:500 17px/1.3 var(--sans);letter-spacing:.04em;color:var(--gold-light)}
+.mast .btn{min-height:44px;padding:0 20px}
+.menu-b{display:none;margin-left:auto;width:44px;height:44px;border:0;background:none;color:var(--gold-light);cursor:pointer}
+.menu-b svg{width:26px;height:26px}
+.menu{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,6vw,88px) clamp(64px,8vw,112px)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 85% 30%,var(--blush),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(36px,6vw,96px);align-items:center}
+.hero h1{font-size:clamp(46px,6.4vw,92px);margin:22px 0 16px}
+.hero h1 em{font-style:italic;color:var(--pink)}
+.tag{font:italic 400 clamp(20px,2vw,26px)/1.3 var(--serif);color:var(--gold-deep)}
+.hero p.lede{max-width:34em;margin:22px 0 32px;font-size:17px;color:var(--muted)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.trust{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:36px;padding-top:26px;border-top:1px solid var(--line);list-style:none;padding-left:0;font-size:14px;color:var(--muted)}
+.trust li{display:flex;align-items:center;gap:8px}
+.trust svg{width:16px;height:16px;color:var(--pink);flex:none}
+.hero-ph{position:relative;justify-self:end;width:min(100%,520px)}
+.hero-ph .frame{position:absolute;inset:-14px 14px 14px -14px;border:1px solid var(--gold);border-radius:999px 999px 0 0;pointer-events:none}
+.hero-ph .pic{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:999px 999px 0 0;background:var(--cream)}
+.hero-ph .pic img{width:100%;height:100%;object-fit:cover;object-position:100% 50%}
+.golden{position:absolute;left:-28px;bottom:36px;max-width:250px;padding:16px 20px;background:#fff;border-left:3px solid var(--pink);box-shadow:0 24px 50px -24px rgba(59,10,37,.45)}
+.golden span{display:block;font:500 11px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--pink)}
+.golden b{display:block;margin-top:4px;font:500 21px/1.15 var(--serif);color:var(--plum)}
+.golden i{display:block;margin-top:4px;font-size:13px;font-style:normal;color:var(--muted)}
+
+/* hero entrance: first view only, the delight budget (CSS animation, so it holds while images load) */
+.js .hero .rise{opacity:0;transform:translateY(18px);animation:rise 800ms var(--ease-out) forwards;animation-delay:calc(var(--i,0) * 80ms + 120ms)}
+.js .hero-ph .pic{animation:unveil 1100ms var(--ease-in-out) both 180ms}
+.js .hero-ph .pic img{animation:settle 1600ms var(--ease-out) both 180ms}
+.js .hero-ph .frame{opacity:0;animation:fadein 900ms var(--ease-out) forwards 900ms}
+.js .golden{opacity:0;transform:translateY(14px);animation:rise 700ms var(--ease-out) forwards 1050ms}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes fadein{to{opacity:1}}
+@keyframes unveil{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes settle{from{transform:scale(1.08)}to{transform:scale(1)}}
+
+/* ---------- the pink band: constant motion, so linear ---------- */
+.band{background:var(--pink);color:#fff;overflow:hidden;border-block:1px solid var(--pink-deep)}
+.band-track{display:flex;width:max-content;animation:drift 42s linear infinite}
+.band ul{display:flex;align-items:center;gap:34px;margin:0;padding:16px 17px;list-style:none;white-space:nowrap;font:400 15px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.band li{display:flex;align-items:center;gap:34px}
+.band li::after{content:"✦";color:var(--gold-light);font-size:12px}
+@keyframes drift{to{transform:translateX(-50%)}}
+@media (hover:hover) and (pointer:fine){.band:hover .band-track{animation-play-state:paused}}
+
+/* ---------- sections ---------- */
+.sec{padding-block:var(--sec)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:clamp(32px,4vw,56px)}
+.head h2{font-size:clamp(36px,4.4vw,62px);margin-top:16px}
+.head h2 em{font-style:italic;color:var(--pink)}
+.head p{max-width:30em;color:var(--muted)}
+.more{display:inline-flex;align-items:center;gap:8px;font:500 14px/1 var(--sans);letter-spacing:.08em;color:var(--plum);text-decoration:none;padding-bottom:6px;border-bottom:1px solid var(--gold);white-space:nowrap}
+.more svg{width:16px;height:16px;transition:transform 200ms var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.more:hover svg{transform:translateX(4px)}}
+
+/* scroll reveal: occasional, once per element, opacity and a short rise */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity 700ms var(--ease-out),transform 700ms var(--ease-out);transition-delay:calc(var(--i,0) * 70ms)}
+.js .rv.in{opacity:1;transform:none}
+
+/* collection tiles */
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
+.cat{position:relative;display:block;text-decoration:none;color:#fff}
+.cat .pic{aspect-ratio:3/4;overflow:hidden;border-radius:999px 999px 0 0;background:var(--cream)}
+.cat img{width:100%;height:100%;object-fit:cover;transition:transform 500ms var(--ease-out)}
+.cat .cap{position:absolute;inset:auto 0 0;display:flex;justify-content:space-between;align-items:end;padding:22px 20px;background:linear-gradient(transparent,rgba(42,6,25,.78))}
+.cat b{font:500 clamp(22px,2vw,28px)/1 var(--serif)}
+.cat span{font:400 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-light)}
+@media (hover:hover) and (pointer:fine){.cat:hover img{transform:scale(1.05)}}
+
+/* favourites */
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,28px)}
+.card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);text-decoration:none;transition:transform 250ms var(--ease-out),box-shadow 250ms ease}
+.card .pic{aspect-ratio:4/5;overflow:hidden;background:var(--cream)}
+.card img{width:100%;height:100%;object-fit:cover}
+.card .body{display:grid;gap:6px;padding:18px 18px 20px}
+.card b{font:500 21px/1.15 var(--serif);color:var(--plum)}
+.card .m{font-size:13px;color:var(--muted)}
+.card .ask{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:12px;border-top:1px solid var(--line);font:500 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--pink)}
+.card .ask svg{width:16px;height:16px}
+.card .bs{position:absolute;margin:12px;padding:6px 10px;background:var(--pink);color:#fff;font:500 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.card .pic{position:relative}
+@media (hover:hover) and (pointer:fine){.card:hover{transform:translateY(-4px);box-shadow:0 26px 40px -30px rgba(59,10,37,.5)}}
+
+/* Suba Mangala */
+.suba{position:relative;overflow:hidden;background:var(--blush)}
+.suba .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(36px,6vw,96px);align-items:center}
+.suba h2{font-size:clamp(40px,5vw,72px);margin:16px 0 18px}
+.suba h2 em{font-style:italic;color:var(--pink)}
+.suba p{color:var(--muted);max-width:30em}
+.suba .ctas{margin-top:28px}
+.steps{display:grid;gap:14px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:18px;align-items:center;padding:20px 22px;background:#fff;border:1px solid var(--pink-soft)}
+.steps li::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--pink);color:#fff;font:500 24px/1 var(--serif)}
+.steps b{display:block;font:500 22px/1.2 var(--serif);color:var(--plum)}
+.steps span{font-size:14px;color:var(--muted)}
+.mandala{position:absolute;right:-120px;top:-120px;width:420px;height:420px;color:var(--pink-soft);opacity:.7;pointer-events:none}
+
+/* money exchange */
+.dark{background:var(--plum);color:#f3dfe7}
+.money{position:relative;overflow:hidden}
+.money::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 0% 0%,rgba(219,10,115,.28),transparent 70%),radial-gradient(40% 50% at 100% 100%,rgba(201,162,74,.18),transparent 70%);pointer-events:none}
+.money .wrap{position:relative}
+.money .head h2{color:#fff}
+.money .head h2 em{color:var(--pink-soft)}
+.money .head p{color:#d9b9c8}
+.agents{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,20px)}
+.agent{display:grid;align-content:start;gap:10px;padding:28px 24px 26px;border:1px solid rgba(236,210,143,.28);background:rgba(255,255,255,.03)}
+.agent .n{font:600 clamp(22px,2vw,27px)/1.1 var(--sans);letter-spacing:-.01em;color:#fff}
+.agent .r{font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.agent p{font-size:14px;color:#d9b9c8}
+.agent.fx{background:var(--pink);border-color:var(--pink)}
+.agent.fx .r{color:#ffe1ee}
+.agent.fx p{color:#ffe1ee}
+.reach{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);margin-top:clamp(28px,3vw,44px);padding-top:clamp(28px,3vw,44px);border-top:1px solid rgba(236,210,143,.22)}
+.reach h3{font-size:26px;color:#fff;margin-bottom:14px}
+.addr{display:grid;gap:10px;margin:0;padding:0;list-style:none;color:#e9d2dc}
+.addr li{display:flex;gap:12px;align-items:baseline}
+.addr li::before{content:"✦";color:var(--gold-light);font-size:11px}
+.phones{display:flex;flex-wrap:wrap;gap:10px}
+.phones a{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid rgba(236,210,143,.4);border-radius:999px;font:500 16px/1 var(--sans);letter-spacing:.04em;color:var(--gold-light);text-decoration:none;transition:background-color 200ms ease,color 200ms ease,transform 140ms var(--ease-out)}
+.phones a:active{transform:scale(.97)}
+.phones svg{width:16px;height:16px}
+@media (hover:hover) and (pointer:fine){.phones a:hover{background:var(--gold-light);color:var(--plum)}}
+
+/* track */
+.track .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
+.track h2{font-size:clamp(34px,4vw,54px);margin:16px 0 14px}
+.track p{color:var(--muted)}
+.tform{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:clamp(22px,3vw,34px);background:#fff;border:1px solid var(--line)}
+.tform label{display:grid;gap:8px;font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tform input{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--ivory);font:400 17px var(--sans);color:var(--ink);transition:border-color 200ms ease}
+.tform input:focus{outline:none;border-color:var(--pink)}
+.tform .btn{grid-column:1/-1}
+
+/* showrooms */
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,26px)}
+.room{display:grid;align-content:start;gap:10px;padding:30px 26px;background:#fff;border-top:3px solid var(--pink);box-shadow:0 1px 0 var(--line)}
+.room h3{font-size:28px;color:var(--plum)}
+.room .r{font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--pink)}
+.room p{color:var(--muted)}
+.room a{font-weight:500;color:var(--plum)}
+.hours{margin-top:clamp(20px,2.4vw,32px);text-align:center;color:var(--muted);font-size:15px}
+
+/* footer */
+.foot{background:var(--plum-2);color:#cfaebc;padding-block:clamp(56px,6vw,80px) 28px;font-size:14px}
+.foot .g{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+.foot img{height:84px;width:auto}
+.foot .t{margin-top:16px;font:italic 400 20px/1.3 var(--serif);color:var(--gold-light)}
+.foot h4{margin:0 0 14px;font:500 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:#fff}
+.foot ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.foot a{text-decoration:none}
+.foot .b{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:44px;padding-top:22px;border-top:1px solid rgba(236,210,143,.18);font-size:13px}
+
+/* ---------- phones and tablets ---------- */
+@media (max-width:1080px){
+  .nav,.mast .btn,.hot{display:none}
+  .menu-b{display:grid;place-items:center}
+  .mast .wrap{min-height:76px;justify-content:space-between}
+  .logo img{height:58px}
+  .menu{display:block;position:absolute;left:0;right:0;top:100%;background:var(--plum);border-top:1px solid rgba(236,210,143,.2);padding:8px var(--gut) 22px;
+    opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s 220ms}
+  .menu.open{opacity:1;transform:none;visibility:visible;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s}
+  .menu a{display:block;padding:14px 0;border-bottom:1px solid rgba(236,210,143,.14);font-size:17px;text-decoration:none}
+  .menu .btn{margin-top:16px;width:100%}
+  .cats,.cards,.agents{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .foot .g{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .rate .where{display:none}
+  .rate .wrap{justify-content:center}
+  .hero .wrap,.suba .wrap,.track .wrap,.reach{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-top:28px}
+  .hero-ph{justify-self:center;width:min(100%,320px);order:-1}
+  .hero-ph .pic{aspect-ratio:1/1}
+  .hero h1{margin-top:16px}
+  .golden{left:auto;right:0;bottom:20px}
+  .head{flex-direction:column;align-items:start}
+  .rooms{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .rate .k{margin-left:8px}
+  .hero-ph .frame{inset:-10px 10px 10px -10px}
+  .golden{max-width:210px;padding:12px 16px}
+  .golden b{font-size:18px}
+  .cards{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .card .body{padding:14px}
+  .card b{font-size:18px}
+  .agents{grid-template-columns:minmax(0,1fr)}
+  .tform{grid-template-columns:minmax(0,1fr)}
+  .foot .g{grid-template-columns:minmax(0,1fr)}
+  .ctas .btn{flex:1 1 100%}
+}
+
+/* reduced motion: keep the fades, drop the movement */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .hero .rise,.js .golden{transform:none;animation:fadein 400ms ease forwards}
+  .js .hero-ph .pic,.js .hero-ph .pic img{animation:none}
+  .js .rv{transform:none;transition:opacity 400ms ease}
+  .band-track{animation:none}
+  .band ul:last-child{display:none}
+  .cat img,.card,.more svg{transition:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3Z"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1.4 2.2 1.4 4.6 0 6.6C10.6 6.6 10.6 4.2 12 2Zm0 13.4c1.4 2 1.4 4.4 0 6.6-1.4-2.2-1.4-4.6 0-6.6ZM2 12c2.2-1.4 4.6-1.4 6.6 0-2 1.4-4.4 1.4-6.6 0Zm13.4 0c2-1.4 4.4-1.4 6.6 0-2.2 1.4-4.6 1.4-6.6 0ZM4.9 4.9c2.5.6 4.2 2.3 4.7 4.7-2.4-.5-4.1-2.2-4.7-4.7Zm9.5 9.5c2.4.5 4.1 2.2 4.7 4.7-2.5-.6-4.2-2.3-4.7-4.7Zm4.7-9.5c-.6 2.5-2.3 4.2-4.7 4.7.5-2.4 2.2-4.1 4.7-4.7ZM9.6 14.4c-.5 2.4-2.2 4.1-4.7 4.7.6-2.5 2.3-4.2 4.7-4.7ZM12 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg>
+
+<div class="rate">
+  <div class="wrap">
+    <span class="where">67 &amp; 69 Greens Road · Sea Street · Katunayake · Open daily</span>
+    <span><span class="dot" aria-hidden="true"></span>Gold today<span class="k">24K</span><b>Rs 333,900</b><span class="k">22K</span><b>Rs 307,200</b> / pawn</span>
+  </div>
+</div>
+
+<header class="mast" id="mast">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Pushpa Jewellers, home"><img src="{{IMG:lockup}}" alt="Pushpa Jewellers, since 1967" width="688" height="603"></a>
+    <ul class="nav">
+      <li><a href="#top" aria-current="page">Home</a></li>
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#suba">Suba Mangala</a></li>
+      <li><a href="#money">Money exchange</a></li>
+      <li><a href="#track">Track order</a></li>
+      <li><a href="#showrooms">Showrooms</a></li>
+    </ul>
+    <a class="hot" href="tel:+94312233857">Hotline<b>031 223 3857</b></a>
+    <a class="btn pink" href="https://wa.me/94777770203" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+    <button class="menu-b" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+  </div>
+  <nav class="menu" id="menu" aria-label="Menu">
+    <a href="#collection">Collection</a><a href="#suba">Suba Mangala</a><a href="#money">Money exchange</a><a href="#track">Track order</a><a href="#showrooms">Showrooms</a>
+    <a class="btn gold" href="tel:+94312233857"><svg aria-hidden="true"><use href="#i-call"/></svg>Call 031 223 3857</a>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="hero-h">
+  <div class="wrap">
+    <div>
+      <span class="label rise" style="--i:0">Negombo · Since 1967</span>
+      <h1 id="hero-h" class="rise" style="--i:1">Gold for the moments that become <em>heirlooms</em></h1>
+      <p class="tag rise" style="--i:2">Forever Quality &amp; Trust</p>
+      <p class="lede rise" style="--i:3">Honest 22KT and 18KT gold from Negombo’s own jewellers. Every piece is weighed in front of you and priced at the day’s rate, for a wedding, a gift or every day.</p>
+      <div class="ctas rise" style="--i:4">
+        <a class="btn pink" href="#suba">Start a Suba Mangala plan</a>
+        <a class="btn line" href="#collection">See the collection</a>
+      </div>
+      <ul class="trust rise" style="--i:5">
+        <li><svg aria-hidden="true"><use href="#i-flower"/></svg>Weighed in front of you</li>
+        <li><svg aria-hidden="true"><use href="#i-flower"/></svg>22KT &amp; 18KT gold</li>
+        <li><svg aria-hidden="true"><use href="#i-flower"/></svg>Three showrooms</li>
+      </ul>
+    </div>
+    <figure class="hero-ph" style="margin:0">
+      <span class="frame" aria-hidden="true"></span>
+      <div class="pic"><img src="{{IMG:hero}}" alt="A bride in a cream saree wearing Pushpa gold" width="1200" height="1500"></div>
+      <div class="golden"><span>Golden day</span><b>Akshaya Tritiya</b><i>Saturday, 9 May 2027</i></div>
+    </figure>
+  </div>
+</section>
+
+<div class="band" aria-label="At Pushpa">
+  <div class="band-track">
+    <ul><li>Authorised money changers</li><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>22KT &amp; 18KT gold</li><li>Suba Mangala gold plan</li><li>Pawning</li><li>Airline tickets</li><li>Since 1967</li></ul>
+    <ul aria-hidden="true"><li>Authorised money changers</li><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>22KT &amp; 18KT gold</li><li>Suba Mangala gold plan</li><li>Pawning</li><li>Airline tickets</li><li>Since 1967</li></ul>
+  </div>
+</div>
+
+<section class="sec" id="collection" aria-labelledby="col-h">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="label rv">The collection</span><h2 id="col-h" class="rv" style="--i:1">Made to be <em>worn</em>, and kept</h2></div>
+      <a class="more rv" style="--i:2" href="#collection">All pieces <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="cats">
+      <a class="cat rv" style="--i:0" href="#collection"><div class="pic"><img src="{{IMG:cat-necklaces}}" alt="" width="600" height="800" loading="lazy"></div><div class="cap"><b>Necklaces</b><span>39 pieces</span></div></a>
+      <a class="cat rv" style="--i:1" href="#collection"><div class="pic"><img src="{{IMG:cat-rings}}" alt="" width="600" height="800" loading="lazy"></div><div class="cap"><b>Rings</b><span>9 pieces</span></div></a>
+      <a class="cat rv" style="--i:2" href="#collection"><div class="pic"><img src="{{IMG:cat-bangles}}" alt="" width="600" height="800" loading="lazy"></div><div class="cap"><b>Bangles</b><span>8 pieces</span></div></a>
+      <a class="cat rv" style="--i:3" href="#collection"><div class="pic"><img src="{{IMG:cat-pendants}}" alt="" width="600" height="800" loading="lazy"></div><div class="cap"><b>Pendants</b><span>9 pieces</span></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" aria-labelledby="fav-h">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="label rv">Favourites</span><h2 id="fav-h" class="rv" style="--i:1">This season’s <em>favourites</em></h2></div>
+      <p class="rv" style="--i:2">Prices follow the day’s gold rate. Ask on WhatsApp and we will reply with today’s price and the weight.</p>
+    </div>
+    <div class="cards">
+      <a class="card rv" style="--i:0" href="https://wa.me/94777770203" target="_blank" rel="noopener"><div class="pic"><img src="{{IMG:p1}}" alt="" width="540" height="675" loading="lazy"><em class="bs">Best seller</em></div><div class="body"><b>Stacked bar bangle</b><span class="m">22KT · 12.470 g</span><span class="ask">Ask the price <svg aria-hidden="true"><use href="#i-wa"/></svg></span></div></a>
+      <a class="card rv" style="--i:1" href="https://wa.me/94777770203" target="_blank" rel="noopener"><div class="pic"><img src="{{IMG:p2}}" alt="" width="540" height="675" loading="lazy"><em class="bs">Bridal</em></div><div class="body"><b>Gold leaf bridal necklace</b><span class="m">22KT · 24.380 g</span><span class="ask">Ask the price <svg aria-hidden="true"><use href="#i-wa"/></svg></span></div></a>
+      <a class="card rv" style="--i:2" href="https://wa.me/94777770203" target="_blank" rel="noopener"><div class="pic"><img src="{{IMG:p3}}" alt="" width="540" height="675" loading="lazy"></div><div class="body"><b>Five-stone ring</b><span class="m">22KT · 1.120 g</span><span class="ask">Ask the price <svg aria-hidden="true"><use href="#i-wa"/></svg></span></div></a>
+      <a class="card rv" style="--i:3" href="https://wa.me/94777770203" target="_blank" rel="noopener"><div class="pic"><img src="{{IMG:p4}}" alt="" width="540" height="675" loading="lazy"></div><div class="body"><b>Enamel flower bracelet</b><span class="m">22KT · 6.680 g</span><span class="ask">Ask the price <svg aria-hidden="true"><use href="#i-wa"/></svg></span></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec suba" id="suba" aria-labelledby="suba-h">
+  <svg class="mandala" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="54"/><circle cx="100" cy="100" r="90"/><g id="pt"><path d="M100 46c10 14 10 28 0 40-10-12-10-26 0-40Z"/><path d="M100 10c16 20 16 40 0 56-16-16-16-36 0-56Z"/></g><use href="#pt" transform="rotate(30 100 100)"/><use href="#pt" transform="rotate(60 100 100)"/><use href="#pt" transform="rotate(90 100 100)"/><use href="#pt" transform="rotate(120 100 100)"/><use href="#pt" transform="rotate(150 100 100)"/><use href="#pt" transform="rotate(180 100 100)"/><use href="#pt" transform="rotate(210 100 100)"/><use href="#pt" transform="rotate(240 100 100)"/><use href="#pt" transform="rotate(270 100 100)"/><use href="#pt" transform="rotate(300 100 100)"/><use href="#pt" transform="rotate(330 100 100)"/></g></svg>
+  <div class="wrap">
+    <div>
+      <span class="label rv">Suba Mangala gold plan</span>
+      <h2 id="suba-h" class="rv" style="--i:1">Save for gold, <em>month by month</em></h2>
+      <p class="rv" style="--i:2">Pay a fixed amount each month for 6 or 12 months. Every payment is turned into gold weight at that day’s rate, so the gold is yours as you go. When the plan ends, you choose your jewellery.</p>
+      <div class="ctas rv" style="--i:3"><a class="btn pink" href="https://wa.me/94777770203" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Reserve a plan</a><a class="btn line" href="tel:+94312233857">Call 031 223 3857</a></div>
+    </div>
+    <ol class="steps">
+      <li class="rv" style="--i:0"><div><b>Choose your monthly amount</b><span>From Rs 1,000 a month on a 12 month plan</span></div></li>
+      <li class="rv" style="--i:1"><div><b>Each payment becomes gold</b><span>Weighed in at the day’s rate, kept on your card</span></div></li>
+      <li class="rv" style="--i:2"><div><b>Choose your jewellery</b><span>Any piece in our showrooms, with special gifts from Pushpa</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec dark money" id="money" aria-labelledby="money-h">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="label rv">Authorised money changers</span><h2 id="money-h" class="rv" style="--i:1">Send, receive and change money, <em>at our counter</em></h2></div>
+      <p class="rv" style="--i:2">The same people you buy your gold from. Send money to family abroad, collect money sent to you, and change foreign currency, at all three showrooms.</p>
+    </div>
+    <div class="agents">
+      <div class="agent rv" style="--i:0"><span class="r">Authorised agent</span><span class="n">Western Union</span><p>Send money worldwide and collect money sent to you.</p></div>
+      <div class="agent rv" style="--i:1"><span class="r">Authorised agent</span><span class="n">Ria Money Transfer</span><p>Fast transfers to and from family overseas.</p></div>
+      <div class="agent rv" style="--i:2"><span class="r">Authorised agent</span><span class="n">MoneyGram</span><p>Receive money sent from abroad, paid out in rupees.</p></div>
+      <div class="agent fx rv" style="--i:3"><span class="r">At the counter</span><span class="n">Foreign currency</span><p>Buy and sell foreign currency at the day’s rate.</p></div>
+    </div>
+    <div class="reach">
+      <div class="rv">
+        <h3>Find us</h3>
+        <ul class="addr">
+          <li>67 &amp; 69 Greens Road, Negombo</li>
+          <li>150A Sea Street, Negombo</li>
+          <li>8A Averiwatte, Katunayake</li>
+        </ul>
+      </div>
+      <div class="rv" style="--i:1">
+        <h3>Call us</h3>
+        <div class="phones">
+          <a href="tel:+94312233857"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 3857</a>
+          <a href="tel:+94312222404"><svg aria-hidden="true"><use href="#i-call"/></svg>031 222 2404</a>
+          <a href="tel:+94757966709"><svg aria-hidden="true"><use href="#i-call"/></svg>075 796 6709</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec track" id="track" aria-labelledby="track-h">
+  <div class="wrap">
+    <div>
+      <span class="label rv">Track your order</span>
+      <h2 id="track-h" class="rv" style="--i:1">Where is my piece?</h2>
+      <p class="rv" style="--i:2">Waiting on a made-to-order piece or a repair? Enter the number on your receipt and the last four digits of your mobile to see where it stands, step by step.</p>
+    </div>
+    <form class="tform rv" style="--i:1" onsubmit="event.preventDefault();this.querySelector('.btn').textContent='On the live site, this shows your steps'">
+      <label>Order number<input inputmode="numeric" autocomplete="off" placeholder="1001"></label>
+      <label>Mobile, last 4 digits<input inputmode="numeric" maxlength="4" autocomplete="off" placeholder="1418"></label>
+      <button class="btn pink" type="submit">Get my status</button>
+    </form>
+  </div>
+</section>
+
+<section class="sec" id="showrooms" style="padding-top:0" aria-labelledby="rooms-h">
+  <div class="wrap">
+    <div class="head"><div><span class="label rv">Visit us</span><h2 id="rooms-h" class="rv" style="--i:1">Three <em>showrooms</em></h2></div></div>
+    <div class="rooms">
+      <div class="room rv" style="--i:0"><span class="r">Head office</span><h3>Greens Road</h3><p>67 &amp; 69 Greens Road, Negombo</p><a href="tel:+94312233857">031 223 3857</a></div>
+      <div class="room rv" style="--i:1"><span class="r">Negombo</span><h3>Sea Street</h3><p>150A Sea Street, Negombo</p><a href="tel:+94312222404">031 222 2404</a></div>
+      <div class="room rv" style="--i:2"><span class="r">Katunayake</span><h3>Averiwatte</h3><p>8A Averiwatte, Katunayake</p><a href="tel:+94757966709">075 796 6709</a></div>
+    </div>
+    <p class="hours rv">Monday to Saturday 9.15 am – 7.30 pm · Sunday 9.15 am – 2.00 pm</p>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="g">
+      <div><img src="{{IMG:lockup}}" alt="Pushpa Jewellers" width="688" height="603" loading="lazy"><p class="t">Forever Quality &amp; Trust</p></div>
+      <div><h4>Shop</h4><ul><li><a href="#collection">The collection</a></li><li><a href="#suba">Suba Mangala</a></li><li><a href="#track">Track an order</a></li></ul></div>
+      <div><h4>Services</h4><ul><li><a href="#money">Money exchange</a></li><li><a href="#money">Western Union · Ria · MoneyGram</a></li><li>Pawning</li><li>Airline tickets</li></ul></div>
+      <div><h4>Call</h4><ul><li><a href="tel:+94312233857">031 223 3857</a></li><li><a href="tel:+94312222404">031 222 2404</a></li><li><a href="tel:+94757966709">075 796 6709</a></li></ul></div>
+    </div>
+    <div class="b"><span>© 2026 Pushpa Jewellers (Pvt) Ltd · pushpa-jewellers.com</span><span>Negombo · Katunayake</span></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var d = document, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // the masthead's shadow, once the page has moved
+  var mast = d.getElementById('mast');
+  function onScroll() { mast.classList.toggle('scrolled', window.scrollY > 8); }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  // phone menu
+  var mb = d.querySelector('.menu-b'), menu = d.getElementById('menu');
+  mb.addEventListener('click', function () { var o = menu.classList.toggle('open'); mb.setAttribute('aria-expanded', String(o)); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) { menu.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); } });
+  // reveal each block once, as it comes into view
+  var els = d.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  els.forEach(function (e) { io.observe(e); });
+})();
+</script>
+</body>
+</html>
