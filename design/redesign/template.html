@@ -1,9 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pushpa Redesign</title>
+<title>Pushpa Jewellers Redesign</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Design preview: Pushpa Jewellers home page in EB Garamond and Outfit, with the shop's hot pink and the money exchange section.">
 <script>document.documentElement.classList.add('js');</script>
 <style>
@@ -29,10 +25,11 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--plum)}
 a{color:inherit}
 h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;margin:0;letter-spacing:-.01em}
 p{margin:0}
-.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gut)}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
 .label{display:inline-flex;align-items:center;gap:10px;font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
 .label::before{content:"";width:22px;height:1px;background:currentColor}
 .dark .label{color:var(--gold-light)}
@@ -61,7 +58,7 @@ p{margin:0}
 .rate b{font-weight:500;color:#fff}
 .rate .k{color:var(--gold-light);font-weight:500;margin:0 6px 0 14px}
 .rate .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--pink);margin-right:8px;vertical-align:1px}
-.mast{position:sticky;top:0;z-index:20;background:var(--plum);color:#f6e3ea}
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--plum);color:#f6e3ea}
 .mast::after{content:"";position:absolute;inset:auto 0 -18px;height:18px;background:linear-gradient(rgba(42,6,25,.28),transparent);opacity:0;transition:opacity 200ms ease;pointer-events:none}
 .mast.scrolled::after{opacity:1}
 .mast .wrap{display:flex;align-items:center;gap:28px;min-height:88px}
@@ -129,9 +126,8 @@ p{margin:0}
 .more svg{width:16px;height:16px;transition:transform 200ms var(--ease-out)}
 @media (hover:hover) and (pointer:fine){.more:hover svg{transform:translateX(4px)}}
 
-/* scroll reveal: occasional, once per element, opacity and a short rise */
-.js .rv{opacity:0;transform:translateY(24px);transition:opacity 700ms var(--ease-out),transform 700ms var(--ease-out);transition-delay:calc(var(--i,0) * 70ms)}
-.js .rv.in{opacity:1;transform:none}
+/* scroll reveal: occasional, once per element; played with element.animate() as each block arrives (see the script),
+   so every block is visible at rest and the motion only decorates its arrival */
 
 /* collection tiles */
 .cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
@@ -233,7 +229,7 @@ p{margin:0}
   .menu-b{display:grid;place-items:center}
   .mast .wrap{min-height:76px;justify-content:space-between}
   .logo img{height:58px}
-  .menu{display:block;position:absolute;left:0;right:0;top:100%;background:var(--plum);border-top:1px solid rgba(236,210,143,.2);padding:8px var(--gut) 22px;
+  .menu{display:block;position:absolute;left:0;right:0;top:100%;background:var(--plum);border-top:1px solid rgba(236,210,143,.2);padding-block:8px 22px;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px));
     opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s 220ms}
   .menu.open{opacity:1;transform:none;visibility:visible;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s}
   .menu a{display:block;padding:14px 0;border-bottom:1px solid rgba(236,210,143,.14);font-size:17px;text-decoration:none}
@@ -272,14 +268,11 @@ p{margin:0}
   html{scroll-behavior:auto}
   .js .hero .rise,.js .golden{transform:none;animation:fadein 400ms ease forwards}
   .js .hero-ph .pic,.js .hero-ph .pic img{animation:none}
-  .js .rv{transform:none;transition:opacity 400ms ease}
   .band-track{animation:none}
   .band ul:last-child{display:none}
   .cat img,.card,.more svg{transition:none}
 }
 </style>
-</head>
-<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3Z"/></symbol>
@@ -481,14 +474,22 @@ p{margin:0}
   var mb = d.querySelector('.menu-b'), menu = d.getElementById('menu');
   mb.addEventListener('click', function () { var o = menu.classList.toggle('open'); mb.setAttribute('aria-expanded', String(o)); });
   menu.addEventListener('click', function (e) { if (e.target.closest('a')) { menu.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); } });
-  // reveal each block once, as it comes into view
+  // each block rises in once as it arrives; blocks already on screen when the page opens are left alone
   var els = d.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  if (!('IntersectionObserver' in window) || !Element.prototype.animate) return;
+  var first = true;
   var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      if (first && e.boundingClientRect.top < innerHeight) return;
+      var i = parseFloat(e.target.style.getPropertyValue('--i')) || 0;
+      e.target.animate(
+        reduce ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }],
+        { duration: reduce ? 400 : 700, delay: i * 70, easing: reduce ? 'ease' : 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'backwards' });
+    });
+    first = false;
+  }, { rootMargin: '0px 0px 80px 0px' });
   els.forEach(function (e) { io.observe(e); });
 })();
 </script>
-</body>
-</html>
