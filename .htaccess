@@ -1,0 +1,44 @@
+# Hostinger (Apache / LiteSpeed) settings for the Pushpa Jewellers site.
+# Does the job vercel.json does on Vercel: HTTPS, www -> bare domain, redirects, and /api/gold.
+
+Options -Indexes
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Always HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# www.example.com -> example.com
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+# Today's gold rate (the bar at the top of every page)
+RewriteRule ^api/gold/?$ api/gold.php [L]
+
+# /services has no page of its own: send it to the services section of the home page
+RewriteRule ^services/?$ https://%{HTTP_HOST}/#services [L,R=302,NE]
+</IfModule>
+
+# /shop -> /shop/, /about -> /about/ and the like are done by Apache itself (DirectorySlash).
+
+# Smaller transfers
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
+</IfModule>
+
+# Photos rarely change: let browsers keep them for a month.
+# Pages, CSS and JS are checked on every visit, so an upload shows straight away.
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/webp "access plus 30 days"
+ExpiresByType image/jpeg "access plus 30 days"
+ExpiresByType image/png  "access plus 30 days"
+ExpiresByType image/svg+xml "access plus 30 days"
+ExpiresByType text/css "access plus 0 seconds"
+ExpiresByType application/javascript "access plus 0 seconds"
+ExpiresByType text/html "access plus 0 seconds"
+</IfModule>

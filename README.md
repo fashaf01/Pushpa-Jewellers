@@ -29,6 +29,38 @@ single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one 
 (it too shows the call line in place of the rate, and has only the home page, so its links to the shop, About and the
 service pages do not work).
 
+## Hosting on Hostinger
+
+The site runs on any Hostinger web hosting plan as it is: plain files plus one small PHP
+script for the gold rate. Vercel's `vercel.json` and `api/gold.js` are replaced there by
+`.htaccess` and `api/gold.php`, which do the same jobs.
+
+1. Build the upload: `sh tools/package-hostinger.sh` → `dist/pushpa-hostinger.zip`
+   (only the site's files; no README, tools or Vercel files).
+2. hPanel → **Websites** → **Add website** → **Empty PHP/HTML website**, and give it the domain
+   (`testlk.store`). If the website already exists, skip this.
+3. hPanel → that website → **Files → File Manager** → open `public_html`. Delete the
+   `default.php` Hostinger puts there, upload the zip, right-click it → **Extract** (into
+   `public_html` itself, not a sub-folder), then delete the zip.
+   `.htaccess` starts with a dot, so the File Manager may hide it; it is there.
+4. Point the domain at Hostinger. It currently uses Vercel's nameservers
+   (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`). Where the domain is registered, set the
+   nameservers to Hostinger's — `ns1.dns-parking.com` and `ns2.dns-parking.com`
+   (if the domain was bought at Hostinger: hPanel → **Domains** → the domain →
+   **DNS / Nameservers** → **Change nameservers** → use Hostinger nameservers).
+   It takes from a few minutes to a few hours to switch over.
+5. hPanel → **Security → SSL**: the free SSL certificate installs itself once the domain points
+   at Hostinger. Until then the site can show a certificate warning; wait for it.
+6. Remove `testlk.store` from the Vercel project's **Settings → Domains**, so the two do not fight
+   over it. The admin (`pushpa-jewellers-admin.vercel.app`) stays on Vercel and keeps working;
+   the gold bar still reads the counter rate from it.
+
+To pin the gold rate by hand on Hostinger, set `FIXED_24K_PAWN` and `FIXED_22K_PAWN` at the top
+of `api/gold.php` (and put them back to 0 afterwards). It keeps each answer for ten minutes.
+
+To update the site later: rebuild the zip and extract it over `public_html` again
+(say yes to replacing files).
+
 ## Files
 
 ```
@@ -51,6 +83,9 @@ assets/img/              photographs (webp) and favicon
 assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
 assets/img/orn/          gold ornaments: corner, dividers, mandalas, the line-drawn lotus (svg)
 api/gold.js              today's gold rate, a Vercel function served at /api/gold
+api/gold.php             the same, for Hostinger (PHP); .htaccess serves it at /api/gold
+.htaccess                Hostinger: HTTPS, www to bare domain, redirects, /api/gold
+tools/package-hostinger.sh   builds dist/pushpa-hostinger.zip, the upload for Hostinger
 tools/frame-photos.py    frames a product photo of any size for the shop, or cuts a close-up from it
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
