@@ -26,7 +26,7 @@ RewriteRule ^(shop|about|services/pawning|services/money-exchange|services/airli
 RewriteRule ^services/?$ /#services [NE,R=302,L]
 
 # Keep repository-only files private.
-RewriteRule ^(\.git|\.github|tools|docs|dist|node_modules)(/|$) - [F,L]
+RewriteRule ^(\.git|\.github|tools|docs|design|dist|node_modules)(/|$) - [F,L]
 <FilesMatch "^(README\.md|.*\.zip|.*\.sh|.*\.py|\.gitignore)$">
   Require all denied
 </FilesMatch>
