@@ -56,11 +56,15 @@
     var all = fresh.concat(imported);
     return all.filter(function (p) { return !isWatch(p); }).concat(all.filter(isWatch));
   }
+  // prices show only when the owner turns them on in the admin (Settings > Website shop); otherwise every piece is
+  // "Price on request" and the button asks for the price on WhatsApp
+  var showPrices = false;
   function loadShop(done) {
     var settled = false, timer = setTimeout(function () { finish(null); }, 5000);
     function finish(r) {
       if (settled) return;
       settled = true; clearTimeout(timer);
+      showPrices = !!(r && r.show_prices === true);
       done(r && r.source === 'admin' && r.pieces && r.pieces.length ? fromAdmin(r.pieces) : FILES);
     }
     if (!window.fetch) return finish(null);
@@ -118,7 +122,7 @@
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
       '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + photo(p, 2, true) + '"' : '') + '><img src="' + photo(p, 1, true) + '" data-full="' + photo(p, 1) + '" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async">' + (p.bestseller ? '<em class="bs">Best seller</em>' : '') + '</div>' +
       '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.watch && p.brand ? p.brand + ' · ' + p.line : p.kind) + '</span>' + wt +
-      (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : p.watch ? '<em class="pr ask">Price on request</em>' : '') + '</a></li>';
+      (showPrices && p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : showPrices && p.watch ? '<em class="pr ask">Price on request</em>' : '') + '</a></li>';
   }
   function list(cat, sort) {
     var out = P.filter(function (p) { return cat === 'all' || p.cats.indexOf(cat) > -1; });
@@ -324,6 +328,9 @@
   var gold = null, current = null;
   function perGram(k) { return k === 22 ? +gold.k22.gram : +gold.k24.gram * k / 24; }
   function priceHTML(p) {
+    if (!showPrices) return '<span class="pv-pk">Price</span><b class="pv-pv">On request</b>' +
+      '<p class="pv-pn">' + (p.watch ? 'Message us on WhatsApp and we will reply with the price and whether this watch is in stock.'
+        : 'Gold is priced by its weight at the day’s rate. Message us on WhatsApp and we will reply with today’s price for this piece.') + '</p>';
     if (p.price) return '<span class="pv-pk">Price</span><b class="pv-pv tab">Rs ' + rs(p.price) + '</b>' +
       '<p class="pv-pn">' + (p.watch ? 'Message us on WhatsApp or call the hotline to confirm the price and whether it is in stock.'
         : 'Gold moves with the day’s rate, so we confirm the price when you ask. Message us on WhatsApp or call the hotline.') + '</p>';
@@ -360,7 +367,7 @@
   }
   function renderPiece(p) {
     var cat = p.cats[0], more = list(cat, 'new').filter(function (q) { return q !== p; }).slice(0, 4);
-    var ask = wa('I’d like to ask about the ' + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website.');
+    var ask = wa((showPrices ? 'I’d like to ask about the ' : 'could you tell me the price of the ') + p.name + (p.weight ? ' (' + p.weight + ')' : '') + ' I saw on your website' + (showPrices ? '.' : '?'));
     var fl = '<svg class="fl" aria-hidden="true"><use href="#flower"/></svg>';
     current = p;
     pieceView.innerHTML =
@@ -375,7 +382,7 @@
             '<p class="pv-d">' + esc(p.about) + '</p>' +
             specHTML(p) +
             '<div class="pv-ctas">' +
-              '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Ask about this piece</a>' +
+              '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>' + (showPrices ? 'Ask about this piece' : 'Ask the price on WhatsApp') + '</a>' +
               '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
             '</div>' +
             (p.watch

@@ -32,6 +32,8 @@ const DEFAULT_SETTINGS = [
     'market_premium_percent' => 5.12,
     'k22_percent_of_24k' => 92,
     'k18_percent_of_24k' => 75,
+    /* the shop takes no orders online: the website says "Price on request" and visitors ask on WhatsApp */
+    'website_prices' => false,
 ];
 
 function round100(float $n): float { return round($n / 100) * 100; }
@@ -898,6 +900,7 @@ function update_settings(array $d): array
         $r = q1('SELECT data FROM settings WHERE id = 1 FOR UPDATE');
         $s = array_merge(DEFAULT_SETTINGS, $r ? jdec($r['data']) : []);
         if (array_key_exists('shop_name', $d)) $s['shop_name'] = str_clean($d['shop_name'], 80) ?: $s['shop_name'];
+        if (array_key_exists('website_prices', $d)) $s['website_prices'] = (bool) $d['website_prices'];
         foreach (['price_rounding', 'default_making_percent', 'low_stock_default', 'featured_limit'] as $k) {
             $v = num($d[$k] ?? null);
             if ($v !== null && $v >= 0) $s[$k] = n($v);
@@ -1136,13 +1139,15 @@ function shop_import(): array
 function public_shop(): array
 {
     $s = get_settings();
-    if (empty($s['website_shop'])) return ['source' => 'website'];
+    $showPrices = !empty($s['website_prices']);
+    if (empty($s['website_shop'])) return ['source' => 'website', 'show_prices' => $showPrices];
     $rate = latest_rate();
     $rateArr = $rate ? ['per_gram' => (array) $rate['per_gram']] : null;
     $pieces = [];
     foreach (q("SELECT * FROM products WHERE status = 'published' ORDER BY created_at DESC") as $r) {
         $pr = product_out($r);
-        $price = $pr['show_price'] ? price_of($pr, $rateArr, $s['price_rounding']) : null;
+        /* with prices off, none leave the server */
+        $price = $showPrices && $pr['show_price'] ? price_of($pr, $rateArr, $s['price_rounding']) : null;
         /* the site's own photos are given as paths, so they keep working if the domain changes */
         $images = array_map(function ($i) {
             $path = parse_url($i['url'], PHP_URL_PATH) ?: '';
@@ -1155,7 +1160,7 @@ function public_shop(): array
             'price' => $price === null ? null : n($price), 'created_at' => $pr['created_at'],
             'web' => is_array($web) ? $web : null];
     }
-    return ['source' => 'admin', 'pieces' => $pieces];
+    return ['source' => 'admin', 'show_prices' => $showPrices, 'pieces' => $pieces];
 }
 
 /* ------------------------------------------------------------------

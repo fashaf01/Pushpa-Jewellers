@@ -111,7 +111,11 @@ first, newest first, then the website's own pieces in their old order, watches l
 pressed, and whenever the backend cannot be reached, the shop shows the pieces in `assets/js/pieces.js` and
 `pieces-instagram.js`, as below. Each website piece keeps its own details in the product's `web` field (its
 address slug, kind, Bridal/Watches filters, weight as printed, Instagram post, watch specifications), so the
-shop page looks the same either way. After changing those two files, run `node tools/export-pieces.js` to
+shop page looks the same either way.
+
+**Prices are off.** The shop takes no orders online, so every piece says "Price: on request", its button reads
+"Ask the price on WhatsApp", and no prices leave the server. The owner can turn prices on in the admin
+(Settings → Website shop → Show prices on the website). After changing those two files, run `node tools/export-pieces.js` to
 refresh `api/seed/website-pieces.json`, the list the admin brings in.
 
 `/shop/` shows every piece in `assets/js/pieces.js` in list order, with its weight in grams and

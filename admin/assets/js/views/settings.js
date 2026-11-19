@@ -205,15 +205,20 @@
         try { st = await PJ.api.shop.importStatus(); } catch (err) { box.innerHTML = String(html`<p class="muted">${err.message}</p>`); return; }
         if (!el.isConnected) return;
         $('[data-web-pill]', el).outerHTML = String(html`<span class="pill ${st.website_shop ? 'pill--ready' : 'pill--in_making'}" data-web-pill>${st.website_shop ? 'Shows this admin' : 'Not linked yet'}</span>`);
+        const prices = html`
+          <label class="check" style="margin:0.75rem 0 0.25rem"><input type="checkbox" data-web-prices ${s.website_prices ? 'checked' : ''}><span><strong>Show prices on the website</strong></span></label>
+          <p class="field__hint" style="margin-top:0">Off: every piece says “Price on request”, and its button asks for the price on WhatsApp. Turn it on if you start taking orders online.</p>`;
         box.innerHTML = String(st.website_shop ? html`
+          ${prices}
           <p>The shop on the website shows every piece marked <strong>Published</strong> here, with today’s price. Changes show on the website straight away.</p>
           <p class="muted">To hide a piece from the website, set it to <em>Draft</em>.${st.waiting ? html` ${st.waiting} piece${st.waiting === 1 ? '' : 's'} from the website’s files ${st.waiting === 1 ? 'is' : 'are'} not here yet.` : ''}</p>
           ${st.waiting ? html`<button class="btn btn--sm" type="button" data-act="import">Bring in the other ${st.waiting}</button>` : ''}`
         : html`
           <p>The shop on the website still shows the <strong>${st.in_file} pieces</strong> written into the website’s own files, so nothing you add here appears there yet.</p>
           <p>Bring those pieces in, and from then on the website shop shows the pieces published here. You can then change, hide or add pieces from this admin.</p>
-          <p class="muted small">Their prices come across exactly as the website shows them (the sample prices, until you change them), and their stock starts at 0 until you count it.</p>
-          <button class="btn btn--primary btn--sm" type="button" data-act="import">Bring in ${st.in_file} pieces and link the website</button>`);
+          <p class="muted small">Their prices come across from the website’s files (sample prices, until you change them), and their stock starts at 0 until you count it.</p>
+          <button class="btn btn--primary btn--sm" type="button" data-act="import">Bring in ${st.in_file} pieces and link the website</button>
+          ${prices}`);
       }
       on(el, 'click', '[data-act="import"]', async (e, btn) => {
         btn.disabled = true;
@@ -223,6 +228,14 @@
           ui.toast(r.added ? `${r.added} pieces brought in. The website shop now shows this admin.` : 'The website shop now shows this admin.');
           drawWeb();
         } catch (err) { ui.fail(err); btn.disabled = false; }
+      });
+      on(el, 'change', '[data-web-prices]', async (e, box) => {
+        box.disabled = true;
+        try {
+          PJ.ctx.settings = await PJ.api.settings.update({ website_prices: box.checked });
+          s.website_prices = box.checked;
+          ui.toast(box.checked ? 'Prices now show on the website' : 'Prices hidden on the website: visitors ask on WhatsApp');
+        } catch (err) { ui.fail(err); box.checked = !box.checked; } finally { box.disabled = false; }
       });
       drawWeb();
 
