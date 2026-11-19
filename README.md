@@ -13,7 +13,7 @@ for each of the three counter services: pawning, money exchange and airline tick
 legal pages: the privacy policy (`/privacy/`), cookies (`/cookies/`) and terms of use (`/terms/`). Suba Mangala
 and order tracking stay on the home page.
 
-No build step. It is hosted on **Hostinger** at **https://www.pushpajewelers.com**: plain
+No build step. It is hosted on **Hostinger** at **https://www.pushpa-jewellers.com**: plain
 HTML/CSS/JS for the website, with a small PHP + MySQL backend (`api/`) and the staff admin
 panel (`admin/`). Locally, PHP's own server runs all of it, gold bar included:
 
@@ -29,7 +29,7 @@ php -S localhost:8000 tools/dev-router.php
 Everything sits at the top level, so what is in the repo is what goes into `public_html`.
 Two ways to put it there:
 
-- **From GitHub (recommended).** hPanel → Websites → pushpajewelers.com → **Advanced → Git**:
+- **From GitHub (recommended).** hPanel → Websites → pushpa-jewellers.com → **Advanced → Git**:
   repository `fashaf01/Pushpa-Jewellers`, the site's branch, install path left empty
   (= `public_html`). Then each push is one click on **Deploy** (or turn on auto-deploy).
   The repository is private, so Hostinger shows an SSH key to add under GitHub → the repo →
@@ -51,7 +51,7 @@ pj-data/        ← next to public_html, never in Git, never served directly
 
 **One-time set-up**
 1. hPanel → **Databases** → create a MySQL database and user.
-2. Open `https://www.pushpajewelers.com/api/install.php`, paste the database name, user and
+2. Open `https://www.pushpa-jewellers.com/api/install.php`, paste the database name, user and
    password and the owner's email. The page then locks itself.
 3. Open `/admin/`, choose *Set up the shop* and create the owner account with that email.
 
@@ -61,7 +61,7 @@ pj-data/        ← next to public_html, never in Git, never served directly
   rupees plus the premium set in admin → Settings).
 - Products, stock per showroom, orders, payments, staff accounts and settings, as in `docs/API.md`.
   `GET /api/public/products` gives the website published pieces with their live price.
-- `.htaccess` (root) forces HTTPS, sends `pushpajewelers.com` to `www.`, keeps repo-only files
+- `.htaccess` (root) forces HTTPS, sends `pushpa-jewellers.com` to `www.`, keeps repo-only files
   private and restores the short links. `api/.htaccess` routes `/api/*` and keeps the
   `Authorization` header that shared hosting otherwise drops.
 

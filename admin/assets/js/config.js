@@ -14,7 +14,7 @@
 
 /* On a laptop or a Vercel preview there is no PHP API, so the panel opens in
    demo mode there and a test can never write into the real shop. Everywhere
-   else (pushpajewelers.com, Hostinger's preview address) it is live. */
+   else (pushpa-jewellers.com, Hostinger's preview address) it is live. */
 var PJ_DEMO_HOST = /^(localhost|127\.0\.0\.1|\[::1\]|)$|\.vercel\.app$|^testlk\.store$/i.test(window.location.hostname);
 
 window.PJ_CONFIG = {

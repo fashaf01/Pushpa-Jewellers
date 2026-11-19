@@ -11,10 +11,12 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# The canonical address is https://www.pushpajewelers.com/ — send the bare domain there.
+# The address is https://www.pushpa-jewellers.com/. Send the bare domain there, and the
+# misspelled pushpajewelers.com (bought first by mistake) too, so old links still arrive.
 # Other hosts (Hostinger's temporary preview domain) are left alone.
-RewriteCond %{HTTP_HOST} ^pushpajewelers\.com$ [NC]
-RewriteRule ^ https://www.pushpajewelers.com%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^(www\.)?pushpajewelers\.com$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^pushpa-jewellers\.com$ [NC]
+RewriteRule ^ https://www.pushpa-jewellers.com%{REQUEST_URI} [L,R=301]
 
 # /api/* (the shop backend, including the website's /api/gold bar) is handled by api/.htaccess.
 # The admin panel is at /admin/.
