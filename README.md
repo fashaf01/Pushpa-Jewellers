@@ -32,39 +32,41 @@ service pages do not work).
 ## Hosting on Hostinger
 
 Hostinger deploys this branch straight from GitHub into `public_html` (hPanel → Websites →
-Deployments). Everything the site needs sits at the top level, so no build step is needed.
+Deployments). Everything sits at the top level, so there is no build step.
 
-- `.htaccess` forces HTTPS, sends `pushpajewelers.com` to `www.pushpajewelers.com`, keeps repo-only
-  files private and restores the short links (`/shop`, `/about`, `/services/...`) that
-  `vercel.json` handles on Vercel.
-- `api/gold.php` is the PHP version of `api/gold.js`: the gold-rate bar asks for `/api/gold`, and
-  `.htaccess` points that at the PHP file. `api/gold.js` and `vercel.json` only apply on Vercel.
-- Fonts come from an Adobe Fonts kit (`tiq7fhn`): add the live domain to that kit in
-  Adobe Fonts → Web Projects, or headings fall back to a plain font.
+```
+public_html/
+  index.html, shop/, about/, services/ …   the website
+  admin/                                   the shop admin panel (staff sign in here)
+  api/                                     the shop backend, PHP 8.1+ and MySQL
+    index.php, src/                        every endpoint in docs/API.md
+    install.php                            one-time set-up page
+pj-data/        ← next to public_html, never in Git, never served directly
+  config.php                               database details + owner email (written by install.php)
+  uploads/                                 product photos (served at /api/photos/…)
+```
 
-## Deploying to Hostinger
+**One-time set-up**
+1. hPanel → **Databases** → create a MySQL database and user.
+2. Open `https://www.pushpajewelers.com/api/install.php`, paste the database name, user and
+   password and the owner's email. The page then locks itself.
+3. Open `/admin/`, choose *Set up the shop* and create the owner account with that email.
 
-The site is static, so any Hostinger plan works. No Node, PHP or database needed.
+**What the backend runs**
+- The gold-rate bar on every page asks `/api/gold`: the rate staff saved in the admin, or, if
+  nobody has saved one today, the automatic Sri Lankan market rate (international gold price in
+  rupees plus the premium set in admin → Settings).
+- Products, stock per showroom, orders, payments, staff accounts and settings, as in `docs/API.md`.
+  `GET /api/public/products` gives the website published pieces with their live price.
+- `.htaccess` (root) forces HTTPS, sends `pushpajewelers.com` to `www.`, keeps repo-only files
+  private and restores the short links. `api/.htaccess` routes `/api/*` and keeps the
+  `Authorization` header that shared hosting otherwise drops.
+- `api/gold.js` and `vercel.json` only apply on Vercel (`testlk.store`).
 
-1. `sh tools/package-hostinger.sh` builds `dist/hostinger-upload.zip`
-   (only `index.html`, `.htaccess` and `assets/`).
-2. hPanel → **Websites** → your domain → **File Manager** → open `public_html`.
-   Delete the placeholder `default.php` / `index.php` if present.
-3. Upload the zip, right-click → **Extract** into `public_html`, then delete the zip.
-   `index.html` must sit directly in `public_html`, not in a subfolder.
-4. hPanel → **Security → SSL**: install the free SSL. `.htaccess` then forces HTTPS
-   and sends `pushpajewelers.com` to `www.pushpajewelers.com` (the canonical URL).
-5. If the domain was bought elsewhere, point its nameservers to
-   `ns1.dns-parking.com` / `ns2.dns-parking.com` (shown in hPanel → Domains).
+**Starting over:** delete `pj-data/config.php` in File Manager and open `install.php` again.
 
-**Automatic deploys:** `.github/workflows/deploy-hostinger.yml` uploads the site
-over FTP on every push to the live branch (or by hand from the Actions tab).
-Create an FTP account in hPanel → **Files → FTP Accounts**, then add `FTP_SERVER`,
-`FTP_USERNAME` and `FTP_PASSWORD` under GitHub → Settings → Secrets and variables →
-Actions. The comments at the top of the workflow cover the optional settings.
-
-**Updating by hand:** re-run the script and upload/extract again, overwriting files.
-`.htaccess` blocks the repo-only files (README, tools, zips) from being served.
+Fonts come from an Adobe Fonts kit (`tiq7fhn`): add the live domain to that kit in
+Adobe Fonts → Web Projects, or headings fall back to a plain font.
 
 ## Files
 

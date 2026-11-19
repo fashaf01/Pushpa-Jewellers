@@ -16,8 +16,8 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^pushpajewelers\.com$ [NC]
 RewriteRule ^ https://www.pushpajewelers.com%{REQUEST_URI} [L,R=301]
 
-# Gold-rate bar: the page asks for /api/gold, which is api/gold.php here.
-RewriteRule ^api/gold/?$ api/gold.php [L]
+# /api/* (the shop backend, including the website's /api/gold bar) is handled by api/.htaccess.
+# The admin panel is at /admin/.
 
 # Short links, as the old Vercel redirects did.
 RewriteRule ^(shop|about|services/pawning|services/money-exchange|services/airline-ticketing)$ /$1/ [R=301,L]

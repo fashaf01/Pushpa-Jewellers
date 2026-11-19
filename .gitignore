@@ -3,5 +3,5 @@ node_modules/
 *.log
 dist/
 
-# Hostinger writes the gold-rate cache here
-api/gold-cache.json
+# Fallback private data folder, used only if pj-data next to public_html is not writable
+api/data/
