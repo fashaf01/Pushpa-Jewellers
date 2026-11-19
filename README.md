@@ -27,9 +27,14 @@ The site is static, so any Hostinger plan works. No Node, PHP or database needed
 5. If the domain was bought elsewhere, point its nameservers to
    `ns1.dns-parking.com` / `ns2.dns-parking.com` (shown in hPanel → Domains).
 
-**Updating later:** re-run the script and upload/extract again, overwriting files.
-Or use hPanel → **Advanced → Git** to pull this repository straight into
-`public_html`. `.htaccess` blocks the repo-only files (README, tools, zips) from being served.
+**Automatic deploys:** `.github/workflows/deploy-hostinger.yml` uploads the site
+over FTP on every push to the live branch (or by hand from the Actions tab).
+Create an FTP account in hPanel → **Files → FTP Accounts**, then add `FTP_SERVER`,
+`FTP_USERNAME` and `FTP_PASSWORD` under GitHub → Settings → Secrets and variables →
+Actions. The comments at the top of the workflow cover the optional settings.
+
+**Updating by hand:** re-run the script and upload/extract again, overwriting files.
+`.htaccess` blocks the repo-only files (README, tools, zips) from being served.
 
 ## Files
 

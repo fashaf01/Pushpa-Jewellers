@@ -1,0 +1,49 @@
+# Uploads the site to Hostinger over FTP whenever the live branch changes.
+#
+# One-time setup — GitHub repo → Settings → Secrets and variables → Actions:
+#   Secrets:   FTP_SERVER    e.g. ftp.pushpa-jewellers.com (or the IP hPanel shows)
+#              FTP_USERNAME  e.g. u123456789 or u123456789.pushpa-jewellers.com
+#              FTP_PASSWORD  the FTP account's password
+#   Variables (optional):
+#              FTP_SERVER_DIR  folder to upload into; default "public_html/".
+#                              Use "./" if your FTP login already opens inside public_html.
+#              FTP_PROTOCOL    "ftps" (default) or "ftp" if the TLS connection is refused.
+#
+# Run it by hand from the Actions tab → "Deploy to Hostinger" → Run workflow.
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+      - claude/pushpa-jewellers-landing-hkcef8
+  workflow_dispatch:
+
+concurrency:
+  group: hostinger-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Only the files the live site needs; README, tools and zips stay in the repo.
+      - name: Stage site files
+        run: |
+          mkdir -p site
+          cp index.html .htaccess site/
+          cp -r assets site/
+          find site -type f | sort
+
+      - name: Upload over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./site/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}
