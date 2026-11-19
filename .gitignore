@@ -2,3 +2,6 @@ node_modules/
 .DS_Store
 *.log
 dist/
+
+# Fallback private data folder, used only if pj-data next to public_html is not writable
+api/data/

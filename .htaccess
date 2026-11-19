@@ -1,44 +1,48 @@
-# Hostinger (Apache / LiteSpeed) settings for the Pushpa Jewellers site.
-# Does the job vercel.json does on Vercel: HTTPS, www -> bare domain, redirects, and /api/gold.
+# Pushpa Jewellers — Apache / LiteSpeed config for Hostinger.
+# Lives in public_html/ next to index.html.
 
 Options -Indexes
-DirectoryIndex index.html index.php
+DirectoryIndex index.html
 
-<IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Always HTTPS
-RewriteCond %{HTTPS} !=on
-RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+# Always use HTTPS (turn on the free SSL in hPanel first).
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# www.example.com -> example.com
-RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+# The canonical address is https://www.pushpajewelers.com/ — send the bare domain there.
+# Other hosts (Hostinger's temporary preview domain) are left alone.
+RewriteCond %{HTTP_HOST} ^pushpajewelers\.com$ [NC]
+RewriteRule ^ https://www.pushpajewelers.com%{REQUEST_URI} [L,R=301]
 
-# Today's gold rate (the bar at the top of every page)
-RewriteRule ^api/gold/?$ api/gold.php [L]
+# /api/* (the shop backend, including the website's /api/gold bar) is handled by api/.htaccess.
+# The admin panel is at /admin/.
 
-# /services has no page of its own: send it to the services section of the home page
-RewriteRule ^services/?$ https://%{HTTP_HOST}/#services [L,R=302,NE]
-</IfModule>
+# Short links: /shop -> /shop/ and so on.
+RewriteRule ^(shop|about|services/pawning|services/money-exchange|services/airline-ticketing)$ /$1/ [R=301,L]
+RewriteRule ^services/?$ /#services [NE,R=302,L]
 
-# /shop -> /shop/, /about -> /about/ and the like are done by Apache itself (DirectorySlash).
+# Keep repository-only files private.
+RewriteRule ^(\.git|\.github|tools|docs|dist|node_modules)(/|$) - [F,L]
+<FilesMatch "^(README\.md|.*\.zip|.*\.sh|.*\.py|\.gitignore)$">
+  Require all denied
+</FilesMatch>
 
-# Smaller transfers
 <IfModule mod_deflate.c>
-AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
 </IfModule>
 
-# Photos rarely change: let browsers keep them for a month.
-# Pages, CSS and JS are checked on every visit, so an upload shows straight away.
+# Pages revalidate every visit so edits show at once; images, fonts, CSS and JS stay a week.
 <IfModule mod_expires.c>
-ExpiresActive On
-ExpiresByType image/webp "access plus 30 days"
-ExpiresByType image/jpeg "access plus 30 days"
-ExpiresByType image/png  "access plus 30 days"
-ExpiresByType image/svg+xml "access plus 30 days"
-ExpiresByType text/css "access plus 0 seconds"
-ExpiresByType application/javascript "access plus 0 seconds"
-ExpiresByType text/html "access plus 0 seconds"
+  ExpiresActive On
+  ExpiresDefault "access plus 1 week"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
 </IfModule>

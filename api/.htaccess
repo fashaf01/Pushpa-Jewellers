@@ -1,0 +1,14 @@
+# Pushpa Jewellers — every /api/* request goes to index.php.
+Options -Indexes
+RewriteEngine On
+
+# Shared hosting drops the Authorization header unless told to keep it
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# The code and any fallback data folder are never served directly
+RewriteRule ^(src|data)(/|$) - [F,L]
+
+# install.php is a real page; everything else is a route
+RewriteRule ^install\.php$ - [L]
+RewriteRule ^ index.php [QSA,L]
+

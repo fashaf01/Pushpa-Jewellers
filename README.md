@@ -13,53 +13,62 @@ for each of the three counter services: pawning, money exchange and airline tick
 legal pages: the privacy policy (`/privacy/`), cookies (`/cookies/`) and terms of use (`/terms/`). Suba Mangala
 and order tracking stay on the home page.
 
-No build step, no dependencies. It is hosted on Vercel at
-**https://pushpa-jewellers.vercel.app**. Locally, serve the folder (the shop needs a server,
-since it lives at `/shop/`):
+No build step. It is hosted on **Hostinger** at **https://www.pushpajewelers.com**: plain
+HTML/CSS/JS for the website, with a small PHP + MySQL backend (`api/`) and the staff admin
+panel (`admin/`). Locally, PHP's own server runs all of it, gold bar included:
 
 ```bash
-python3 -m http.server 8000
+php -S localhost:8000 tools/dev-router.php
 ```
 
-A plain static server has no `/api/gold`, so locally the top bar shows
-"Call 031 223 8822 for today's gold rate" instead of the rate.
-
-`node build.js` inlines the CSS, JS, favicon and every image of the home page into a
-single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
-(it too shows the call line in place of the rate, and has only the home page, so its links to the shop, About and the
-service pages do not work).
+(or `python3 -m http.server 8000` for the pages alone; then the top bar shows
+"Call 031 223 8822 for today's gold rate" instead of the rate).
 
 ## Hosting on Hostinger
 
-The site runs on any Hostinger web hosting plan as it is: plain files plus one small PHP
-script for the gold rate. Vercel's `vercel.json` and `api/gold.js` are replaced there by
-`.htaccess` and `api/gold.php`, which do the same jobs.
+Everything sits at the top level, so what is in the repo is what goes into `public_html`.
+Two ways to put it there:
 
-1. Build the upload: `sh tools/package-hostinger.sh` → `dist/pushpa-hostinger.zip`
-   (only the site's files; no README, tools or Vercel files).
-2. hPanel → **Websites** → **Add website** → **Empty PHP/HTML website**, and give it the domain
-   (`testlk.store`). If the website already exists, skip this.
-3. hPanel → that website → **Files → File Manager** → open `public_html`. Delete the
-   `default.php` Hostinger puts there, upload the zip, right-click it → **Extract** (into
-   `public_html` itself, not a sub-folder), then delete the zip.
-   `.htaccess` starts with a dot, so the File Manager may hide it; it is there.
-4. Point the domain at Hostinger. It currently uses Vercel's nameservers
-   (`ns1.vercel-dns.com`, `ns2.vercel-dns.com`). Where the domain is registered, set the
-   nameservers to Hostinger's — `ns1.dns-parking.com` and `ns2.dns-parking.com`
-   (if the domain was bought at Hostinger: hPanel → **Domains** → the domain →
-   **DNS / Nameservers** → **Change nameservers** → use Hostinger nameservers).
-   It takes from a few minutes to a few hours to switch over.
-5. hPanel → **Security → SSL**: the free SSL certificate installs itself once the domain points
-   at Hostinger. Until then the site can show a certificate warning; wait for it.
-6. Remove `testlk.store` from the Vercel project's **Settings → Domains**, so the two do not fight
-   over it. The admin (`pushpa-jewellers-admin.vercel.app`) stays on Vercel and keeps working;
-   the gold bar still reads the counter rate from it.
+- **From GitHub (recommended).** hPanel → Websites → pushpajewelers.com → **Advanced → Git**:
+  repository `fashaf01/Pushpa-Jewellers`, the site's branch, install path left empty
+  (= `public_html`). Then each push is one click on **Deploy** (or turn on auto-deploy).
+  The repository is private, so Hostinger shows an SSH key to add under GitHub → the repo →
+  Settings → Deploy keys.
+- **By hand.** `sh tools/package-hostinger.sh` builds `dist/pushpa-hostinger.zip` with only the
+  files the site needs. Upload it to `public_html` in File Manager and **Extract** it there.
 
-To pin the gold rate by hand on Hostinger, set `FIXED_24K_PAWN` and `FIXED_22K_PAWN` at the top
-of `api/gold.php` (and put them back to 0 afterwards). It keeps each answer for ten minutes.
+```
+public_html/
+  index.html, shop/, about/, services/ …   the website
+  admin/                                   the shop admin panel (staff sign in here)
+  api/                                     the shop backend, PHP 8.1+ and MySQL
+    index.php, src/                        every endpoint in docs/API.md
+    install.php                            one-time set-up page
+pj-data/        ← next to public_html, never in Git, never served directly
+  config.php                               database details + owner email (written by install.php)
+  uploads/                                 product photos (served at /api/photos/…)
+```
 
-To update the site later: rebuild the zip and extract it over `public_html` again
-(say yes to replacing files).
+**One-time set-up**
+1. hPanel → **Databases** → create a MySQL database and user.
+2. Open `https://www.pushpajewelers.com/api/install.php`, paste the database name, user and
+   password and the owner's email. The page then locks itself.
+3. Open `/admin/`, choose *Set up the shop* and create the owner account with that email.
+
+**What the backend runs**
+- The gold-rate bar on every page asks `/api/gold`: the rate staff saved in the admin, or, if
+  nobody has saved one today, the automatic Sri Lankan market rate (international gold price in
+  rupees plus the premium set in admin → Settings).
+- Products, stock per showroom, orders, payments, staff accounts and settings, as in `docs/API.md`.
+  `GET /api/public/products` gives the website published pieces with their live price.
+- `.htaccess` (root) forces HTTPS, sends `pushpajewelers.com` to `www.`, keeps repo-only files
+  private and restores the short links. `api/.htaccess` routes `/api/*` and keeps the
+  `Authorization` header that shared hosting otherwise drops.
+
+**Starting over:** delete `pj-data/config.php` in File Manager and open `install.php` again.
+
+Fonts come from an Adobe Fonts kit (`tiq7fhn`): add the live domain to that kit in
+Adobe Fonts → Web Projects, or headings fall back to a plain font.
 
 ## Files
 
@@ -82,10 +91,12 @@ assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
 assets/img/              photographs (webp) and favicon
 assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
 assets/img/orn/          gold ornaments: corner, dividers, mandalas, the line-drawn lotus (svg)
-api/gold.js              today's gold rate, a Vercel function served at /api/gold
-api/gold.php             the same, for Hostinger (PHP); .htaccess serves it at /api/gold
-.htaccess                Hostinger: HTTPS, www to bare domain, redirects, /api/gold
-tools/package-hostinger.sh   builds dist/pushpa-hostinger.zip, the upload for Hostinger
+admin/                   the staff admin panel (products, stock, orders, gold rate, settings)
+api/                     the shop backend (PHP + MySQL), every endpoint in docs/API.md,
+                         including /api/gold for the bar at the top of every page
+.htaccess                HTTPS, bare domain to www, short links, keeps repo-only files private
+tools/package-hostinger.sh   builds the upload zip for Hostinger
+tools/dev-router.php     local preview: php -S localhost:8000 tools/dev-router.php
 tools/frame-photos.py    frames a product photo of any size for the shop, or cuts a close-up from it
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
@@ -179,26 +190,18 @@ them has to be made in all six files (`index.html`, `shop/`, `about/` and the th
 The bar at the top of the page shows 24K and 22K per pawn (8 g); tapping it shows
 per gram too. It stays at the top while the page scrolls.
 
-The page calls `/api/gold` (`api/gold.js`), which never shows the bare international
-price: Sri Lankan counters sit about 5% above it. It answers with, first match wins:
+The page calls `/api/gold` (in `api/src/app.php`), which never shows the bare international
+price: Sri Lankan counters sit about 5% above it. It answers with:
 
-1. **The shop admin's rate** (`pushpa-jewellers-admin`): today's counter rate if staff
-   entered one on the admin's Gold rate page, otherwise the admin's **automatic Sri Lankan
-   market rate** for today. Changing the premium in the admin's Settings changes both.
-2. **The same market rate worked out here**, if the admin cannot be reached: the
-   international gold price (gold-api.com) in rupees (open.er-api.com) plus a
-   **5.12% Sri Lankan market premium**, 22K at **92%** of 24K, pawns rounded to Rs 100.
-   On 8 Nov 2026 that gave 24K Rs 366,000 and 22K Rs 336,700 a pawn, the market's figures.
-   Override with `GOLD_MARKET_PREMIUM_PERCENT` and `GOLD_22K_PERCENT_OF_24K`.
+1. **Today's counter rate**, if staff saved one on the admin's Gold rate page.
+2. Otherwise the **automatic Sri Lankan market rate**: the international gold price
+   (gold-api.com) in rupees (open.er-api.com) plus the market premium set in admin →
+   Settings (5.12% to start), 22K at 92% of 24K, pawns rounded to Rs 100.
+   This also works before the database is set up, so the bar is never empty on day one.
 
-Vercel's CDN keeps each answer for ten minutes, so a counter rate saved in the admin
-shows on the site within ten minutes. The page reloads the rate every 30 minutes and
+Each answer is cached for five minutes. The page reloads the rate every 30 minutes and
 whenever the tab comes back into view. The details panel says whether the figure is
 the counter rate or the market rate.
-
-For an emergency fixed rate, set `GOLD_24K_PAWN_LKR` and `GOLD_22K_PAWN_LKR` (whole
-rupees per pawn) in the Vercel project's environment variables and redeploy; remove
-them to go back to the automatic rate.
 
 If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
 
@@ -352,12 +355,8 @@ The same details are in the `JewelryStore` JSON-LD in `<head>`. Update both toge
 
 ## Product photography
 
-`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library into
-`product-images/`, with a `manifest.tsv` of titles and alt text:
-
-```sh
-sh tools/fetch-images.sh https://saravanas.lk
-```
+New shop photos: `tools/frame-photos.py` frames them to the shop's size and
+`tools/shop-thumbs.py` makes the small grid copies.
 
 **Before using any photograph, confirm it is the client's to use** and that the
 licence covers commercial use.
