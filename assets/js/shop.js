@@ -383,7 +383,7 @@
             specHTML(p) +
             '<div class="pv-ctas">' +
               '<a class="btn" href="' + ask + '" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>' + (showPrices ? 'Ask about this piece' : 'Ask the price on WhatsApp') + '</a>' +
-              '<a class="btn ghost" href="tel:+94312238822"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 8822</a>' +
+              '<a class="btn ghost" href="tel:+94312233857"><svg aria-hidden="true"><use href="#i-call"/></svg>031 223 3857</a>' +
             '</div>' +
             (p.watch
               ? '<ul class="pv-marks" role="list"><li>' + fl + 'Negombo’s jewellers since 1967</li><li>' + fl + 'Price and stock confirmed when you ask</li></ul>'

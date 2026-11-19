@@ -22,7 +22,7 @@ php -S localhost:8000 tools/dev-router.php
 ```
 
 (or `python3 -m http.server 8000` for the pages alone; then the top bar shows
-"Call 031 223 8822 for today's gold rate" instead of the rate).
+"Call 031 223 3857 for today's gold rate" instead of the rate).
 
 ## Hosting on Hostinger
 
@@ -218,7 +218,7 @@ Each answer is cached for five minutes. The page reloads the rate every 30 minut
 whenever the tab comes back into view. The details panel says whether the figure is
 the counter rate or the market rate.
 
-If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
+If the rate cannot be fetched, the bar reads "Call 031 223 3857 for today's gold rate".
 
 ## The intro
 
@@ -257,8 +257,8 @@ Every page's footer links to all three. When you change one, update its "Last up
 
 ## Logo size
 
-The masthead logo is `--logo` (82px on desktop, 72px on phones and tablets) and `--logo-s` once a desktop page has
-scrolled (58px), at the top of `styles.css`. The header's height, the jump-link landing point and the hero's height
+The masthead logo is `--logo` (96px on desktop, 82px on phones and tablets) and `--logo-s` once a desktop page has
+scrolled (64px), at the top of `styles.css`. The header's height, the jump-link landing point and the hero's height
 are all worked out from these, so change the logo size there and nothing else needs to move.
 
 ## Sections
@@ -366,7 +366,7 @@ var WA = 'https://wa.me/94777770203?text=';
 |---|---|
 | Founded | 1967, Greens Road, Negombo |
 | Showrooms | 67 Greens Road, Negombo (head office) · 150A Sea Street, Negombo · 8A Averiwatte, Katunayake |
-| Hotline | 031 223 8822 |
+| Hotline | 031 223 3857 |
 | Tel | 031 223 3857 · 031 222 2404 · Katunayake 011 225 4689 |
 | WhatsApp | 077 777 0203 |
 | Hours | Mon–Sat 9.15 am – 7.30 pm · Sun 9.15 am – 2.00 pm |
