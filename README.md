@@ -29,6 +29,19 @@ single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one 
 (it too shows the call line in place of the rate, and has only the home page, so its links to the shop, About and the
 service pages do not work).
 
+## Hosting on Hostinger
+
+Hostinger deploys this branch straight from GitHub into `public_html` (hPanel → Websites →
+Deployments). Everything the site needs sits at the top level, so no build step is needed.
+
+- `.htaccess` forces HTTPS, sends `pushpajewelers.com` to `www.pushpajewelers.com`, keeps repo-only
+  files private and restores the short links (`/shop`, `/about`, `/services/...`) that
+  `vercel.json` handles on Vercel.
+- `api/gold.php` is the PHP version of `api/gold.js`: the gold-rate bar asks for `/api/gold`, and
+  `.htaccess` points that at the PHP file. `api/gold.js` and `vercel.json` only apply on Vercel.
+- Fonts come from an Adobe Fonts kit (`tiq7fhn`): add the live domain to that kit in
+  Adobe Fonts → Web Projects, or headings fall back to a plain font.
+
 ## Deploying to Hostinger
 
 The site is static, so any Hostinger plan works. No Node, PHP or database needed.

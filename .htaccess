@@ -1,38 +1,44 @@
-# Pushpa Jewellers — Apache / LiteSpeed config for Hostinger shared hosting.
-# Goes in public_html/ next to index.html.
+# Pushpa Jewellers — Apache / LiteSpeed config for Hostinger.
+# Lives in public_html/ next to index.html.
 
 Options -Indexes
 DirectoryIndex index.html
 
 RewriteEngine On
 
-# Always serve over HTTPS (turn on the free SSL in hPanel first).
+# Always use HTTPS (turn on the free SSL in hPanel first).
 RewriteCond %{HTTPS} off
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# The page's canonical URL is https://www.pushpajewelers.com/ — send the bare
-# domain there. Other hosts (e.g. Hostinger's temporary preview domain) are left alone.
+# The canonical address is https://www.pushpajewelers.com/ — send the bare domain there.
+# Other hosts (Hostinger's temporary preview domain) are left alone.
 RewriteCond %{HTTP_HOST} ^pushpajewelers\.com$ [NC]
 RewriteRule ^ https://www.pushpajewelers.com%{REQUEST_URI} [L,R=301]
 
-# Never serve repository files if the site is deployed straight from Git.
-RewriteRule ^(\.git|tools|dist|node_modules)(/|$) - [F,L]
-<FilesMatch "^(README\.md|build\.js|.*\.zip|.*\.sh|\.gitignore)$">
+# Gold-rate bar: the page asks for /api/gold, which is api/gold.php here.
+RewriteRule ^api/gold/?$ api/gold.php [L]
+
+# Short links, as the old Vercel redirects did.
+RewriteRule ^(shop|about|services/pawning|services/money-exchange|services/airline-ticketing)$ /$1/ [R=301,L]
+RewriteRule ^services/?$ /#services [NE,R=302,L]
+
+# Keep repository-only files private.
+RewriteRule ^(\.git|\.github|tools|dist|node_modules)(/|$) - [F,L]
+<FilesMatch "^(README\.md|build\.js|vercel\.json|gold\.js|.*\.zip|.*\.sh|.*\.py|\.gitignore)$">
   Require all denied
 </FilesMatch>
 
-# Compression
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
 </IfModule>
 
-# Caching: HTML revalidates every visit so edits show up at once;
-# CSS, JS and images are cached for a week.
+# Pages revalidate every visit so edits show at once; images, fonts, CSS and JS stay a week.
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 week"
   ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
 </IfModule>
 
 <IfModule mod_headers.c>
