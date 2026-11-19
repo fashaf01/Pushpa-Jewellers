@@ -102,6 +102,19 @@ tools/frame-photos.py    frames a product photo of any size for the shop, or cut
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
 
+## Pushpa pink, favourites and the money changers
+
+- **Pink** (`--pink`, #db0a73, from the shop's own printed flyers) is the colour of the buttons on light pages, the
+  hero's main button (`.btn.pink`), the label flowers, and the band under the hero. Dark sections keep their gold
+  buttons.
+- **The band** under the hero drifts slowly (linear, pauses under a pointer, still for reduced motion): authorised
+  money changers, Western Union, Ria Money Transfer, MoneyGram, and the shop's services.
+- **Favourites** on the home page: the pieces starred in the admin (Products, the star), in that order; with none
+  starred, the admin's best sellers; until the shop is linked, the four best sellers written into the page.
+  Prices stay hidden, so each card says "Ask the price".
+- **Money changers**: a strip under the three services on the home page, and an "Authorised agent for" row on the
+  money exchange page, with the numbers 031 223 3857, 031 222 2404 and 075 796 6709.
+
 ## The shop
 
 **Where the pieces come from.** Once the owner presses *Bring in 110 pieces and link the website* in the admin

@@ -1158,7 +1158,7 @@ function public_shop(): array
             'badge' => $pr['badge'], 'metal' => $pr['metal'], 'karat' => $pr['karat'], 'weight_g' => $pr['weight_g'],
             'stones' => $pr['stones'], 'description' => $pr['description'], 'images' => $images,
             'price' => $price === null ? null : n($price), 'created_at' => $pr['created_at'],
-            'web' => is_array($web) ? $web : null];
+            'featured_rank' => $pr['featured_rank'], 'web' => is_array($web) ? $web : null];
     }
     return ['source' => 'admin', 'show_prices' => $showPrices, 'pieces' => $pieces];
 }

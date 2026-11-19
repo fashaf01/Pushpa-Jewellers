@@ -5,6 +5,7 @@
   --ivory:#fbf3f0; --tint:#f4e7e5; --rule:#ead5d2; --rule-2:#dcbec3;
   --ink:#3a0d24; --muted:#6e4558; --soft:#a07088;
   --wine:#6d1745; --wine-hi:#86205a;
+  --pink:#db0a73; --pink-hi:#b8005e; --pink-soft:#fbe3ee; /* Pushpa pink, from the shop's own print */
   --plum:#3b0a25; --plum-2:#4a1030; --plum-3:#2c071b;
   --gold:#c9a24a; --gold-light:#ecd28f; --gold-deep:#7a5814;
   --on-plum:#f6e3e8; --on-plum-2:#d6b3c2; --plum-gold:#e2c27a; --plum-rule:rgba(226,194,122,.28);
@@ -77,11 +78,14 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .orn::before,.orn::after{content:"";flex:1;height:1px;background:currentColor;opacity:.6}
 .orn .fl{width:18px;height:18px}
 
-.btn{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 28px;background:var(--wine);color:var(--gold-light);font-size:13px;line-height:1.2;letter-spacing:.09em;font-weight:600;text-transform:uppercase;text-decoration:none;white-space:nowrap;box-shadow:inset 0 0 0 4px var(--wine),inset 0 0 0 5px rgba(236,210,143,.5);transition:background .3s,box-shadow .3s,transform .2s var(--ease);font-family:var(--display);font-size-adjust:none}
-.btn:hover{background:var(--wine-hi);box-shadow:inset 0 0 0 4px var(--wine-hi),inset 0 0 0 5px rgba(236,210,143,.85)}
+.btn{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 28px;background:var(--pink);color:#fff;font-size:13px;line-height:1.2;letter-spacing:.09em;font-weight:600;text-transform:uppercase;text-decoration:none;white-space:nowrap;box-shadow:inset 0 0 0 4px var(--pink),inset 0 0 0 5px rgba(236,210,143,.6);transition:background .3s,box-shadow .3s,transform .2s var(--ease);font-family:var(--display);font-size-adjust:none}
+.btn:hover{background:var(--pink-hi);box-shadow:inset 0 0 0 4px var(--pink-hi),inset 0 0 0 5px rgba(236,210,143,.85)}
+.btn:active{transform:scale(.97)}
 .btn svg{width:18px;height:18px;flex:none}
 .dark .btn,.btn.gold{background:linear-gradient(180deg,#f1da9c 0%,#dfbd6c 52%,#cfa952 100%);color:var(--plum);box-shadow:0 1px 0 rgba(255,241,200,.35) inset;outline:1px solid rgba(59,10,37,.3);outline-offset:-5px}
 .dark .btn:hover,.btn.gold:hover{background:linear-gradient(180deg,#f6e3ae 0%,#e6c87c 52%,#d6b25e 100%)}
+.dark .btn.pink{background:var(--pink);color:#fff;box-shadow:inset 0 0 0 4px var(--pink),inset 0 0 0 5px rgba(236,210,143,.6);outline:0}
+.dark .btn.pink:hover{background:var(--pink-hi);box-shadow:inset 0 0 0 4px var(--pink-hi),inset 0 0 0 5px rgba(236,210,143,.85)}
 .btn.ghost{background:transparent;color:var(--wine);box-shadow:inset 0 0 0 1px var(--wine);outline:1px solid rgba(109,23,69,.28);outline-offset:-5px}
 .btn.ghost:hover{background:var(--tint)}
 .dark .btn.ghost{color:var(--on-plum);box-shadow:inset 0 0 0 1px var(--plum-rule);outline-color:rgba(226,194,122,.16)}
@@ -89,6 +93,7 @@ button{cursor:pointer;background:none;border:0;padding:0}
 /* the engraved inner line is an outline, so keyboard focus gets its ring back explicitly */
 .btn:focus-visible,.btn.ghost:focus-visible{outline:2px solid var(--wine);outline-offset:3px}
 .dark .btn:focus-visible,.btn.gold:focus-visible,.dark .btn.ghost:focus-visible{outline:2px solid var(--plum-gold);outline-offset:3px}
+.label .fl{color:var(--pink)}
 .alink{display:inline-flex;align-items:center;gap:12px;font-size:13.5px;line-height:1.3;letter-spacing:.08em;font-weight:600;text-transform:uppercase;text-decoration:none;padding-block:10px;border-bottom:1px solid currentColor;white-space:nowrap;color:var(--wine);font-family:var(--display);font-size-adjust:none}
 .alink svg{width:22px;height:10px;transition:transform .45s var(--ease)}
 .alink:hover svg{transform:translateX(4px)}
@@ -990,4 +995,46 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
   .coin{transform:none;opacity:1}
   .js .mk .stamp{opacity:1;transform:none}
   .js .draw .lotus path{stroke-dashoffset:0}
+}
+
+/* ---------- Pushpa pink: the band under the hero, the favourites, the money changers ---------- */
+/* the band drifts at a constant pace (linear), pauses under a pointer, and stands still for reduced motion */
+.band{position:relative;overflow:hidden;background:var(--pink);color:#fff;box-shadow:inset 0 1px 0 rgba(236,210,143,.7),inset 0 -1px 0 rgba(236,210,143,.7)}
+.band-track{display:flex;width:max-content;animation:drift 46s linear infinite}
+.band ul{display:flex;align-items:center;gap:30px;margin:0;padding:15px 15px;list-style:none;white-space:nowrap;font-family:var(--display);font-size-adjust:none;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.band li{display:flex;align-items:center;gap:30px}
+.band li::after{content:"";width:9px;height:9px;flex:none;background:var(--gold-light);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+@keyframes drift{to{transform:translateX(-50%)}}
+@media (hover:hover) and (pointer:fine){.band:hover .band-track{animation-play-state:paused}}
+
+.favs{padding-block:var(--sec);border-top:1px solid var(--rule)}
+.favs .coll-head .lede{max-width:46ch;text-align:center}
+.favs-g{grid-template-columns:repeat(4,minmax(0,1fr))}
+.favs-g > li{list-style:none}
+.favs .pc .pr.ask{color:var(--pink);font-weight:600;letter-spacing:.02em}
+.favs .pc .pr.ask::after{content:" \2192"}
+@media (max-width:900px){.favs-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* the money changers, under the three services */
+.agents{display:grid;justify-items:center;gap:18px;margin-top:clamp(36px,4.4vw,60px);text-align:center}
+.agents .label{color:var(--plum-gold)}
+.agent-l{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:0;padding:0;list-style:none}
+.agent-l li{display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border:1px solid var(--plum-rule);font-family:var(--display);font-size-adjust:none;font-size:14px;font-weight:600;letter-spacing:.06em;color:var(--on-plum)}
+.agent-l li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px rgba(219,10,115,.25)}
+.agent-c{font-size:15px;color:var(--on-plum-2)}
+.agent-c a{color:var(--plum-gold);text-decoration:none;font-weight:600;white-space:nowrap}
+.agent-c a:hover{text-decoration:underline;text-underline-offset:3px}
+/* the money exchange page: the same antique tiles, as plain information rather than links */
+.ag-g{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ag-g .tile{grid-template-rows:auto auto 1fr}
+.ag-g .tile .ic{color:var(--pink)}
+.tile.static:hover{transform:none;filter:none;border-image-source:var(--label)}
+@media (max-width:900px){.ag-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.ag-g{grid-template-columns:minmax(0,1fr)}}
+
+@media (prefers-reduced-motion:reduce){
+  .band-track{animation:none;width:auto}
+  .band ul{flex-wrap:wrap;justify-content:center;white-space:normal;row-gap:10px}
+  .band ul[aria-hidden]{display:none}
+  .btn:active{transform:none}
 }

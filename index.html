@@ -174,13 +174,21 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
       <img class="hdiv rv" style="--d:3" src="assets/img/orn/divider-plum.svg" alt="" aria-hidden="true" width="1200" height="240">
       <p class="lede rv" style="--d:4">Honest 22KT and 18KT gold from Negombo&rsquo;s own jewellers. Every piece is weighed in front of you and priced at the day&rsquo;s rate, whether it is for a wedding, a gift or every day.</p>
       <div class="ctas rv" style="--d:6">
-        <a class="btn" href="#suba">Start a Suba Mangala plan</a>
+        <a class="btn pink" href="#suba">Start a Suba Mangala plan</a>
         <a class="btn ghost" href="#track">Track an order or repair</a>
       </div>
     </div>
   </div>
   <div class="hero-line" aria-hidden="true"></div>
 </section>
+
+<!-- ================= the pink band: what we do, drifting past ================= -->
+<div class="band" aria-label="At Pushpa">
+  <div class="band-track">
+    <ul role="list"><li>Authorised money changers</li><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>22KT &amp; 18KT gold</li><li>Suba Mangala gold plan</li><li>Pawning</li><li>Airline tickets</li><li>Since 1967</li></ul>
+    <ul role="list" aria-hidden="true"><li>Authorised money changers</li><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>22KT &amp; 18KT gold</li><li>Suba Mangala gold plan</li><li>Pawning</li><li>Airline tickets</li><li>Since 1967</li></ul>
+  </div>
+</div>
 
 <!-- ================= marks ================= -->
 <section class="marks" aria-labelledby="marks-h">
@@ -218,6 +226,24 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
       <a class="door rv" style="--d:2" href="shop/?cat=rings"><div class="ph"><img src="assets/img/cat-rings.webp" alt="" width="800" height="1000" loading="lazy"></div><b>Rings</b><span>Wedding, engagement and gifts</span></a>
       <a class="door rv" style="--d:3" href="shop/?cat=pendants"><div class="ph"><img src="assets/img/cat-pendants.webp" alt="" width="900" height="1125" loading="lazy"></div><b>Pendants</b><span>Keepsakes to wear close</span></a>
     </div>
+    <div class="coll-foot rv"><a class="alink" href="shop/">See the whole collection <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+  </div>
+</section>
+
+<!-- ================= favourites: the starred pieces in the admin (or its best sellers), else these four ================= -->
+<section class="favs" id="favourites" aria-labelledby="favs-h">
+  <div class="wrap">
+    <div class="coll-head">
+      <h2 class="h2 rv" id="favs-h">This season&rsquo;s favourites</h2>
+      <img class="divider rv" src="assets/img/orn/divider.svg" alt="" aria-hidden="true" width="1200" height="240" loading="lazy">
+      <p class="lede rv">Gold is priced by its weight at the day&rsquo;s rate. Ask us on WhatsApp and we will reply with today&rsquo;s price.</p>
+    </div>
+    <ul class="grid favs-g" id="favs" role="list">
+      <li class="rv" style="--d:0"><div class="pc in seen"><a href="shop/?piece=stacked-bar-bangle"><div class="ph"><img src="assets/img/shop/small/stacked-bar-bangle.webp" data-full="assets/img/shop/stacked-bar-bangle.webp" alt="Stacked bar bangle" width="540" height="675" loading="lazy"><em class="bs">Best seller</em></div><b>Stacked bar bangle</b><span class="m">Bangle</span><i>12.470 g &middot; 1.56 pawn</i><em class="pr ask">Ask the price</em></a></div></li>
+      <li class="rv" style="--d:1"><div class="pc in seen"><a href="shop/?piece=gold-leaf-bridal-necklace"><div class="ph"><img src="assets/img/shop/small/gold-leaf-bridal-necklace.webp" data-full="assets/img/shop/gold-leaf-bridal-necklace.webp" alt="Gold leaf bridal necklace" width="540" height="675" loading="lazy"><em class="bs">Best seller</em></div><b>Gold leaf bridal necklace</b><span class="m">Necklace</span><i>24.380 g &middot; 3.05 pawn</i><em class="pr ask">Ask the price</em></a></div></li>
+      <li class="rv" style="--d:2"><div class="pc in seen"><a href="shop/?piece=five-stone-ring"><div class="ph"><img src="assets/img/shop/small/five-stone-ring.webp" data-full="assets/img/shop/five-stone-ring.webp" alt="Five-stone ring" width="540" height="675" loading="lazy"><em class="bs">Best seller</em></div><b>Five-stone ring</b><span class="m">Ring</span><i>1.120 g &middot; 0.14 pawn</i><em class="pr ask">Ask the price</em></a></div></li>
+      <li class="rv" style="--d:3"><div class="pc in seen"><a href="shop/?piece=cross-pendant"><div class="ph"><img src="assets/img/shop/small/cross-pendant.webp" data-full="assets/img/shop/cross-pendant.webp" alt="Cross pendant" width="540" height="675" loading="lazy"><em class="bs">Best seller</em></div><b>Cross pendant</b><span class="m">Pendant</span><i>12.020 g &middot; 1.50 pawn</i><em class="pr ask">Ask the price</em></a></div></li>
+    </ul>
     <div class="coll-foot rv"><a class="alink" href="shop/">See the whole collection <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
   </div>
 </section>
@@ -341,7 +367,7 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
         <a class="svc-hit" href="services/money-exchange/" tabindex="-1" aria-hidden="true"></a>
         <span class="medal" aria-hidden="true"><svg><use href="#i-fx"/></svg></span>
         <h3>Money exchange</h3>
-        <div class="tx"><p>We are authorised money changers. Change foreign currency, and send or receive money through the names you know, all at the counter.</p><p class="partners">Western Union, MoneyGram and Ria</p></div>
+        <div class="tx"><p>We are authorised money changers. Change foreign currency, and send or receive money through the names you know, all at the counter.</p><p class="partners">Western Union, Ria and MoneyGram</p></div>
         <a class="alink" href="services/money-exchange/">More about money exchange <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </article>
       <article class="svc rv" style="--d:2">
@@ -351,6 +377,11 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
         <div class="tx"><p>Planning a trip? Book your flights at our counter, from the same people you buy your gold from, and ask us anything you need to know about your ticket.</p></div>
         <a class="alink" href="services/airline-ticketing/">More about tickets <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </article>
+    </div>
+    <div class="agents rv" style="--d:3">
+      <span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Authorised money changers</span>
+      <ul class="agent-l" role="list"><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>Foreign currency</li></ul>
+      <p class="agent-c">Call <a href="tel:+94312233857">031 223 3857</a> &middot; <a href="tel:+94312222404">031 222 2404</a> &middot; <a href="tel:+94757966709">075 796 6709</a></p>
     </div>
   </div>
 </section>
@@ -402,7 +433,7 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
     </div>
     <dl class="lines rv">
       <div><dt>Hotline</dt><dd>031 223 3857</dd><button class="copy" data-copy="031 223 3857">Copy</button></div>
-      <div><dt>Tel</dt><dd>031 223 3857, 031 222 2404</dd><button class="copy" data-copy="031 223 3857">Copy</button></div>
+      <div><dt>Tel</dt><dd>031 223 3857, 031 222 2404, 075 796 6709</dd><button class="copy" data-copy="031 223 3857">Copy</button></div>
       <div><dt>WhatsApp</dt><dd>077 777 0203</dd><button class="copy" data-copy="077 777 0203">Copy</button></div>
     </dl>
   </div>

@@ -285,4 +285,44 @@
   } else { tlSeen = true; fillTL(); }
 
   if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { ODOS.forEach(function (o) { o.measure(); var s0 = o.str; o.str = ''; o.set(s0, true); }); });
+
+  /* ---------- favourites: the pieces starred in the shop admin, else its best sellers; the four in the page until then ----------
+     Only the cards' insides change, so each card keeps its place in the scroll reveal. Prices stay hidden unless the
+     owner has turned them on (Settings > Website shop). */
+  (function () {
+    var slots = $$('#favs > li');
+    if (!slots.length || !window.fetch) return;
+    var IMG = /^\/assets\/img\/shop\/([^/]+\.webp)$/;
+    function weightOf(a, w) {
+      if (a.weight_g) return w.weight && w.weight_g_src === a.weight_g ? w.weight : (+a.weight_g).toFixed(3) + ' g';
+      return w.weight_g_src == null && w.weight ? w.weight : '';
+    }
+    function pawnOf(t) {
+      var g = (t.match(/\d+(?:\.\d+)?/g) || []).map(Number), set = t.indexOf('+') > -1;
+      if (!g.length) return '';
+      if (set) g = [g.reduce(function (x, y) { return x + y; }, 0)];
+      return g.map(function (n) { return (Math.round(n / 8 * 100) / 100).toFixed(2); }).join(' – ') + ' pawn';
+    }
+    function card(a, prices) {
+      var w = a.web || {}, im = (a.images || [])[0], full = im ? im.url : 'assets/img/favicon.svg', m = im && IMG.exec(im.url);
+      var small = m ? '/assets/img/shop/small/' + m[1] : full, weight = weightOf(a, w);
+      var best = !!w.bestseller || a.badge === 'Best seller';
+      return '<a href="shop/?piece=' + encodeURIComponent(w.slug || String(a.sku || a.id).toLowerCase()) + '"><div class="ph"><img src="' + esc(small) + '" data-full="' + esc(full) + '" alt="' + esc(a.name) + '" width="540" height="675" loading="lazy">' +
+        (best ? '<em class="bs">Best seller</em>' : '') + '</div><b>' + esc(a.name) + '</b><span class="m">' + esc(w.kind || '') + '</span>' +
+        (weight ? '<i>' + esc(weight) + (pawnOf(weight) ? ' &middot; ' + pawnOf(weight) : '') + '</i>' : '') +
+        (prices && a.price ? '<em class="pr">Rs ' + rs(a.price) + '</em>' : '<em class="pr ask">Ask the price</em>') + '</a>';
+    }
+    fetch('/api/public/shop', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) {
+        if (!r || r.source !== 'admin' || !r.pieces || !r.pieces.length) return;
+        var starred = r.pieces.filter(function (a) { return a.featured_rank; }).sort(function (x, y) { return x.featured_rank - y.featured_rank; });
+        var picks = (starred.length ? starred : r.pieces.filter(function (a) { return (a.web && a.web.bestseller) || a.badge === 'Best seller'; })).slice(0, slots.length);
+        if (!picks.length) return;
+        slots.forEach(function (li, i) {
+          if (!picks[i]) { li.hidden = true; return; }
+          li.firstElementChild.innerHTML = card(picks[i], r.show_prices === true);
+        });
+      }, function () {});
+  })();
 })();
