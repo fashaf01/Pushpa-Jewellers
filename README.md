@@ -349,14 +349,15 @@ var WA = 'https://wa.me/94777770203?text=';
 
 ## Fonts
 
-- **The Seasons** (Adobe Fonts kit `tiq7fhn`) for the big headlines. **Add the
-  site's domain to this kit in Adobe Fonts > Web Projects**, or the kit will not
-  serve on the live site. The page falls back to Cinzel if it does not load.
+- **Butler** (Fabian De Smet, the free version) for the headlines and the small capitals: navigation, buttons,
+  labels, links, prices. It is served from this site, `assets/fonts/butler/` (woff2, weights 300 to 900, with its
+  licence), so it needs no outside account. The licence allows commercial use and asks for the files to stay
+  unmodified, the licence to go with them, and a credit and link to www.fabiandesmet.com: the credit is on the
+  Terms of use page. Butler has no italic, so italic headline words show upright. The `.has-butler` rules at the
+  end of `styles.css` tune the headline sizes once it has loaded.
 - **EB Garamond** for all reading text, an old book type. It runs small, so `font-size-adjust` (`--text-adjust`)
   sizes it up to match the sizes in the stylesheet; the display faces opt out of that.
-- **Cinzel** for the small capitals: navigation, buttons, labels, links.
-- **Cinzel, EB Garamond, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil**
-  from Google Fonts.
+- **EB Garamond, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil** from Google Fonts.
 
 ## Business details used on the page
 

@@ -98,7 +98,7 @@
     $$('.rv').forEach(function (el) { if (!el.closest('.hero')) io.observe(el); });
   } else $$('.rv').forEach(function (el) { el.classList.add('in'); });
 
-  try { if (d.fonts && d.fonts.load) d.fonts.load('1em "the-seasons"').then(function (f) { if (f && f.length) d.documentElement.classList.add('has-seasons'); }, function () {}); } catch (e) {}
+  try { if (d.fonts && d.fonts.load) d.fonts.load('1em "Butler"').then(function (f) { if (f && f.length) d.documentElement.classList.add('has-butler'); }, function () {}); } catch (e) {}
 
   /* ---------- entrance: as the intro lifts, where a page shows one (it lifts after its animation-delay in styles.css);
      at once where there is none, or it has already played this visit, or motion is reduced ---------- */
