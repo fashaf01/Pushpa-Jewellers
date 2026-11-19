@@ -1,299 +1,239 @@
-/* Pushpa Jewellers — landing page behaviour */
+/* The home page: the Suba Mangala calculator and enrolment, order and repair tracking, this week's hours, the
+   welcome, the hero's words drifting on scroll, and the counter photo warming to colour. What every page shares
+   (header, menus, gold rate, reveals, entrance) is in site.js, which runs first and provides window.PJ. */
 (function () {
   'use strict';
+  var PJ = window.PJ, d = document;
+  if (!PJ || !d.getElementById('hero')) return;
+  var $ = PJ.$, $$ = PJ.$$, reduce = PJ.reduce, wa = PJ.wa, clamp = PJ.clamp, rs = PJ.rs, openWA = PJ.openWA;
 
-  /* ------------------------------------------------------------------
-     PHOTOGRAPHY
-     Paste an image URL against a slot and that slot switches from the
-     drawn placeholder to the real photograph. Leave a slot empty and the
-     drawing stays, so the page never shows a hole.
-
-     Any direct image URL works — Unsplash CDN links (the
-     https://images.unsplash.com/photo-… address behind "Download"),
-     or your own files committed under assets/img/.
-
-     Add ?w=1600&q=80&fm=webp to an Unsplash URL to keep it light.
-     ------------------------------------------------------------------ */
-  var PHOTOS = {
-    heroAside:          'https://img.magnific.com/free-photo/young-brunette-model-demonstrating-jewelry_7502-7050.jpg',   /* tall — a model wearing a bridal set     */
-
-    catNecklaces:       'https://img.magnific.com/free-photo/young-model-demonstrating-golden-necklace_7502-7049.jpg',   /* portrait lifestyle, neck and chest      */
-    catEarrings:        'https://img.magnific.com/free-photo/model-demonstrating-silver-earrings_7502-7054.jpg',   /* portrait lifestyle, ear detail          */
-    catRings:           'https://img.magnific.com/free-photo/young-model-demonstrating-expensive-ring_7502-7051.jpg',   /* portrait lifestyle, hand                */
-    catBangles:         'https://img.magnific.com/free-photo/woman-s-arms-wearing-beautiful-jewelry_23-2149640597.jpg',   /* portrait lifestyle, wrist               */
-
-    prodSolitaire:      'https://img.magnific.com/free-photo/gold-ring-with-diamonds_1203-1534.jpg',   /* square packshot                         */
-    prodBridalNecklace: 'https://img.magnific.com/free-photo/top-view-bright-gold-necklace_23-2149836468.jpg',
-    prodStuds:          'https://img.magnific.com/free-photo/aesthetic-golden-earrings-assortment_23-2149846587.jpg',
-    prodSapphire:       'https://img.magnific.com/free-photo/golden-ring-with-purple-gemstone_1203-1529.jpg',
-    prodTennis:         'https://img.magnific.com/free-photo/side-view-hand-holding-gold-bracelet_23-2149836428.jpg',
-    prodBangles:        'https://img.magnific.com/free-photo/high-angle-shot-beautiful-golden-necklace-bracelet-earing-white-surface_181624-58013.jpg',
-    prodPendant:        'https://img.magnific.com/free-photo/beautiful-luxury-necklace-jewelry-stand-neck_1339-7946.jpg',
-    prodChain:          'https://img.magnific.com/free-photo/top-view-gold-chain-white-background_23-2149836434.jpg',
-
-    workshop:           'https://img.magnific.com/free-photo/medium-shot-jeweler-making-jewellery_23-2150931446.jpg',   /* bench, tools, a jeweller at work        */
-
-    bridalSet:          'https://img.magnific.com/free-photo/charming-model-with-dark-hair-shows-rich-golden-earrings-necklace-ring_8353-5040.jpg',   /* tall portrait                           */
-    bridalEarrings:     'https://img.magnific.com/free-photo/long-earring-with-violet-precious-stones-hang-from-woman-s-ear_8353-5042.jpg',
-    bridalBangles:      'https://img.magnific.com/free-photo/model-shows-earrings-ring-with-beautiful-blue-precious-stones_8353-5044.jpg',
-
-    showroomNegombo:    'https://img.magnific.com/free-photo/golden-jewelry-store-window_1398-4127.jpg',   /* wide — shopfront or interior            */
-    showroomKatunayake: 'https://img.magnific.com/free-photo/gold-jewelry-with-gems-showcase_1398-4327.jpg'
+  /* ---------- odometer: digits roll into place ---------- */
+  var ODOS = [];
+  function Odo(el) { this.el = el; this.cols = []; this.str = ''; this.wd = null; el.style.display = 'inline-flex'; el.style.alignItems = 'baseline'; this.measure(); this.set(el.textContent.trim(), true); ODOS.push(this); }
+  Odo.prototype.measure = function () {
+    var fs = parseFloat(getComputedStyle(this.el).fontSize) || 16, m = d.createElement('span');
+    m.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+    this.el.appendChild(m); this.wd = [];
+    for (var k = 0; k < 10; k++) { m.textContent = String(k); this.wd.push(m.getBoundingClientRect().width / fs); }
+    this.el.removeChild(m);
+  };
+  Odo.prototype.set = function (str, first) {
+    var el = this.el, i;
+    if (str.length !== this.str.length) {
+      el.textContent = ''; this.cols = [];
+      for (i = 0; i < str.length; i++) {
+        var ch = str.charAt(i);
+        if (/\d/.test(ch)) {
+          var c = d.createElement('span'); c.style.cssText = 'display:inline-block;height:1.04em;overflow:hidden;vertical-align:baseline;transition:width 1.1s cubic-bezier(.2,.7,.2,1)';
+          var s = d.createElement('span'); s.style.cssText = 'display:block;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)';
+          for (var k = 0; k < 10; k++) { var n = d.createElement('span'); n.style.cssText = 'display:block;height:1.04em;line-height:1.04em;text-align:center'; n.textContent = k; s.appendChild(n); }
+          c.appendChild(s); el.appendChild(c); this.cols.push(s);
+        } else { var p = d.createElement('span'); p.style.cssText = 'display:inline-block;line-height:1.04em'; p.textContent = ch; el.appendChild(p); this.cols.push(null); }
+      }
+      void el.offsetWidth;
+    }
+    for (i = 0; i < str.length; i++) {
+      var col = this.cols[i]; if (!col) continue;
+      col.style.transitionDelay = (reduce || first) ? '0ms' : (i * 60) + 'ms';
+      col.style.transitionDuration = reduce ? '0s' : '';
+      var dg = parseInt(str.charAt(i), 10);
+      col.style.transform = 'translateY(' + (-dg * 10) + '%)';
+      if (this.wd) col.parentNode.style.width = (this.wd[dg] + 0.02).toFixed(3) + 'em';
+    }
+    this.str = str;
   };
 
-  Object.keys(PHOTOS).forEach(function (key) {
-    var url = PHOTOS[key];
-    if (!url) return;
-    document.querySelectorAll('[data-photo="' + key + '"]').forEach(function (slot) {
-      var img = document.createElement('img');
-      img.src = url;
-      img.alt = '';
-      img.className = 'art art--photo';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      /* Keep the drawing until the photograph has actually loaded, so a
-         broken or slow URL never leaves an empty panel. */
-      img.addEventListener('load', function () {
-        var drawn = slot.querySelector('svg.art');
-        if (drawn) drawn.remove();
-        slot.classList.add('has-photo');
-      });
-      slot.appendChild(img);
+  var hero = $('#hero');
+
+  /* ---------- Suba Mangala, as set out on the plan card ----------
+     Monthly payments are converted into gold weight at each month's gold rate; the minimum scheme amount is Rs 10,000;
+     after 6 or 12 months the customer buys any jewellery with the gold (wastage added to its weight); special gifts at the
+     end. The weight shown here is only an illustration at today's 22K rate: the real weight is set by each month's rate.
+     MIN_TOTAL is read as the least the whole plan may add up to, so a 6 month plan starts at Rs 2,000 a month and a 12
+     month plan at Rs 1,000. Change the three numbers below if the plan changes. */
+  var MIN_TOTAL = 10000, STEP = 1000, MAX_MONTHLY = 10000, gold = null;
+  function minMonthly(mo) { return Math.max(STEP, Math.ceil(MIN_TOTAL / mo / STEP) * STEP); }
+  function plan(mo, m) { var total = mo * m; return { total: total, grams: gold ? total / +gold.k22.gram : null }; }
+  function g2(n) { return n.toFixed(2); }
+  var amt = $('#amt'), coins = $('#coins'), gOdo = new Odo($('#c-grand')), months = 6;
+  function lo() { return minMonthly(months); }
+  function fillOf(m) { return ((m - lo()) / (MAX_MONTHLY - lo()) * 100) + '%'; }
+  // the least a month may be depends on the plan's length
+  function applyBounds() {
+    amt.min = lo(); amt.max = MAX_MONTHLY;
+    amt.value = clamp(+amt.value, lo(), MAX_MONTHLY);
+    $('#t-min').textContent = 'Rs ' + rs(lo());
+  }
+  // the figures: with today's rate to hand the big figure is the gold weight and the total sits in the list; without it
+  // the big figure is the total
+  function renderNumbers() {
+    var m = +amt.value, p = plan(months, m), known = p.grams !== null;
+    amt.style.setProperty('--fill', fillOf(m));
+    $('#amt-o').textContent = 'Rs ' + rs(m);
+    $('#c-total').textContent = 'Rs ' + rs(p.total);
+    $('#c-total-row').hidden = !known;
+    $('#c-label').textContent = known ? 'Gold weight you could save' : 'You pay in total';
+    $('#c-pre').textContent = known ? '≈' : 'Rs';
+    $('#c-suf').hidden = !known;
+    gOdo.set(known ? g2(p.grams) : rs(p.total));
+    $('#coins-cap').textContent = months + ' monthly payments of Rs ' + rs(m) + ', then special gifts from Pushpa';
+    $('#c-fine').textContent = 'Each month’s payment is converted into gold weight at that month’s gold rate' +
+      (known ? ', so this is an illustration at today’s 22K rate of Rs ' + rs(Math.round(+gold.k22.gram)) + ' a gram (about ' + g2(p.grams / 8) + ' pawn), not a promise.' : '.');
+    $('#c-live').textContent = months + ' months at Rs ' + rs(m) + ' a month: you pay Rs ' + rs(p.total) + ' in total' +
+      (known ? ', about ' + g2(p.grams) + ' grams of gold at today’s rate' : '') + ', and special gifts at the end.';
+  }
+  function renderCalc(animate) {
+    renderNumbers();
+    var h = '';
+    for (var i = 0; i < months; i++) h += '<span class="coin" style="--i:' + i + '">' + (i + 1) + '</span>';
+    h += '<span class="plus">+</span><span class="coin gift" style="--i:' + (months + 1) + '"><svg class="fl"><use href="#flower"/></svg></span>';
+    coins.innerHTML = h;
+    coins.classList.toggle('m12', months === 12);
+    var cs = $$('.coin', coins);
+    if (reduce || !animate) cs.forEach(function (c) { c.style.transform = 'none'; c.style.opacity = 1; });
+    else requestAnimationFrame(function () { cs.forEach(function (c) { c.classList.add('in'); }); });
+  }
+  var amtT;
+  amt.addEventListener('input', function () { clearTimeout(amtT); var m = +amt.value; $('#amt-o').textContent = 'Rs ' + rs(m); amt.style.setProperty('--fill', fillOf(m)); amtT = setTimeout(function () { renderCalc(true); }, 120); });
+  $('#amt-dn').addEventListener('click', function () { amt.value = clamp(+amt.value - STEP, lo(), MAX_MONTHLY); renderCalc(true); });
+  $('#amt-up').addEventListener('click', function () { amt.value = clamp(+amt.value + STEP, lo(), MAX_MONTHLY); renderCalc(true); });
+  $$('input[name="plan"]').forEach(function (r) { r.addEventListener('change', function () { months = +r.value; applyBounds(); renderCalc(true); }); });
+  applyBounds();
+  renderCalc(false);
+
+  // the plan table: what each month adds up to over the plan, and the gold weight at today's rate once it is known
+  function renderTables() {
+    var html = '';
+    [6, 12].forEach(function (mo) {
+      html += '<table><caption>' + mo + ' month plan</caption><thead><tr><th scope="col">Monthly</th><th scope="col">You pay</th>' + (gold ? '<th scope="col">Gold today</th>' : '') + '</tr></thead><tbody>';
+      for (var m = minMonthly(mo); m <= MAX_MONTHLY; m += STEP) { var p = plan(mo, m); html += '<tr><td>' + rs(m) + '</td><td>' + rs(p.total) + '</td>' + (gold ? '<td>' + g2(p.grams) + ' g</td>' : '') + '</tr>'; }
+      html += '</tbody></table>';
+    });
+    $('#tables').innerHTML = html;
+  }
+  renderTables();
+  PJ.onGold(function (g) { gold = g; renderNumbers(); renderTables(); });
+
+  /* ---------- enrol: reserve a plan on WhatsApp; no NIC online ---------- */
+  var enrol = $('#enrol'), eAm = $('#e-am'), ePl = $('#e-pl');
+  // the amounts offered follow the plan's length, as in the calculator
+  function fillAmounts(mo, keep) {
+    eAm.innerHTML = '';
+    for (var m = minMonthly(mo); m <= MAX_MONTHLY; m += STEP) { var o = d.createElement('option'); o.value = m; o.textContent = 'Rs ' + rs(m); eAm.appendChild(o); }
+    if (keep >= minMonthly(mo)) eAm.value = String(keep);
+  }
+  fillAmounts(6, 5000);
+  ePl.addEventListener('change', function () { fillAmounts(+ePl.value, +eAm.value); });
+  $$('[data-enrol]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      ePl.value = String(months); fillAmounts(months, +amt.value); $('#e-err').textContent = '';
+      if (enrol.showModal) enrol.showModal(); else enrol.setAttribute('open', '');
+      $('#e-nm').focus();
     });
   });
+  $('#enrol-x').addEventListener('click', function () { enrol.close(); });
+  enrol.addEventListener('click', function (e) { if (e.target === enrol) enrol.close(); });
+  $('#eform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nm = $('#e-nm').value.trim(), mb = $('#e-mb').value.trim();
+    if (!nm || mb.replace(/\D/g, '').length < 9) { $('#e-err').textContent = !nm ? 'Please add your name.' : 'Please add a mobile number we can reach you on.'; (!nm ? $('#e-nm') : $('#e-mb')).focus(); return; }
+    var mo = +ePl.value, mm = +eAm.value, p = plan(mo, mm);
+    openWA(wa('I’d like to join the Suba Mangala plan. Name: ' + nm + '. Mobile: ' + mb + '. Plan: ' + mo + ' months at Rs ' + rs(mm) + ' a month (Rs ' + rs(p.total) + ' in total). Showroom: ' + $('#e-st').value + '.'));
+    enrol.close();
+  });
 
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ------------------------------------------------------------------
-     Current year
-     ------------------------------------------------------------------ */
-  var year = document.getElementById('year');
-  if (year) year.textContent = String(new Date().getFullYear());
-
-  /* ------------------------------------------------------------------
-     Sticky header shadow
-     ------------------------------------------------------------------ */
-  var header = document.getElementById('header');
-  if (header) {
-    var onScroll = function () {
-      header.classList.toggle('is-stuck', window.scrollY > 12);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+  /* ---------- track: the example timeline, and the request ---------- */
+  var STEPS = {
+    order: { cur: 1, s: [['Order placed', 'Design, karat and expected weight agreed.'], ['With the goldsmith', 'Your piece is being made.'], ['Quality check', 'We check the piece and its weight.'], ['Ready to collect', 'Collect it from your showroom.']] },
+    repair: { cur: 2, s: [['Received', 'We note the piece and the work needed.'], ['Being repaired', 'With our goldsmith.'], ['Ready to collect', 'Bring your repair bill to the counter.'], ['Collected', 'Handed back to you.']] }
+  };
+  var tl = $('#tl'), tlBar = $('#tl-bar'), kind = 'order', tlSeen = false;
+  function renderTL() {
+    var k = STEPS[kind], h = '';
+    k.s.forEach(function (st, i) {
+      var cls = i < k.cur ? 'done' : i === k.cur ? 'cur' : '';
+      h += '<li class="' + cls + '"><span class="dot" aria-hidden="true"><svg class="fl"><use href="#flower"/></svg></span><div><b>' + st[0] + '</b><span>' + st[1] + '</span></div></li>';
+    });
+    tl.innerHTML = h;
+    tlBar.style.height = '0px';
+    if (tlSeen) fillTL();
   }
-
-  /* ------------------------------------------------------------------
-     Mobile drawer
-     ------------------------------------------------------------------ */
-  var drawer = document.getElementById('drawer');
-  var openBtn = document.getElementById('menuOpen');
-  var closeBtn = document.getElementById('menuClose');
-
-  function openDrawer() {
-    if (!drawer) return;
-    drawer.classList.add('is-open');
-    document.body.classList.add('is-locked');
-    if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
-    if (closeBtn) closeBtn.focus();
+  function fillTL() {
+    var lis = $$('li', tl), cur = STEPS[kind].cur;
+    var hgt = lis[cur].offsetTop - lis[0].offsetTop;
+    requestAnimationFrame(function () { tlBar.style.height = Math.max(0, hgt) + 'px'; });
   }
+  $$('input[name="kind"]').forEach(function (r) {
+    r.addEventListener('change', function () { kind = r.value; $('#t-no-l').textContent = kind === 'order' ? 'Order number' : 'Repair bill number'; renderTL(); });
+  });
+  renderTL();
+  $('#tform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var no = $('#t-no').value.trim(), ph = $('#t-ph').value.trim(), err = $('#t-err');
+    if (!no) { err.textContent = 'Please enter your ' + (kind === 'order' ? 'order' : 'repair bill') + ' number.'; $('#t-no').focus(); return; }
+    if (!/^\d{4}$/.test(ph)) { err.textContent = 'Please enter the last 4 digits of your mobile.'; $('#t-ph').focus(); return; }
+    err.textContent = '';
+    openWA(wa('please send me the status of my ' + (kind === 'order' ? 'order' : 'repair') + '. ' + (kind === 'order' ? 'Order' : 'Repair bill') + ' number: ' + no + '. Mobile ending ' + ph + '.'));
+  });
 
-  function closeDrawer() {
-    if (!drawer) return;
-    drawer.classList.remove('is-open');
-    document.body.classList.remove('is-locked');
-    if (openBtn) {
-      openBtn.setAttribute('aria-expanded', 'false');
-      openBtn.focus();
+  /* ---------- this week, in Sri Lanka time ---------- */
+  (function () {
+    var week = $('#week'), names = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], full = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var now = new Date(), y, m, dd, wd, mins;
+    try {
+      var o = {};
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Colombo', year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(now).forEach(function (p) { o[p.type] = p.value; });
+      y = +o.year; m = +o.month; dd = +o.day; wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(o.weekday); mins = (+o.hour % 24) * 60 + +o.minute;
+    } catch (e) { y = now.getFullYear(); m = now.getMonth() + 1; dd = now.getDate(); wd = now.getDay(); mins = now.getHours() * 60 + now.getMinutes(); }
+    var start = Date.UTC(y, m - 1, dd - wd), html = '<div role="row" style="display:contents">';
+    names.forEach(function (n, i) { html += '<div class="dh" role="columnheader"><abbr title="' + full[i] + '">' + n.toUpperCase() + '</abbr></div>'; });
+    html += '</div><div role="row" style="display:contents">';
+    for (var i = 0; i < 7; i++) {
+      var dt = new Date(start + i * 864e5), sun = i === 0, close = sun ? 840 : 1170, today = i === wd;
+      var state = today ? (mins >= 555 && mins < close ? 'Open now' : 'Today') : '';
+      html += '<div class="day' + (sun ? ' sun' : '') + (today ? ' today' : '') + '" role="cell"' + (today ? ' data-state="' + state + '" aria-current="date"' : '') + '>' +
+        '<span class="dn" aria-hidden="true">' + dt.getUTCDate() + '</span><span class="hr" aria-hidden="true">9.15 am<br>' + (sun ? '2.00 pm' : '7.30 pm') + '</span>' +
+        '<span class="sr">' + full[i] + ' ' + dt.getUTCDate() + (today ? ', today, ' + state.toLowerCase() : '') + ', 9.15 am to ' + (sun ? '2.00 pm' : '7.30 pm') + '</span></div>';
     }
-  }
+    week.innerHTML = html + '</div>';
+  })();
 
-  if (openBtn) openBtn.addEventListener('click', openDrawer);
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-  if (drawer) {
-    drawer.addEventListener('click', function (e) {
-      if (e.target.closest('[data-close]')) closeDrawer();
+  /* ---------- welcome ---------- */
+  var hello = $$('.hello span'), hk = 0;
+  hello[0].classList.add('lit');
+  if (!reduce) setInterval(function () { hello[hk].classList.remove('lit'); hk = (hk + 1) % hello.length; hello[hk].classList.add('lit'); }, 2800);
+
+  /* ---------- scroll: the counter photo warms from sepia to colour, and the hero's words drift away ---------- */
+  var shopPh = $('#shop-ph'), ticking = false, hcopy = $('.hero .hcopy');
+  function prog(el) { var r = el.getBoundingClientRect(), vh = window.innerHeight; return clamp((vh - r.top) / (vh + r.height), 0, 1); }
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      shopPh.style.setProperty('--gs', reduce ? 0 : clamp(1 - (prog(shopPh) - 0.2) / 0.4, 0, 1).toFixed(3));
+      // desktop: the hero's words drift up and fade a little as the page scrolls away from them
+      var y = window.innerWidth > 820 && !reduce ? clamp(window.scrollY / hero.offsetHeight, 0, 1) : 0;
+      hcopy.style.transform = y ? 'translate3d(0,' + (-y * 60).toFixed(1) + 'px,0)' : '';
+      hcopy.style.opacity = y ? (1 - y * 0.6).toFixed(3) : '';
     });
   }
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
-  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { onScroll(); if (tlSeen) fillTL(); });
+  onScroll();
 
-  /* Keep focus inside the drawer while it is open */
-  document.addEventListener('focusin', function (e) {
-    if (!drawer || !drawer.classList.contains('is-open')) return;
-    if (!drawer.contains(e.target)) {
-      var first = drawer.querySelector('a, button');
-      if (first) first.focus();
-    }
-  });
-
-  /* ------------------------------------------------------------------
-     Featured carousel
-     ------------------------------------------------------------------ */
-  var viewport = document.getElementById('carousel');
-  var prevBtn = document.querySelector('[data-carousel-prev]');
-  var nextBtn = document.querySelector('[data-carousel-next]');
-
-  if (viewport && prevBtn && nextBtn) {
-    var step = function () {
-      var card = viewport.querySelector('.product');
-      if (!card) return viewport.clientWidth;
-      var gap = parseFloat(getComputedStyle(viewport.querySelector('.carousel__track')).columnGap) || 20;
-      return card.getBoundingClientRect().width + gap;
-    };
-
-    /* The viewport is padded so the track can bleed to the page edge, and
-       scroll snapping rests the first card at scrollLeft === that padding —
-       not at 0. Measure it rather than comparing against zero. */
-    var syncButtons = function () {
-      var pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
-      var max = viewport.scrollWidth - viewport.clientWidth;
-      prevBtn.disabled = viewport.scrollLeft <= pad + 4;
-      nextBtn.disabled = viewport.scrollLeft >= max - pad - 4;
-    };
-
-    var scrollBy = function (dir) {
-      viewport.scrollBy({
-        left: dir * step(),
-        behavior: reduceMotion ? 'auto' : 'smooth'
+  /* ---------- the calculator's coins and the timeline play when they come into view ---------- */
+  var calcEl = $('.calc'), tlCard = $('.tl-card');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var t = e.target; io.unobserve(t);
+        if (t === calcEl) setTimeout(function () { renderCalc(true); }, 300);
+        if (t === tlCard) { tlSeen = true; setTimeout(fillTL, 300); }
       });
-    };
+    }, { rootMargin: '0px 0px -10% 0px' });
+    io.observe(calcEl); io.observe(tlCard);
+  } else { tlSeen = true; fillTL(); }
 
-    prevBtn.addEventListener('click', function () { scrollBy(-1); });
-    nextBtn.addEventListener('click', function () { scrollBy(1); });
-    viewport.addEventListener('scroll', syncButtons, { passive: true });
-    window.addEventListener('resize', syncButtons);
-    syncButtons();
-
-    /* Arrow-key support when the carousel has focus */
-    viewport.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowRight') { e.preventDefault(); scrollBy(1); }
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollBy(-1); }
-    });
-  }
-
-  /* ------------------------------------------------------------------
-     Wishlist toggles — local to the visitor's own browser
-     ------------------------------------------------------------------ */
-  document.querySelectorAll('.product__wish').forEach(function (btn) {
-    btn.setAttribute('aria-pressed', 'false');
-    btn.addEventListener('click', function () {
-      var on = btn.getAttribute('aria-pressed') === 'true';
-      btn.setAttribute('aria-pressed', on ? 'false' : 'true');
-    });
-  });
-
-  /* ------------------------------------------------------------------
-     Assurance marquee — duplicate the items so the loop is seamless
-     ------------------------------------------------------------------ */
-  var track = document.getElementById('assuranceTrack');
-  if (track && !reduceMotion) {
-    track.innerHTML += track.innerHTML;
-  }
-
-  /* ------------------------------------------------------------------
-     Scroll reveal
-     ------------------------------------------------------------------ */
-  var revealables = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window) || reduceMotion) {
-    revealables.forEach(function (el) { el.classList.add('is-in'); });
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-in');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    revealables.forEach(function (el) { io.observe(el); });
-  }
-
-  /* ------------------------------------------------------------------
-     Appointment form
-     There is no backend here, so a valid submission hands the enquiry to
-     WhatsApp — which is how the showroom actually takes bookings.
-     Swap this for a real POST when an endpoint exists.
-     ------------------------------------------------------------------ */
-  var WHATSAPP_NUMBER = '94777770203';
-  var form = document.getElementById('appointForm');
-  var status = document.getElementById('formStatus');
-
-  function setInvalid(input, invalid) {
-    var field = input.closest('.field');
-    if (field) field.classList.toggle('is-invalid', invalid);
-  }
-
-  if (form) {
-    form.querySelectorAll('input, textarea, select').forEach(function (input) {
-      input.addEventListener('input', function () { setInvalid(input, false); });
-    });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      var name = form.elements.name;
-      var phone = form.elements.phone;
-      var ok = true;
-
-      if (!name.value.trim()) { setInvalid(name, true); ok = false; }
-
-      /* Sri Lankan numbers: allow 07XXXXXXXX, 0XXXXXXXXX and +94XXXXXXXXX */
-      var digits = phone.value.replace(/[^\d+]/g, '');
-      if (!/^(\+94\d{9}|0\d{9})$/.test(digits)) { setInvalid(phone, true); ok = false; }
-
-      if (!ok) {
-        var firstBad = form.querySelector('.field.is-invalid input');
-        if (firstBad) firstBad.focus();
-        return;
-      }
-
-      var lines = [
-        'Appointment request — Pushpa Jewellers',
-        'Name: ' + name.value.trim(),
-        'Phone: ' + phone.value.trim(),
-        'Showroom: ' + form.elements.showroom.value,
-        'Interested in: ' + form.elements.interest.value
-      ];
-      var note = form.elements.message.value.trim();
-      if (note) lines.push('Note: ' + note);
-
-      window.open(
-        'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n')),
-        '_blank',
-        'noopener'
-      );
-
-      if (status) {
-        status.textContent =
-          'Thank you, ' + name.value.trim().split(' ')[0] +
-          '. Your request is ready to send in WhatsApp — or call us on 031 223 3857.';
-        status.classList.add('is-visible');
-      }
-      form.reset();
-    });
-  }
-
-  /* ------------------------------------------------------------------
-     Highlight the section currently in view in the primary nav
-     ------------------------------------------------------------------ */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav__link'));
-  var sections = navLinks
-    .map(function (link) { return document.querySelector(link.getAttribute('href')); })
-    .filter(Boolean);
-
-  if (sections.length && 'IntersectionObserver' in window) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach(function (link) {
-          link.setAttribute(
-            'aria-current',
-            link.getAttribute('href') === '#' + entry.target.id ? 'true' : 'false'
-          );
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach(function (section) { spy.observe(section); });
-  }
+  if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { ODOS.forEach(function (o) { o.measure(); var s0 = o.str; o.str = ''; o.set(s0, true); }); });
 })();
