@@ -27,7 +27,13 @@ php -S localhost:8000 tools/dev-router.php
 ## Hosting on Hostinger
 
 Everything sits at the top level, so what is in the repo is what goes into `public_html`.
-Two ways to put it there:
+
+**Live setup (since 19 Nov 2026):** Hostinger deploys the branch `claude/nice-wright-nhzvwb` of
+`fashaf01/Pushpa-Jewellers` to pushpa-jewellers.com by itself on every push (Git auto-deployment, static). So only
+push work that is finished and checked, and run `sh tools/stamp-versions.sh` before a release that changes CSS or
+JS. The database details and product photos live in `pj-data/` next to `public_html`, which a deploy never touches.
+
+Other ways to put it there:
 
 - **From GitHub (recommended).** hPanel → Websites → pushpa-jewellers.com → **Advanced → Git**:
   repository `fashaf01/Pushpa-Jewellers`, the site's branch, install path left empty
