@@ -17,7 +17,7 @@ mkdir -p "$STAGE"
 
 # Site files only, as tracked by git (so stray local files never get uploaded)
 git ls-files -z -- \
-  .htaccess index.html assets admin api \
+  .htaccess index.html coming-soon.on assets admin api \
   '*/index.html' \
 | xargs -0 -I{} sh -c 'mkdir -p "$1/$(dirname "$2")" && cp "$2" "$1/$2"' _ "$STAGE" {}
 

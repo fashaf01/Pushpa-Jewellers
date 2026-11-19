@@ -108,6 +108,14 @@ tools/frame-photos.py    frames a product photo of any size for the shop, or cut
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
 
+## Coming soon
+
+While the file `coming-soon.on` is in the site folder, every page shows `coming-soon/index.html` instead (the
+rules are near the top of `.htaccess`). The admin (`/admin/`), the API (`/api/`, so the admin and the gold rate keep
+working) and the files pages load stay reachable. To see the real site, open
+`https://pushpa-jewellers.com/?preview=pushpa1967` once in a browser: it leaves a cookie for 30 days. **To launch,
+delete `coming-soon.on`** and push; Hostinger deploys it within a minute.
+
 ## Pushpa pink, favourites and the money changers
 
 - **Pink** (`--pink`, #db0a73, from the shop's own printed flyers) is the colour of the buttons on light pages, the
