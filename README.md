@@ -1,136 +1,363 @@
-# Pushpa Jewellers — Landing Page
+# Pushpa Jewellers — Website
 
-A static landing page for **Pushpa Jewellers (Pvt) Ltd** — *Forever Trusted Jewellers
-since 1967* — Negombo and Katunayake, Sri Lanka.
+A static website for **Pushpa Jewellers (Pvt) Ltd**, *Forever Quality & Trust*,
+since 1967. Negombo and Katunayake, Sri Lanka.
 
-No build step, no dependencies. Open `index.html`, or serve the folder:
+Design: **Plum, Gold & Petal**. Petal ivory is the paper, Pushpa plum the brand,
+gold the metal. One mark (the Pushpa flower, since *pushpa* means flower) and one
+frame (the cusped arch of an old doorway). It is meant to feel like a house that has been here since 1967:
+book type, old paper, plum like printed velvet, gilt line ornament.
+
+Nine pages: the home page (`index.html`), the shop (`shop/index.html`, at `/shop/`), About us (`/about/`), one page
+for each of the three counter services: pawning, money exchange and airline ticketing (`/services/<name>/`), and the
+legal pages: the privacy policy (`/privacy/`), cookies (`/cookies/`) and terms of use (`/terms/`). Suba Mangala
+and order tracking stay on the home page.
+
+No build step, no dependencies. It is hosted on Vercel at
+**https://pushpa-jewellers.vercel.app**. Locally, serve the folder (the shop needs a server,
+since it lives at `/shop/`):
 
 ```bash
 python3 -m http.server 8000
 ```
 
-`node build.js` inlines the CSS, JS and favicon into a single self-contained
-`dist/pushpa-jewellers.html`, for hosting that serves one file.
+A plain static server has no `/api/gold`, so locally the top bar shows
+"Call 031 223 8822 for today's gold rate" instead of the rate.
+
+`node build.js` inlines the CSS, JS, favicon and every image of the home page into a
+single self-contained `dist/pushpa-jewellers.html`, for hosting that serves one file
+(it too shows the call line in place of the rate, and has only the home page, so its links to the shop, About and the
+service pages do not work).
 
 ## Files
 
 ```
-index.html              markup + the inline SVG sprite that draws every illustration
-assets/css/styles.css   design tokens and all layout
-assets/js/main.js       drawer, carousel, scroll reveal, form handling
-assets/img/favicon.svg  tab icon
+index.html               the home page: markup, the inline SVG icon sprite, JSON-LD
+shop/index.html          the shop
+about/index.html         About us: the story, the marks, how we work, the name, the services, the showrooms
+privacy/index.html       Privacy policy
+cookies/index.html       Cookies
+terms/index.html         Terms of use
+services/*/index.html    pawning, money-exchange, airline-ticketing: how it works, contact card, the other services
+assets/css/styles.css    design tokens and all layout, both pages
+assets/js/site.js        shared by every page: header, menus, gold rate bar, copy buttons,
+                         header shrinking on scroll, reveals, the entrance
+assets/js/main.js        home page only: Suba Mangala calculator and enrolment,
+                         order tracking, opening-hours week, the welcome
+assets/js/pieces.js      the shop's catalogue, one line per piece
+assets/js/pieces-instagram.js   Pushpa's 32 Instagram pieces, shown in the shop alongside pieces.js
+assets/js/shop.js        the shop: grid, filters, sorting, and each piece's page
+assets/img/              photographs (webp) and favicon
+assets/img/shop/         the shop photos, 1080 x 1350, and small/ grid copies, 540 x 675
+assets/img/orn/          gold ornaments: corner, dividers, mandalas, the line-drawn lotus (svg)
+api/gold.js              today's gold rate, a Vercel function served at /api/gold
+tools/frame-photos.py    frames a product photo of any size for the shop, or cuts a close-up from it
+tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
+
+## The shop
+
+`/shop/` shows every piece in `assets/js/pieces.js` in list order, with its weight in grams and
+in pawn (8 g) where one is known. Visitors can filter by the categories that have pieces (a
+category with none gets no button), and sort by weight (the sort appears once any piece has a weight). Each
+piece has its own page at `/shop/?piece=<slug>`: the large photo with the piece's other photos
+underneath (swipe across the photo on a phone; on a computer use the arrows or the thumbs, and the
+photo zooms in under the pointer), its price, description and details (karat, weight in grams and in pawn, kind,
+categories), an "Ask about this piece" button that opens WhatsApp with the piece's name filled in, a call button, a
+note on saving for it with Suba Mangala, a link to its Instagram post when it has one, a share button, and more
+pieces of the same kind. Filters and sorting are in the address too
+(`/shop/?cat=bangles&sort=light`), so any view can be shared; the home page's collection tiles
+open the shop filtered this way.
+
+**Best seller labels.** A piece with `bestseller: true` in `pieces.js` or `pieces-instagram.js` shows a gold "Best
+seller" ribbon off the left edge of its photo in the collection (gilded, with a swallowtail end and plum
+lettering; a light sweeps across it every few seconds, and stops for visitors who ask for reduced motion). Six pieces carry it now (the stacked bar bangle, the gold
+leaf bridal necklace, the five-stone ring, the cross pendant, the solid gold initial necklace and the pave huggies):
+**they were picked to show the design, not from sales figures, so set the label on the pieces that really sell best
+before the site goes live.** Delete the field to remove a label.
+
+**Watches.** Six Casio MTP men's quartz watches are in `pieces.js` with `cats: ['watches']`, and the **Watches**
+filter appears because there are pieces in it. They come from the "W. A. De Silva Selected 6 Casio" set the client
+supplied (details checked 30 October 2026): the prices are the Sri Lankan rupee prices that W. A. De Silva & Co. list
+for them, one 600 px photograph each, and Casio's specifications. They always come last in the collection, after all
+the jewellery (`shop.js` puts them there, wherever they are in the list). A watch's page differs from a piece of
+jewellery's: it has no gold weight, karat, pawn weight or gold value and no Suba Mangala note; it has a specifications
+list (the first six rows show, the rest fold under "Full specifications") and a `credit` line under the photograph.
+Watches 03 and 04 (MTP-1253SG-9ADF, MTP-1192A-7ADF) came with design details only, so they show four rows and no
+Casio link. **Things to confirm with the client:**
+
+- **Prices.** Each watch's `price` is W. A. De Silva's listed price, shown as "Rs". Confirm these are the prices
+  Pushpa will charge, and change `price` where they are not.
+- **Photographs.** They are credited to W. A. De Silva / Casio. Confirm that Pushpa has permission to use them (as a
+  dealer, or from W. A. De Silva) before relying on them; the `credit` field is the line shown under the photograph.
+- **Stock.** The "available" status in the set is W. A. De Silva's, not Pushpa's, so each page says price and stock are
+  confirmed when asked.
+- **Photograph size.** The photographs are about 600 px, so they look soft at full width. Replace them if larger
+  ones can be had.
+
+Each photograph was framed to 4:5 (1080 x 1350, plus a 540 x 675 small copy) like the rest of the shop.
+
+**The price on a piece's card and page.** A piece with `price` (rupees) shows that price. **Every piece now has a
+sample price, put in to show the design: replace them with the real prices before the site goes live** (the sample
+figures are the weight at about Rs 31,250 a gram plus 16% where the weight is known, and a typical figure for the
+kind of piece where it is not). A piece with a weight and a `karat`
+shows its gold value today: the weight times today's rate for that karat (from `/api/gold`), rounded to Rs 100, with
+the weight, karat and rate per gram written under it and a plain note that making charges are added at the counter.
+A set adds its pieces' weights; a range of weights gives a range of values. Anything else reads "Price on request".
+Delete a piece's `price` to fall back to these.
+The 28 Instagram pieces whose posts print a weight also print 22KT, so they carry `karat: 22`. They use the same rate as
+the bar (see *Today's gold rate*).
+
+**What it shows now.** 104 pieces from two lists:
+
+- 72 pieces from the photos uploaded in `assets/img/shop` (`assets/js/pieces.js`), each with two
+  photos. Their names and descriptions are written from the product names; their weights are not
+  known yet, so each page asks for the weight.
+- Pushpa's 32 pieces from Instagram (`assets/js/pieces-instagram.js`), with their weights and a
+  link to each post. Their second photo is a close-up cropped from the post.
+
+The shop spreads the Instagram pieces evenly through the others (`mix()` in `shop.js`). Photos
+that would need background added to fill the 4:5 frame are cut to a clean 4:5 window of the photo
+instead, so no background is invented. Watermarks in the uploaded photos are cropped out.
+
+**To add a piece:**
+
+1. Frame its photo for the shop. Any size works:
+   `python3 tools/frame-photos.py path/to/photo.jpg rose-ring`
+   This finds the piece, centres it in the shop's 4:5 frame (1080 x 1350) with the photo's own
+   background carried out to the edges, and writes `assets/img/shop/rose-ring.webp` and its grid
+   copy in `small/`. A second photo of the same piece: `... photo2.jpg rose-ring-2`. A close-up
+   cut from the same photo: `python3 tools/frame-photos.py --closeup path/to/photo.jpg rose-ring-2`.
+   Real photos from other angles show the piece better than a close-up, so use those when there are some.
+   (Needs Pillow and NumPy. A photo already 1080 x 1350 can go straight into `assets/img/shop/`,
+   then `python3 tools/shop-thumbs.py` makes its grid copy.)
+2. Add a line at the top of `assets/js/pieces.js`, with `photos: 2` if it has a second photo
+   (`photos: 3` for three, and so on).
+   The comments there explain each field.
+
+Every page shares the home page's header, menus, footer and gold rate panel. They are
+copied into each page with links rewritten for where the page sits, so a change to any of
+them has to be made in all six files (`index.html`, `shop/`, `about/` and the three under `services/`).
+
+## Today's gold rate
+
+The bar at the top of the page shows 24K and 22K per pawn (8 g); tapping it shows
+per gram too. It stays at the top while the page scrolls.
+
+The page calls `/api/gold` (`api/gold.js`), which never shows the bare international
+price: Sri Lankan counters sit about 5% above it. It answers with, first match wins:
+
+1. **The shop admin's rate** (`pushpa-jewellers-admin`): today's counter rate if staff
+   entered one on the admin's Gold rate page, otherwise the admin's **automatic Sri Lankan
+   market rate** for today. Changing the premium in the admin's Settings changes both.
+2. **The same market rate worked out here**, if the admin cannot be reached: the
+   international gold price (gold-api.com) in rupees (open.er-api.com) plus a
+   **5.12% Sri Lankan market premium**, 22K at **92%** of 24K, pawns rounded to Rs 100.
+   On 8 Nov 2026 that gave 24K Rs 366,000 and 22K Rs 336,700 a pawn, the market's figures.
+   Override with `GOLD_MARKET_PREMIUM_PERCENT` and `GOLD_22K_PERCENT_OF_24K`.
+
+Vercel's CDN keeps each answer for ten minutes, so a counter rate saved in the admin
+shows on the site within ten minutes. The page reloads the rate every 30 minutes and
+whenever the tab comes back into view. The details panel says whether the figure is
+the counter rate or the market rate.
+
+For an emergency fixed rate, set `GOLD_24K_PAWN_LKR` and `GOLD_22K_PAWN_LKR` (whole
+rupees per pawn) in the Vercel project's environment variables and redeploy; remove
+them to go back to the automatic rate.
+
+If the rate cannot be fetched, the bar reads "Call 031 223 8822 for today's gold rate".
+
+## The intro
+
+The home page opens on the plum with the logo coming into focus under a soft warm light. A single glint of gold
+light then crosses the logo (a band of light cut to the logo's shape with a CSS mask of `lockup.webp`) and the motto
+rises beneath it. At 3 seconds the logo lifts away and the plum is drawn up off the page with a curved edge, like a
+curtain going up, as the hero arrives; the whole thing is over in about 4 seconds. It is all CSS (the `intro` block in
+`styles.css`).
+
+It plays **once a visit**: the first time the home page opens in a tab. Coming back to the home page, from another
+page, the back button or a reload, goes straight to the page. A short script in `index.html`'s `<head>` remembers
+this in `sessionStorage` and marks the page `.opened`, so the intro is hidden before anything is drawn. To see it
+again, open the site in a new tab or window.
+
+The intro lifts after the `animation-delay` on `.intro`; `site.js` reads it from there to start the hero's entrance,
+and starts it at once when the intro is not showing, so change the timing in the CSS only. The logo's size is
+`.intro-logo` (220px wide on desktop). Other pages have no intro, and it is skipped for visitors who ask for reduced
+motion.
+
+## Legal pages
+
+`privacy/`, `cookies/` and `terms/` are plain HTML, like the rest of the site, so edit the text in each page. They are
+drafts written from what the site actually does: it has no
+accounts, no analytics and no cookies of its own, one browser item (`pj-opened`, a flag for the opening animation),
+forms that open WhatsApp, and two third-party font services. **They are not legal advice. Have a lawyer in Sri Lanka
+check them before the site goes live, and confirm these with the client:**
+
+- the company's registration details and an email address for privacy requests (the site gives a phone number,
+  WhatsApp and the showrooms' addresses; add an email when one exists);
+- the return and exchange wording in the terms (it points customers to the counter and their receipt rather than
+  stating a policy);
+- how long transaction records are kept, and any identity checks the counter carries out;
+- that the policy matches practice if anything changes, such as adding analytics or a booking form.
+
+Every page's footer links to all three. When you change one, update its "Last updated" date at the top.
+
+## Logo size
+
+The masthead logo is `--logo` (82px on desktop, 72px on phones and tablets) and `--logo-s` once a desktop page has
+scrolled (58px), at the top of `styles.css`. The header's height, the jump-link landing point and the hero's height
+are all worked out from these, so change the logo size there and nothing else needs to move.
+
+## Sections
+
+1. **Hero.** Two photographs of a bride in Pushpa gold, one beside the brass lamp and one in the wood-panelled room,
+   that dissolve into each other (see "Hero photos" below). On phones the photo comes first, with the copy centred
+   below: a label, a two-line headline, one button and a text link.
+2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
+3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
+4. **Suba Mangala.** The 6 and 12 month gold purchase plan: its terms and conditions, a calculator and the plan table.
+5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
+6. **Services.** Pawning, money exchange and airline ticketing, each linking to its own page.
+7. **About.** 1967, the pride of Negombo, with a View more button to the About page.
+8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
+
+### The About and service pages
+
+They are written only from facts already on the site (1967 on Greens Road, the three showrooms, the 916 and 750
+marks, weighing in front of the customer, the services and their partners). Add the real history (who founded
+Pushpa, milestones, old photographs) to `about/index.html` when the family can share it, and check the steps on
+each service page against how the counter actually works, including what a customer should bring.
+
+### Hero photos: two, each in one size for desktop and one for phones
+
+The hero shows two photographs that dissolve into each other: each arrives over two seconds, stays for about five, and
+settles slowly from a slight zoom while it shows. There is no button and no label; it starts as the opening logo
+lifts, and it is plain CSS (`heroSlide` in `styles.css`; the round is 14s and the second photo starts 7s after the
+first). Visitors who ask for reduced motion, and browsers without scripts, see the first photo only. Each photograph
+comes in two sizes: every desktop screen shows the desktop photo in the same shape, and every phone the phone photo.
+
+| | Desktop (821px and wider) | Phone (820px and narrower) |
+|---|---|---|
+| Shape | 2:1 | 4:5 |
+| Size | **1774 x 887** | **1120 x 1400** |
+| Files | `hero-1.webp`, `hero-2.webp` | `hero-1-mobile.webp`, `hero-2-mobile.webp` |
+| Framing | Put the bride in the right half. The left half sits under the headline and is darkened. | The whole photo shows; only the bottom fifth fades into plum, under the copy. Keep the face and jewellery above that. |
+
+To change a photo, replace its file in `assets/img/` with one of the same name and size (any size in the same shape
+works). To use one photo only, delete the second `<picture class="slide s2">` in `index.html`.
+
+On a screen tall enough the whole 2:1 photo shows. On a short screen the hero is cut to the screen's height, but no
+lower than 560px, trimming the photo's lower edge, so the whole hero stays on the first screen of most laptops and
+desktops. Between 821px and 1279px wide the headline needs a little more height, so the hero grows and trims the
+photo's sides. Tablets use the phone photo with its height capped at 680px, which trims the bottom. The rules are the
+`desktop: one shape on every screen` block and the `phones:` lines in `styles.css`.
+
+## Suba Mangala
+
+The plan follows the printed plan card (its terms and conditions, a photo of which the client supplied):
+
+- each monthly payment is converted into gold weight at that month's gold rate;
+- the minimum scheme amount is Rs 10,000;
+- after 6 or 12 months the customer can purchase any jewellery with the gold, and wastage is added to the weight;
+- buying jewellery before the 6 or 12 months are over makes the customer ineligible for the offer;
+- special gifts are issued at the end of the plan; no cash refund; management has complete right over jewellery
+  pricing and distribution; the customer agrees to the terms by signing.
+
+The card's terms are the seven items under "Terms and conditions" in the Suba Mangala section of `index.html`, and
+section 4 of `terms/index.html` says the same. **Two choices were made that the client should confirm:**
+
+1. **"The minimum scheme amount is Rs 10,000"** is read as the least the whole plan may add up to. So the calculator and
+   the enrolment form start a 6 month plan at Rs 2,000 a month and a 12 month plan at Rs 1,000, and go up to Rs 10,000 a
+   month (the old range's top; the card gives no maximum). If it means the least *monthly* payment instead, change
+   `MIN_TOTAL`, `STEP` and `MAX_MONTHLY` at the top of the Suba Mangala block in `assets/js/main.js`.
+2. **The gold weight shown is an illustration.** The calculator divides what you would pay by today's 22K rate (the
+   `/api/gold` one) to show about how much gold it would be, and says plainly that each month's real rate sets the real
+   weight. It assumes the card's "gold rate" is the 22K rate. Without a rate (offline, or the rate service down) it shows
+   the total to pay instead. The old cash gift and "gold you can buy in rupees" are gone: the card says special gifts,
+   with no figure, so none is shown.
+
+## WhatsApp
+
+There is no backend. Enrolling, tracking and every "Ask about" link open WhatsApp
+with the message pre-filled. The number is at the top of `main.js` and in the
+`wa.me` links in `index.html`:
+
+```js
+var WA = 'https://wa.me/94777770203?text=';
+```
+
+## Fonts
+
+- **The Seasons** (Adobe Fonts kit `tiq7fhn`) for the big headlines. **Add the
+  site's domain to this kit in Adobe Fonts > Web Projects**, or the kit will not
+  serve on the live site. The page falls back to Cinzel if it does not load.
+- **EB Garamond** for all reading text, an old book type. It runs small, so `font-size-adjust` (`--text-adjust`)
+  sizes it up to match the sizes in the stylesheet; the display faces opt out of that.
+- **Cinzel** for the small capitals: navigation, buttons, labels, links.
+- **Cinzel, EB Garamond, Pinyon Script, Noto Serif Sinhala and Noto Serif Tamil**
+  from Google Fonts.
 
 ## Business details used on the page
 
-These came from the company's public listings and social profiles. **Please check
-each one before the site goes live.**
+**Please check each one before the site goes live.**
 
 | | |
 |---|---|
-| Founded | 1967 |
-| Negombo (flagship) | 67 & 69 Greens Road, Negombo 11500 |
-| Katunayake | 8A Averiwatte Road, Katunayake |
-| Phone | 031 223 3857 · 031 222 2404 · 077 777 0203 |
+| Founded | 1967, Greens Road, Negombo |
+| Showrooms | 67 Greens Road, Negombo (head office) · 150A Sea Street, Negombo · 8A Averiwatte, Katunayake |
+| Hotline | 031 223 8822 |
+| Tel | 031 223 3857 · 031 222 2404 · Katunayake 011 225 4689 |
+| WhatsApp | 077 777 0203 |
 | Hours | Mon–Sat 9.15 am – 7.30 pm · Sun 9.15 am – 2.00 pm |
 | Instagram | [@pushpajewellers_official](https://www.instagram.com/pushpajewellers_official/) |
 | Facebook | [pushpajewellerspvtltd](https://www.facebook.com/pushpajewellerspvtltd/) |
-| Products | 22kt & 18kt gold, diamonds, platinum, gemstones |
-| Services | Retail, bespoke, bridal, gold pawning, authorised money exchange |
+| Services | Suba Mangala plan, order and repair tracking, pawning, money exchange (Western Union, MoneyGram, Ria), airline ticketing |
 
-**Not yet filled in:** a public email address. Search the directory listings and
-you find `pushpaairtravels@gmail.com`, which belongs to the sister travel
-business — so it is deliberately left off the page rather than guessed at.
-Add the real one to the footer and the `JewelryStore` JSON-LD block when you have it.
+The same details are in the `JewelryStore` JSON-LD in `<head>`. Update both together.
 
-## Getting the real photography
+## Product photography
 
-The build environment has no outbound network access — every host, including
-Instagram, Facebook and the old WooCommerce site, is refused by the egress
-proxy. So the images have to be fetched from a machine that can reach them.
-
-`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library:
+`tools/fetch-images.sh` pulls a whole WordPress/WooCommerce media library into
+`product-images/`, with a `manifest.tsv` of titles and alt text:
 
 ```sh
 sh tools/fetch-images.sh https://saravanas.lk
 ```
 
-It walks `/wp-json/wp/v2/media`, saves every image into `product-images/`, and
-writes `manifest.tsv` mapping each file to its title and alt text — which is
-what tells us which shot is which piece. If the REST route is disabled it
-prints a `wget` fallback that mirrors `/wp-content/uploads/`.
-
-Commit that folder and the images can be wired into the slots below.
-
-**Before using them, confirm the photographs are the client's to use.** Product
-photography is normally owned by whoever shot it, and a site being "the old
-site" is worth verifying if the domain belongs to a different trading name.
-
-## Adding photography
-
-Every image is drawn in SVG. To use real photographs, you do not touch the
-markup — open `assets/js/main.js` and paste a URL against the slot you want:
-
-```js
-var PHOTOS = {
-  heroAside: 'https://images.unsplash.com/photo-XXXX?w=1600&q=80&fm=webp',
-  catRings:  'assets/img/rings.jpg',
-  ...
-};
-```
-
-A slot with a URL swaps to the photograph; a slot left empty keeps its
-drawing, so the page never shows a hole. The drawing is only removed once the
-photograph has actually loaded, so a broken or slow URL degrades quietly.
-
-Any direct image URL works: an Unsplash CDN link (the
-`https://images.unsplash.com/photo-…` address behind their Download button),
-or your own file committed under `assets/img/`. Appending
-`?w=1600&q=80&fm=webp` to an Unsplash URL keeps the page light.
-
-The nineteen slots, and the crop each one wants:
-
-| Key | Where | Crop |
-|---|---|---|
-| `heroAside` | Hero, right panel | tall portrait — model wearing a bridal set |
-| `catNecklaces` `catEarrings` `catRings` `catBangles` | Category strip | portrait lifestyle — neck, ear, hand, wrist |
-| `prodSolitaire` `prodBridalNecklace` `prodStuds` `prodSapphire` `prodTennis` `prodBangles` `prodPendant` `prodChain` | Favourites carousel | square packshot on white |
-| `workshop` | Workshop panel | bench, tools, a jeweller at work |
-| `bridalSet` `bridalEarrings` `bridalBangles` | Bridal | tall portrait |
-| `showroomNegombo` `showroomKatunayake` | Showrooms | wide — shopfront or interior |
-
-Two cautions worth keeping in mind:
-
-- **Stock photography is not your stock.** A generic photo beside a specific
-  listing ("22kt gold · 42.6 g") reads as a real product that you can be asked
-  to sell. Use stock for the atmosphere slots — hero, categories, bridal,
-  workshop, showrooms — and hold the eight carousel slots for photographs of
-  pieces you actually have.
-- **Check the licence covers commercial use.** The Unsplash licence does; many
-  other "free" libraries require attribution or bar commercial use.
-
-## Prices
-
-Gold pieces read **"At today's gold rate"** rather than a fixed figure, because
-22kt prices track the daily rate. Stone-led pieces read **"Price on enquiry."**
-Weights and carats in the markup are illustrative — swap them for the real stock.
-
-## The appointment form
-
-There is no backend. A valid submission opens WhatsApp with the enquiry pre-filled,
-which is how the showroom already takes bookings. The number is at the top of
-`main.js`:
-
-```js
-var WHATSAPP_NUMBER = '94777770203';
-```
-
-To post to a real endpoint instead, replace the `window.open(...)` call in the
-submit handler with your `fetch`.
+**Before using any photograph, confirm it is the client's to use** and that the
+licence covers commercial use.
 
 ## Notes
 
-- Fonts load from Google Fonts (Cormorant Garamond + Jost) with system fallbacks.
-- Responsive from 320px up; no horizontal overflow at any width tested.
-- Honours `prefers-reduced-motion`; skip link, focus states and ARIA labels throughout.
-- `JewelryStore` JSON-LD in `<head>` carries both showrooms for local search.
+- Responsive from 320px up, with no horizontal scroll.
+- Heritage details, all at the top of `styles.css` as drawn data URIs: a fine paper grain on the ivory (`--paper`); plum
+  as printed velvet, small gold florets on a fine nap (`--damask`, `--velvet`); the cusped arch (`--arch-mask`,
+  `--arch-line` on the collection photos, `--arch-tall` behind page titles); gilt corner brackets on framed cards
+  (`--brackets`); and the old label shape with inward corners for tiles (`--label`). The line-drawn lotus
+  (`assets/img/orn/lotus-line.svg`) grows at the foot of the Suba Mangala section and of page titles. Steps on the About and service
+  pages are numbered in Roman capitals, ruled like an old account book. Ornaments stand on something: the lotus's stems
+  run to the bottom of its drawing, so it grows from the lower edge of the section it sits in, and a page title's
+  arch stands on a gilt threshold at the foot of the band, with a lotus either side.
+- The header shrinks on scroll on desktop only. On phones and tablets it keeps one height, so
+  nothing moves under the finger and jump links always land just under it (`scroll-margin-top`).
+- Phone details: form fields are 16px or larger (a smaller one makes iPhones zoom the page when
+  it is tapped), taps do not flash grey, and the colour behind the page when it is pulled past
+  the top or bottom is the header's plum.
+- On a product page the photos are one row that slides by a transform (`place()` in `shop.js`), not by scrolling, so it
+  behaves the same on every phone. The row is `touch-action: pan-y`, so a finger on the photo always scrolls the page up and
+  down; a drag that is clearly sideways moves the row with the finger and settles on a photo when released. Arrows, thumbs,
+  the arrow keys and a sideways trackpad swipe work on a computer. Jumping to the top of the page when a product opens switches
+  the page's gliding off first, because a glide ignores the user's finger until it is done.
+- The round WhatsApp button on phones is the site's wine with a white WhatsApp glyph (`#i-wa` in the icon sprite).
+- Motion: the opening logo (once a visit), the hero's photo and headline arriving as it lifts, reveals as sections
+  arrive (ornaments unfold, the collection's photos settle into their arches, the service medals turn in), a light
+  across buttons, gold underlines, and in the shop, cards rising into
+  place, photos that slide under the finger, and a card's photo growing into its piece's page
+  and back (view transitions, only on screens with a mouse, in browsers that have them).
+- Honours `prefers-reduced-motion`: all of that switches off.
+- Nothing moves the page while it scrolls: reveals only fade and rise (they never change a heading's size or letter
+  spacing, which would rewrap it and push what is below), so the layout stays put as sections arrive.
+- Each service card on the home page is one link to its page: the medal, the title and the words all open it
+  (`.svc-hit`, a link over the card that screen readers and the Tab key skip, since the card's own link is there).
+- Focus states, ARIA labels and live regions throughout. The Sinhala and Tamil
+  lines carry `lang` attributes.
