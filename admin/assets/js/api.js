@@ -160,6 +160,10 @@
       settings: {
         get: () => req('GET', '/settings'),
         update: (d) => req('PUT', '/settings', d)
+      },
+      shop: {
+        importStatus: () => req('GET', '/shop/import'),
+        importPieces: () => req('POST', '/shop/import')
       }
     };
   }

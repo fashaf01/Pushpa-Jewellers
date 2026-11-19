@@ -414,6 +414,11 @@ details.tbl[open] summary::before{transform:rotate(45deg)}
 .tl li.done b,.tl li.cur b{color:var(--wine)}
 .tl div span{font-size:14px;color:var(--muted)}
 .tl li.cur div span::after{content:" \00b7  Now";color:var(--gold-deep);font-weight:600}
+.tl b small{font-family:var(--text);font-weight:400;font-size:13px;letter-spacing:0;color:var(--muted);margin-left:6px}
+.tl-note{margin-top:14px;padding-top:16px;border-top:1px solid var(--rule);font-size:14px;line-height:1.7;color:var(--muted)}
+.tl-note b{color:var(--wine);font-weight:600}
+.tl-note a{color:var(--wine);text-decoration:underline;text-underline-offset:3px}
+#t-err a{color:inherit;text-decoration:underline}
 @media (max-width:900px){.ledger{grid-template-columns:minmax(0,1fr)}.tl-card{border-left:0;border-top:1px solid var(--rule)}}
 @media (max-width:480px){.two{grid-template-columns:minmax(0,1fr)}}
 

@@ -21,6 +21,12 @@ git ls-files -z -- \
   '*/index.html' \
 | xargs -0 -I{} sh -c 'mkdir -p "$1/$(dirname "$2")" && cp "$2" "$1/$2"' _ "$STAGE" {}
 
+# Browsers keep CSS and JS for a week (.htaccess), so every upload stamps a fresh ?v= on the site's own
+# CSS and JS links: the pages are re-checked on every visit, and point at the new files at once.
+STAMP=$(git rev-parse --short HEAD 2>/dev/null || date +%s)$(git diff --quiet HEAD -- 2>/dev/null || echo "-$(date +%H%M%S)")
+find "$STAGE" -name index.html -exec perl -pi -e \
+  's{((?:src|href)="(?!https?:)[^"]+\.(?:js|css))(?:\?v=[^"]*)?"}{$1?v='"$STAMP"'"}g' {} +
+
 (cd "$STAGE" && zip -qr -X "../$(basename "$OUT")" .htaccess .)
 
 echo "$OUT  $(du -h "$OUT" | cut -f1)  ($(cd "$STAGE" && find . -type f | wc -l | tr -d ' ') files)"

@@ -142,25 +142,60 @@
     enrol.close();
   });
 
-  /* ---------- track: the example timeline, and the request ---------- */
+  /* ---------- track: an example timeline, until a real order is looked up in the shop admin ---------- */
   var STEPS = {
     order: { cur: 1, s: [['Order placed', 'Design, karat and expected weight agreed.'], ['With the goldsmith', 'Your piece is being made.'], ['Quality check', 'We check the piece and its weight.'], ['Ready to collect', 'Collect it from your showroom.']] },
     repair: { cur: 2, s: [['Received', 'We note the piece and the work needed.'], ['Being repaired', 'With our goldsmith.'], ['Ready to collect', 'Bring your repair bill to the counter.'], ['Collected', 'Handed back to you.']] }
   };
-  var tl = $('#tl'), tlBar = $('#tl-bar'), kind = 'order', tlSeen = false;
+  var tl = $('#tl'), tlBar = $('#tl-bar'), tlTag = $('#tl-tag'), tlNote = $('#tl-note'), tlBox = $('.tl-card');
+  var kind = 'order', tlSeen = false, tlCur = 1, real = null;
+  var ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return ESC[c]; }); }
+  function day(iso) {
+    try { return new Date(iso.length === 10 ? iso + 'T12:00:00Z' : iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Asia/Colombo' }); }
+    catch (e) { return ''; }
+  }
+  function step(cls, title, text, when) {
+    return '<li class="' + cls + '"><span class="dot" aria-hidden="true"><svg class="fl"><use href="#flower"/></svg></span><div><b>' + esc(title) +
+      (when ? ' <small>' + esc(when) + '</small>' : '') + '</b><span>' + esc(text) + '</span></div></li>';
+  }
   function renderTL() {
     var k = STEPS[kind], h = '';
-    k.s.forEach(function (st, i) {
-      var cls = i < k.cur ? 'done' : i === k.cur ? 'cur' : '';
-      h += '<li class="' + cls + '"><span class="dot" aria-hidden="true"><svg class="fl"><use href="#flower"/></svg></span><div><b>' + st[0] + '</b><span>' + st[1] + '</span></div></li>';
-    });
+    k.s.forEach(function (st, i) { h += step(i < k.cur ? 'done' : i === k.cur ? 'cur' : '', st[0], st[1]); });
+    real = null; tlCur = k.cur;
     tl.innerHTML = h;
+    tlTag.textContent = 'Example';
+    tlNote.hidden = true;
     tlBar.style.height = '0px';
     if (tlSeen) fillTL();
   }
+  // a real order, as the shop admin has it: its steps, what it is, and when it is due
+  function renderReal(o) {
+    var h = '', cur = 0;
+    o.steps.forEach(function (st, i) {
+      if (st.state) cur = i;
+      h += step(st.state === 'done' ? 'done' : st.state === 'current' ? 'cur' : '', st.label, st.text, st.at ? day(st.at) : '');
+    });
+    real = o; tlCur = o.cancelled ? 0 : cur;
+    tl.innerHTML = h;
+    tlTag.textContent = o.number;
+    var items = o.items.map(function (it) { return esc(it.name) + (it.qty > 1 ? ' × ' + it.qty : ''); }).join(', ');
+    var ask = wa('I have a question about my order ' + o.number + '.');
+    tlNote.innerHTML = (o.cancelled ? '<b>This order was cancelled.</b> If that is not right, please ask us. ' : '') +
+      (items ? '<b>' + items + '</b>' : '') +
+      (o.due_date && !o.cancelled && o.status !== 'completed' ? ' · due ' + esc(day(o.due_date)) : '') +
+      (o.fulfilment === 'pickup' ? ' · ' + esc(o.showroom) + ' showroom' : ' · delivery') +
+      (o.tracking ? '<br>Sent with ' + esc(o.tracking.courier || 'the courier') + ', tracking number ' + esc(o.tracking.number) : '') +
+      '<br><a href="' + ask + '" target="_blank" rel="noopener">Ask us about it on WhatsApp</a>';
+    tlNote.hidden = false;
+    tlBar.style.height = '0px';
+    if (tlSeen) fillTL();
+    if (tlBox && tlBox.getBoundingClientRect().top > window.innerHeight * 0.6) tlBox.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+  }
   function fillTL() {
-    var lis = $$('li', tl), cur = STEPS[kind].cur;
-    var hgt = lis[cur].offsetTop - lis[0].offsetTop;
+    var lis = $$('li', tl);
+    if (!lis.length) return;
+    var hgt = real && real.cancelled ? 0 : lis[Math.min(tlCur, lis.length - 1)].offsetTop - lis[0].offsetTop;
     requestAnimationFrame(function () { tlBar.style.height = Math.max(0, hgt) + 'px'; });
   }
   $$('input[name="kind"]').forEach(function (r) {
@@ -169,11 +204,25 @@
   renderTL();
   $('#tform').addEventListener('submit', function (e) {
     e.preventDefault();
-    var no = $('#t-no').value.trim(), ph = $('#t-ph').value.trim(), err = $('#t-err');
+    var no = $('#t-no').value.trim(), ph = $('#t-ph').value.trim(), err = $('#t-err'), btn = $('#tform button[type="submit"]');
     if (!no) { err.textContent = 'Please enter your ' + (kind === 'order' ? 'order' : 'repair bill') + ' number.'; $('#t-no').focus(); return; }
     if (!/^\d{4}$/.test(ph)) { err.textContent = 'Please enter the last 4 digits of your mobile.'; $('#t-ph').focus(); return; }
     err.textContent = '';
-    openWA(wa('please send me the status of my ' + (kind === 'order' ? 'order' : 'repair') + '. ' + (kind === 'order' ? 'Order' : 'Repair bill') + ' number: ' + no + '. Mobile ending ' + ph + '.'));
+    var ask = wa('please send me the status of my ' + (kind === 'order' ? 'order' : 'repair') + '. ' + (kind === 'order' ? 'Order' : 'Repair bill') + ' number: ' + no + '. Mobile ending ' + ph + '.');
+    var askLink = ' <a href="' + ask + '" target="_blank" rel="noopener">Ask us on WhatsApp</a>';
+    // without the shop admin, or when it cannot be reached, ask on WhatsApp, as before
+    if (!window.fetch) { openWA(ask); return; }
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Looking it up…';
+    fetch('/api/public/track?number=' + encodeURIComponent(no) + '&phone=' + encodeURIComponent(ph), { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }, function () { return { ok: false, body: null }; }); })
+      .then(function (res) {
+        if (res.ok && res.body && res.body.steps) { renderReal(res.body); return; }
+        var code = res.body && res.body.code;
+        if (code === 'not_found' || code === 'too_many') { err.innerHTML = esc(res.body.error) + askLink; return; }
+        openWA(ask);
+      }, function () { openWA(ask); })
+      .then(function () { btn.disabled = false; btn.textContent = label; });
   });
 
   /* ---------- this week, in Sri Lanka time ---------- */

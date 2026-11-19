@@ -6,7 +6,7 @@ RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 # The code and any fallback data folder are never served directly
-RewriteRule ^(src|data)(/|$) - [F,L]
+RewriteRule ^(src|data|seed)(/|$) - [F,L]
 
 # install.php is a real page; everything else is a route
 RewriteRule ^install\.php$ - [L]

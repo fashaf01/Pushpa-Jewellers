@@ -370,6 +370,22 @@ made in the admin show on the site:
 * `GET /public/products?featured=1` → published products in `featured_rank` order, each with
   `price` (from the formula, or `null` when `show_price` is false) and the main image.
 * `GET /public/products?category=rings` → the published pieces in a category.
+* `GET /public/shop` → what `/shop/` shows. `{ "source": "website" }` until the owner links the shop (then the
+  site keeps its own files), else `{ "source": "admin", "pieces": [...] }`: every published product, newest
+  first, with `price`, `images` (the site's own photos as paths, `/assets/img/shop/…`), `created_at` and `web`
+  (the website's own details for pieces brought in from it, or `null`).
+* `GET /public/track?number=1001&phone=1418` → one order's progress, for the home page: `number`, `status`,
+  `cancelled`, `fulfilment`, `showroom` (name), `due_date`, `items` (`name`, `qty`), `steps` (`key`, `label`,
+  `text`, `at`, `state`: `done` / `current` / ''), `updated_at`, and `tracking` for a sent delivery. `phone` is the
+  last 4 digits of the customer's mobile. Wrong number or phone → 404 `not_found` (one answer for both);
+  more than 12 lookups in 15 minutes from one visitor → 429 `too_many`.
+
+### Linking the website shop (owner only)
+
+* `GET /shop/import` → `{ website_shop, in_file, imported, waiting }`.
+* `POST /shop/import` → brings in the pieces in `api/seed/website-pieces.json` that are not here yet (fixed
+  prices as the website showed them, stock 0, status published), sets `website_shop`, and returns the same
+  counts plus `added`. Safe to repeat.
 
 Never expose stock counts, costs, orders or customers on public routes.
 

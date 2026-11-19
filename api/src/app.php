@@ -1034,6 +1034,196 @@ function public_products(array $p): array
 }
 
 /* ------------------------------------------------------------------
+   The website shop — the pieces published here, for /shop/
+   Until the owner brings the website's own pieces in (Settings → Website
+   shop), the shop keeps showing the pieces written into its files, so it is
+   never empty; the "website_shop" setting is what switches it over.
+   ------------------------------------------------------------------ */
+const WEB_CATS = ['necklaces', 'earrings', 'rings', 'bracelets', 'bangles', 'pendants', 'bridal', 'watches'];
+/* the website's filter for each admin category, and back */
+const CAT_TO_WEB = ['rings' => 'rings', 'necklaces' => 'necklaces', 'earrings' => 'earrings', 'bangles' => 'bangles',
+    'bracelets' => 'bracelets', 'pendants' => 'pendants', 'chains' => 'necklaces', 'sets' => 'bridal', 'other' => null];
+const WEB_TO_CAT = ['necklaces' => 'necklaces', 'earrings' => 'earrings', 'rings' => 'rings', 'bracelets' => 'bracelets',
+    'bangles' => 'bangles', 'pendants' => 'pendants', 'bridal' => 'sets', 'watches' => 'other'];
+
+function website_pieces_file(): array
+{
+    $file = dirname(__DIR__) . '/seed/website-pieces.json';
+    $data = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+    return is_array($data['pieces'] ?? null) ? $data['pieces'] : [];
+}
+
+/* slugs of the website pieces already brought in */
+function imported_slugs(): array
+{
+    $out = [];
+    foreach (q('SELECT web FROM products WHERE web IS NOT NULL') as $r) {
+        $w = jdec($r['web'], null);
+        if (is_array($w) && !empty($w['slug'])) $out[$w['slug']] = true;
+    }
+    return $out;
+}
+
+function shop_import_status(): array
+{
+    $file = website_pieces_file();
+    $have = imported_slugs();
+    $waiting = 0;
+    foreach ($file as $p) if (empty($have[$p['slug'] ?? ''])) $waiting++;
+    return ['website_shop' => !empty(get_settings()['website_shop']), 'in_file' => count($file),
+        'imported' => count($have), 'waiting' => $waiting];
+}
+
+/* Brings the website's pieces (api/seed/website-pieces.json, written by tools/export-pieces.js) in as
+   products. Safe to repeat: a piece already brought in is skipped. Prices come across as fixed prices,
+   exactly as the website showed them; stock starts at 0 until it is counted. */
+function shop_import(): array
+{
+    return tx(function () {
+        $s = get_settings();
+        $have = imported_slugs();
+        $origin = preg_replace('#/api$#', '', base_url());
+        $stock = [];
+        foreach ($s['showrooms'] as $r) $stock[$r['id']] = 0;
+        $n = 100;
+        foreach (q('SELECT sku FROM products') as $r) if (preg_match('/(\d+)$/', $r['sku'], $m)) $n = max($n, (int) $m[1]);
+        $added = 0;
+        $now = gmdate('U');
+        foreach (website_pieces_file() as $p) {
+            $slug = (string) ($p['slug'] ?? '');
+            if ($slug === '' || !empty($have[$slug])) continue;
+            $cats = array_values(array_intersect((array) ($p['cats'] ?? []), WEB_CATS));
+            $category = WEB_TO_CAT[$cats[0] ?? ''] ?? 'other';
+            $watch = in_array('watches', $cats, true);
+            $karat = in_array((int) ($p['karat'] ?? 0), KARATS, true) ? (int) $p['karat'] : null;
+            $gold = !$watch && ($karat || stripos((string) $p['name'], 'gold') !== false);
+            $weightText = (string) ($p['weight'] ?? '');
+            /* one plain weight becomes the product's weight; a set or a range stays as printed */
+            $weight = preg_match('/^\s*(\d+(?:\.\d+)?)\s*g\s*$/', $weightText, $m) ? (float) $m[1] : null;
+            $images = [];
+            for ($i = 1; $i <= max(1, (int) ($p['photos'] ?? 1)); $i++) {
+                $images[] = ['url' => $origin . '/assets/img/shop/' . $slug . ($i > 1 ? '-' . $i : '') . '.webp', 'alt' => str_clean($p['name'], 200)];
+            }
+            $web = ['slug' => $slug, 'kind' => (string) ($p['kind'] ?? ''), 'cats' => $cats, 'weight' => $weightText,
+                'weight_g_src' => $weight, 'order' => (int) ($p['order'] ?? 0)];
+            foreach (['note', 'ig', 'bestseller', 'brand', 'line', 'specs', 'casio', 'credit'] as $k) {
+                if (isset($p[$k]) && $p[$k] !== '') $web[$k] = $p[$k];
+            }
+            $price = max(0, (float) ($p['price'] ?? 0));
+            $sku = 'PJ-' . (SKU_CODES[$category] ?? 'OT') . '-' . str_pad((string) (++$n), 4, '0', STR_PAD_LEFT);
+            /* created_at follows the website's order, so "newest first" in the admin matches the shop */
+            $at = gmdate('Y-m-d H:i:s', $now - (int) ($p['order'] ?? 0)) . '.000';
+            q('INSERT INTO products (id, sku, name, category, badge, description, metal, karat, weight_g, stones, pricing_mode,
+                 making_type, making_value, stone_value, fixed_price, show_price, images, stock, low_stock_at, status,
+                 featured_rank, created_at, updated_at, web)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                [uuid(), $sku, str_clean($p['name'], 120), $category, !empty($p['bestseller']) ? 'Best seller' : '',
+                 str_clean($p['about'] ?? '', 2000), $gold ? 'yellow_gold' : 'other', $gold ? $karat : null, $weight, '',
+                 'fixed', 'percent', $s['default_making_percent'], 0, $price, $price > 0 ? 1 : 0, jenc($images),
+                 jenc(obj($stock)), 0, 'published', null, $at, $at, jenc($web)]);
+            $added++;
+        }
+        /* from now on the website shop shows the pieces published here */
+        $r = q1('SELECT data FROM settings WHERE id = 1 FOR UPDATE');
+        $cur = array_merge(DEFAULT_SETTINGS, $r ? jdec($r['data']) : []);
+        $cur['website_shop'] = true;
+        q('INSERT INTO settings (id, data) VALUES (1, ?) ON DUPLICATE KEY UPDATE data = VALUES(data)', [jenc($cur)]);
+        return ['added' => $added] + shop_import_status();
+    });
+}
+
+/* GET /api/public/shop — what /shop/ shows. {source:'website'} means "keep the pieces in your own files". */
+function public_shop(): array
+{
+    $s = get_settings();
+    if (empty($s['website_shop'])) return ['source' => 'website'];
+    $rate = latest_rate();
+    $rateArr = $rate ? ['per_gram' => (array) $rate['per_gram']] : null;
+    $pieces = [];
+    foreach (q("SELECT * FROM products WHERE status = 'published' ORDER BY created_at DESC") as $r) {
+        $pr = product_out($r);
+        $price = $pr['show_price'] ? price_of($pr, $rateArr, $s['price_rounding']) : null;
+        /* the site's own photos are given as paths, so they keep working if the domain changes */
+        $images = array_map(function ($i) {
+            $path = parse_url($i['url'], PHP_URL_PATH) ?: '';
+            return ['url' => str_starts_with($path, '/assets/img/') ? $path : $i['url'], 'alt' => $i['alt']];
+        }, $pr['images']);
+        $web = jdec($r['web'] ?? null, null);
+        $pieces[] = ['id' => $pr['id'], 'sku' => $pr['sku'], 'name' => $pr['name'], 'category' => $pr['category'],
+            'badge' => $pr['badge'], 'metal' => $pr['metal'], 'karat' => $pr['karat'], 'weight_g' => $pr['weight_g'],
+            'stones' => $pr['stones'], 'description' => $pr['description'], 'images' => $images,
+            'price' => $price === null ? null : n($price), 'created_at' => $pr['created_at'],
+            'web' => is_array($web) ? $web : null];
+    }
+    return ['source' => 'admin', 'pieces' => $pieces];
+}
+
+/* ------------------------------------------------------------------
+   Order tracking from the website — order number + last 4 digits of the
+   customer's mobile. Answers with the progress only: no prices, payments
+   or customer details. Wrong guesses are counted per visitor.
+   ------------------------------------------------------------------ */
+const TRACK_TRIES = 12;          /* lookups per visitor ... */
+const TRACK_WINDOW = 900;        /* ... in 15 minutes */
+
+function track_visitor(): string
+{
+    $ip = (string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '');
+    $fwd = trim(explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''))[0]);
+    return hash('sha256', ($fwd ?: $ip) . '|' . (pj_config()['db_name'] ?? 'pj'));
+}
+
+function public_track(array $p): array
+{
+    $who = track_visitor();
+    $since = gmdate('Y-m-d H:i:s', time() - TRACK_WINDOW);
+    $tries = (int) (q1('SELECT COUNT(*) AS c FROM track_attempts WHERE who = ? AND at > ?', [$who, $since])['c'] ?? 0);
+    if ($tries >= TRACK_TRIES) fail(429, 'Too many tries. Please wait 15 minutes, or ask us on WhatsApp.', 'too_many');
+    q('INSERT INTO track_attempts (who, at) VALUES (?, ?)', [$who, now_db()]);
+    if (random_int(1, 50) === 1) q('DELETE FROM track_attempts WHERE at < ?', [gmdate('Y-m-d H:i:s', time() - 86400)]);
+
+    $digits = preg_replace('/\D/', '', (string) ($p['number'] ?? ''));
+    $last4 = preg_replace('/\D/', '', (string) ($p['phone'] ?? ''));
+    $notFound = fn() => fail(404, 'We could not find an order with that number and mobile. Check the number on your receipt.', 'not_found');
+    if ($digits === '' || strlen($last4) !== 4) $notFound();
+    $r = q1('SELECT * FROM orders WHERE number = ?', ['PJ-' . ltrim($digits, '0')]);
+    if (!$r) $notFound();
+    $o = order_out($r);
+    $phone = preg_replace('/\D/', '', (string) (((array) $o['customer'])['phone'] ?? ''));
+    if (strlen($phone) < 4 || !hash_equals(substr($phone, -4), $last4)) $notFound();
+
+    $s = get_settings();
+    $room = room_name($s, $o['showroom']);
+    $delivery = $o['fulfilment'] === 'delivery';
+    $when = [];
+    foreach ($o['history'] as $h) if (($h['type'] ?? '') === 'status' && !empty($h['status'])) $when[$h['status']] = $h['at'] ?? null;
+    $when['new'] = $when['new'] ?? $o['created_at'];
+    $steps = [
+        ['new', 'Order placed', 'We have your order.'],
+        ['confirmed', 'Confirmed', 'Design, karat and weight agreed.'],
+        ['in_making', 'With the goldsmith', 'Your piece is being made.'],
+        ['ready', $delivery ? 'Ready to send' : 'Ready to collect', $delivery ? 'Packed and ready to go out.' : "Collect it from our $room showroom."],
+    ];
+    if ($delivery) $steps[] = ['dispatched', 'On its way', 'Sent out to you.'];
+    $steps[] = ['completed', $delivery ? 'Delivered' : 'Collected', 'Handed over to you. Thank you.'];
+    $keys = array_column($steps, 0);
+    $cur = array_search($o['status'] === 'dispatched' && !$delivery ? 'ready' : $o['status'], $keys, true);
+    $out = [];
+    foreach ($steps as $i => [$key, $label, $text]) {
+        $out[] = ['key' => $key, 'label' => $label, 'text' => $text, 'at' => $when[$key] ?? null,
+            'state' => $cur === false ? '' : ($i < $cur ? 'done' : ($i === $cur ? ($key === 'completed' ? 'done' : 'current') : ''))];
+    }
+    $tracking = (array) $o['tracking'];
+    return [
+        'number' => $o['number'], 'status' => $o['status'], 'cancelled' => $o['status'] === 'cancelled',
+        'fulfilment' => $o['fulfilment'], 'showroom' => $room, 'due_date' => $o['due_date'],
+        'items' => array_values(array_map(fn($i) => ['name' => $i['name'], 'qty' => (int) ($i['qty'] ?? 1)], $o['items'])),
+        'steps' => $out, 'updated_at' => $o['updated_at'],
+        'tracking' => $delivery && ($tracking['number'] ?? '') !== '' ? ['courier' => $tracking['courier'] ?? '', 'number' => $tracking['number']] : null,
+    ];
+}
+
+/* ------------------------------------------------------------------
    Routing
    ------------------------------------------------------------------ */
 function routes(): array
@@ -1051,6 +1241,11 @@ function routes(): array
         ['GET', 'public/products', ['public' => true], fn($r) => public_products($r['query'])],
         ['GET', 'public/gold-rate', ['public' => true], fn() => public_gold_rate()],
         ['GET', 'public/market-rate', ['public' => true, 'noDb' => true], fn() => public_market_rate()],
+        ['GET', 'public/shop', ['public' => true], fn() => public_shop()],
+        ['GET', 'public/track', ['public' => true], fn($r) => public_track($r['query'])],
+
+        ['GET', 'shop/import', ['owner' => true], fn() => shop_import_status()],
+        ['POST', 'shop/import', ['owner' => true], fn() => shop_import()],
 
         ['GET', 'staff', ['owner' => true], fn() => staff_list()],
         ['POST', 'staff/invites', ['owner' => true], fn($r) => staff_invite($r['body'])],

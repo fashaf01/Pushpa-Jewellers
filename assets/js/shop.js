@@ -1,6 +1,8 @@
 /* The shop: the collection grid, filtered by category and sorted by weight, and a page for each piece at
    ?piece=<slug>. Filters and sorting live in the address too (?cat=bangles&sort=light), so any view can be shared.
-   The pieces come from pieces.js; the header, menus and gold rate from site.js.
+   The pieces come from the shop admin (/api/public/shop) once the owner has brought them in there; until then, or
+   whenever the backend cannot be reached, from pieces.js and pieces-instagram.js. The header, menus and gold rate
+   come from site.js.
    Motion: cards rise into place as they come into view; a piece's photos slide under the finger; and where the
    browser has view transitions, a card's photo grows into the piece's page and shrinks back into its card. */
 (function () {
@@ -20,8 +22,56 @@
   // the watches come after all the jewellery, so the whole collection ends with them (pieces.js order, within the watches)
   function isWatch(p) { return p.cats.indexOf('watches') > -1; }
   var own = window.PIECES || [];
-  var P = mix(window.PIECES_INSTAGRAM || [], own.filter(function (p) { return !isWatch(p); })).concat(own.filter(isWatch));
-  if (!PJ || !P.length || !d.getElementById('grid')) return;
+  var FILES = mix(window.PIECES_INSTAGRAM || [], own.filter(function (p) { return !isWatch(p); })).concat(own.filter(isWatch));
+  if (!PJ || !d.getElementById('grid')) return;
+
+  /* ---------- the pieces published in the admin, in the shape pieces.js uses ---------- */
+  var FILTER_OF = { rings: 'rings', necklaces: 'necklaces', earrings: 'earrings', bangles: 'bangles', bracelets: 'bracelets', pendants: 'pendants', chains: 'necklaces', sets: 'bridal' };
+  var KIND_OF = { rings: 'Ring', necklaces: 'Necklace', earrings: 'Earrings', bangles: 'Bangle', bracelets: 'Bracelet', pendants: 'Pendant', chains: 'Chain', sets: 'Set', other: 'Piece' };
+  function fromAdmin(list) {
+    var fresh = [], imported = [];
+    list.forEach(function (a) {
+      var w = a.web || {}, cats = [], main = FILTER_OF[a.category];
+      if (main) cats.push(main);
+      (w.cats || []).forEach(function (c) { if ((c === 'bridal' || c === 'watches') && cats.indexOf(c) < 0) cats.push(c); });
+      if (!cats.length && w.cats) cats = w.cats.slice();
+      // the weight as the website printed it, unless the admin has since changed it
+      var weight = a.weight_g ? (w.weight && w.weight_g_src === a.weight_g ? w.weight : (+a.weight_g).toFixed(3) + ' g') : (w.weight_g_src == null && w.weight ? w.weight : '');
+      var imgs = (a.images || []).map(function (im) {
+        var m = /^\/assets\/img\/shop\/([^/]+\.webp)$/.exec(im.url);
+        return { full: im.url, small: m ? '/assets/img/shop/small/' + m[1] : im.url };
+      });
+      var p = {
+        slug: w.slug || String(a.sku || a.id).toLowerCase(), name: a.name, kind: w.kind || KIND_OF[a.category] || 'Piece', cats: cats,
+        weight: weight, note: weight === w.weight ? w.note : '', karat: a.karat || null, price: a.price || null,
+        imgs: imgs, photos: imgs.length || 1, about: a.description || a.name, stones: a.stones || '',
+        ig: w.ig, bestseller: !!w.bestseller || a.badge === 'Best seller', brand: w.brand, line: w.line, specs: w.specs, casio: w.casio, credit: w.credit,
+        order: w.order, created: a.created_at
+      };
+      (typeof w.order === 'number' ? imported : fresh).push(p);
+    });
+    // pieces added in the admin come first, newest first; then the website's own pieces in their old order
+    fresh.sort(function (x, y) { return x.created < y.created ? 1 : -1; });
+    imported.sort(function (x, y) { return x.order - y.order; });
+    var all = fresh.concat(imported);
+    return all.filter(function (p) { return !isWatch(p); }).concat(all.filter(isWatch));
+  }
+  function loadShop(done) {
+    var settled = false, timer = setTimeout(function () { finish(null); }, 5000);
+    function finish(r) {
+      if (settled) return;
+      settled = true; clearTimeout(timer);
+      done(r && r.source === 'admin' && r.pieces && r.pieces.length ? fromAdmin(r.pieces) : FILES);
+    }
+    if (!window.fetch) return finish(null);
+    fetch('/api/public/shop', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(finish, function () { finish(null); });
+  }
+  loadShop(start);
+
+  function start(P) {
+  if (!P.length) return;
   var $ = PJ.$, $$ = PJ.$$, rs = PJ.rs, wa = PJ.wa, reduce = PJ.reduce;
   var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
   var IMG = '../assets/img/shop/', IG = 'https://www.instagram.com/pushpajewellers_official/p/';
@@ -66,7 +116,7 @@
   function card(p) {
     var wt = p.weight ? '<i>' + weightText(p) + ' · ' + pawnText(p) + ' pawn</i>' : '';
     return '<li class="pc"><a href="?piece=' + p.slug + '" data-piece="' + p.slug + '">' +
-      '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + IMG + 'small/' + p.slug + '-2.webp"' : '') + '><img src="' + IMG + 'small/' + p.slug + '.webp" data-full="' + IMG + p.slug + '.webp" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async">' + (p.bestseller ? '<em class="bs">Best seller</em>' : '') + '</div>' +
+      '<div class="ph"' + (p.photos > 1 ? ' data-alt="' + photo(p, 2, true) + '"' : '') + '><img src="' + photo(p, 1, true) + '" data-full="' + photo(p, 1) + '" alt="' + esc(p.name) + '" width="540" height="675" loading="lazy" decoding="async">' + (p.bestseller ? '<em class="bs">Best seller</em>' : '') + '</div>' +
       '<b>' + esc(p.name) + '</b><span class="m">' + esc(p.watch && p.brand ? p.brand + ' · ' + p.line : p.kind) + '</span>' + wt +
       (p.price ? '<em class="pr">Rs ' + rs(p.price) + '</em>' : p.watch ? '<em class="pr ask">Price on request</em>' : '') + '</a></li>';
   }
@@ -129,7 +179,10 @@
   }, true);
 
   /* ---------- a piece: its photos slide under the finger, or turn with the arrows and the thumbs below ---------- */
-  function photo(p, i, small) { return IMG + (small ? 'small/' : '') + p.slug + (i > 1 ? '-' + i : '') + '.webp'; }
+  function photo(p, i, small) {
+    if (p.imgs) { var im = p.imgs[i - 1] || p.imgs[0]; return im ? (small ? im.small : im.full) : '../assets/img/favicon.svg'; }
+    return IMG + (small ? 'small/' : '') + p.slug + (i > 1 ? '-' + i : '') + '.webp';
+  }
   function gallery(p) {
     var n = p.photos || 1, sl = '', th = '';
     for (var i = 1; i <= n; i++) {
@@ -298,6 +351,7 @@
     if (p.watch) return watchSpecHTML(p);
     var rows = [];
     if (p.karat) rows.push(['Gold', p.karat + 'KT' + (PURE[p.karat] ? ', ' + PURE[p.karat] : '')]);
+    if (p.stones) rows.push(['Stones', esc(p.stones)]);
     rows.push(['Weight', p.weight ? unit(weightText(p)) : 'Confirmed when you ask']);
     if (p.weight) rows.push(['In pawn', pawnText(p)]);
     rows.push(['Piece', esc(p.kind)]);
@@ -420,4 +474,5 @@
     }, function () { return state.piece ? piecePhoto() : cardPhoto(was, grid); });
   });
   render(false);
+  }
 })();

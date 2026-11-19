@@ -1,0 +1,1667 @@
+{
+ "generated": "2026-11-19",
+ "pieces": [
+  {
+   "order": 0,
+   "slug": "gold-mini-initial-necklace",
+   "name": "Gold mini initial necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 74000,
+   "photos": 2,
+   "about": "A gold mini initial necklace."
+  },
+  {
+   "order": 1,
+   "slug": "stacked-bar-bangle",
+   "name": "Stacked bar bangle",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "12.470 g",
+   "karat": 22,
+   "price": 452000,
+   "photos": 2,
+   "about": "Five slim bars of gold, the upper rows set with small stones, shown here with a cream saree.",
+   "ig": "DeCPWHHgKD8",
+   "bestseller": true
+  },
+  {
+   "order": 2,
+   "slug": "deco-opal-bracelet",
+   "name": "Deco opal bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 90000,
+   "photos": 2,
+   "about": "A deco bracelet with opal."
+  },
+  {
+   "order": 3,
+   "slug": "deco-aventurine-and-green-onyx-necklace",
+   "name": "Deco aventurine and green onyx necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 152500,
+   "photos": 2,
+   "about": "A deco necklace with green onyx and aventurine."
+  },
+  {
+   "order": 4,
+   "slug": "five-stone-ring",
+   "name": "Five-stone ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "weight": "1.120 g",
+   "karat": 22,
+   "price": 40500,
+   "photos": 2,
+   "about": "A slim band with five small claw-set stones along the top.",
+   "ig": "Dd9FajfDB2q",
+   "bestseller": true
+  },
+  {
+   "order": 5,
+   "slug": "opal-october-birthstone-studs",
+   "name": "Opal october birthstone studs",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 56000,
+   "photos": 2,
+   "about": "A pair of october birthstone earrings with opal."
+  },
+  {
+   "order": 6,
+   "slug": "mini-initial-deco-birthstone-necklace",
+   "name": "Mini initial deco birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 78500,
+   "photos": 2,
+   "about": "A mini initial deco birthstone necklace."
+  },
+  {
+   "order": 7,
+   "slug": "pebble-opal-october-birthstone-drop-earrings",
+   "name": "Pebble opal october birthstone drop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 65500,
+   "photos": 2,
+   "about": "A pair of pebble october birthstone drop earrings with opal."
+  },
+  {
+   "order": 8,
+   "slug": "gold-leaf-bridal-necklace",
+   "name": "Gold leaf bridal necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces",
+    "bridal"
+   ],
+   "weight": "24.380 g",
+   "karat": 22,
+   "price": 884000,
+   "photos": 2,
+   "about": "A collar of tapered gold leaves with stone-set veins and a single drop at the centre.",
+   "ig": "Dd2_cGXCTjA",
+   "bestseller": true
+  },
+  {
+   "order": 9,
+   "slug": "mini-deco-opal-october-birthstone-necklace",
+   "name": "Mini deco opal october birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 85500,
+   "photos": 2,
+   "about": "A mini deco october birthstone necklace with opal."
+  },
+  {
+   "order": 10,
+   "slug": "spiral-small-hoop-earrings-gold",
+   "name": "Spiral small hoop earrings gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 55000,
+   "photos": 2,
+   "about": "A pair of spiral small hoop gold earrings."
+  },
+  {
+   "order": 11,
+   "slug": "cross-pendant",
+   "name": "Cross pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "12.020 g",
+   "karat": 22,
+   "price": 435500,
+   "photos": 2,
+   "about": "A plain polished cross, shown on a curb chain.",
+   "ig": "DdwJSBmCT2E",
+   "bestseller": true
+  },
+  {
+   "order": 12,
+   "slug": "solid-gold-initial-necklace",
+   "name": "Solid gold initial necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 158000,
+   "photos": 2,
+   "about": "A solid gold initial necklace.",
+   "bestseller": true
+  },
+  {
+   "order": 13,
+   "slug": "pave-huggies-yellow-gold",
+   "name": "Pave huggies yellow gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 64000,
+   "photos": 2,
+   "about": "A pair of pave huggies yellow gold earrings.",
+   "bestseller": true
+  },
+  {
+   "order": 14,
+   "slug": "blue-stone-clover-pendant",
+   "name": "Blue stone clover pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "2.550 g",
+   "karat": 22,
+   "price": 92500,
+   "photos": 2,
+   "about": "A four-petal clover frame holding a blue stone, on a fine chain.",
+   "ig": "Ddf7V7-jVXh"
+  },
+  {
+   "order": 15,
+   "slug": "diamond-initial-pendant-necklace",
+   "name": "Diamond initial pendant necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 224000,
+   "photos": 2,
+   "about": "An initial necklace with diamond."
+  },
+  {
+   "order": 16,
+   "slug": "medium-diamond-halo-hoop-earrings",
+   "name": "Medium diamond halo hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 107500,
+   "photos": 2,
+   "about": "A pair of medium halo hoop earrings with diamond."
+  },
+  {
+   "order": 17,
+   "slug": "everyday-wave-bangle",
+   "name": "Everyday wave bangle",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "7.250 g",
+   "karat": 22,
+   "price": 263000,
+   "photos": 2,
+   "about": "A hinged bangle with a stone-set wave crossing the front, made for daily wear.",
+   "ig": "DdaxhQ_js9N"
+  },
+  {
+   "order": 18,
+   "slug": "initial-birthstone-necklace",
+   "name": "Initial birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 124500,
+   "photos": 2,
+   "about": "An initial birthstone necklace."
+  },
+  {
+   "order": 19,
+   "slug": "deco-opal-birthstone-necklace",
+   "name": "Deco opal birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 152500,
+   "photos": 2,
+   "about": "A deco birthstone necklace with opal."
+  },
+  {
+   "order": 20,
+   "slug": "gold-double-mini-initial-necklace",
+   "name": "Gold double mini initial necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 70000,
+   "photos": 2,
+   "about": "A gold double mini initial necklace."
+  },
+  {
+   "order": 21,
+   "slug": "infinity-ring",
+   "name": "Infinity ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "weight": "1.280 g",
+   "karat": 22,
+   "price": 46500,
+   "photos": 2,
+   "about": "A polished infinity loop with one side set with small stones.",
+   "ig": "DdEQ89AEhxr"
+  },
+  {
+   "order": 22,
+   "slug": "opal-charm-necklace",
+   "name": "Opal charm necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 137500,
+   "photos": 2,
+   "about": "A charm necklace with opal."
+  },
+  {
+   "order": 23,
+   "slug": "deco-mini-birthstone-necklace",
+   "name": "Deco mini birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 90500,
+   "photos": 2,
+   "about": "A deco mini birthstone necklace."
+  },
+  {
+   "order": 24,
+   "slug": "leaf-vine-necklace",
+   "name": "Leaf vine necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 137500,
+   "photos": 2,
+   "about": "A vine of gold leaves edged with small stones, meeting in a leaf-shaped drop.",
+   "ig": "Dc_AfHzjbh6"
+  },
+  {
+   "order": 25,
+   "slug": "deco-red-jasper-garnet-statement-stud-earrings",
+   "name": "Deco red jasper garnet statement stud earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 93500,
+   "photos": 2,
+   "about": "A pair of deco statement stud earrings with red jasper and garnet."
+  },
+  {
+   "order": 26,
+   "slug": "small-twist-hoop-earrings",
+   "name": "Small twist hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 55000,
+   "photos": 2,
+   "about": "A pair of small twist hoop earrings."
+  },
+  {
+   "order": 27,
+   "slug": "coloured-stone-pendants",
+   "name": "Coloured stone pendants",
+   "kind": "Set of three",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "1.740 – 2.100 g",
+   "karat": 22,
+   "price": 63000,
+   "photos": 2,
+   "about": "Three pendants: an open geometric frame, a stone-set leaf and a ring of coloured stones.",
+   "ig": "Dc8uu1BE15v"
+  },
+  {
+   "order": 28,
+   "slug": "malachite-cocktail-ring",
+   "name": "Malachite cocktail ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "price": 74500,
+   "photos": 2,
+   "about": "A cocktail ring with malachite."
+  },
+  {
+   "order": 29,
+   "slug": "emerald-pave-huggie-earrings-yellow-gold",
+   "name": "Emerald pave huggie earrings yellow gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 94500,
+   "photos": 2,
+   "about": "A pair of pave huggie yellow gold earrings with emerald."
+  },
+  {
+   "order": 30,
+   "slug": "enamel-flower-bracelet",
+   "name": "Enamel flower bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "weight": "6.680 g",
+   "karat": 22,
+   "price": 242000,
+   "photos": 2,
+   "about": "A gold chain of enamel flowers in red, white and purple.",
+   "ig": "Dc0urZygNtv"
+  },
+  {
+   "order": 31,
+   "slug": "emerald-glow-earrings-set",
+   "name": "Emerald glow earrings set",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 118000,
+   "photos": 2,
+   "about": "A pair of glow set earrings with emerald."
+  },
+  {
+   "order": 32,
+   "slug": "golden-heart-earrings-set",
+   "name": "Golden heart earrings set",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 98000,
+   "photos": 2,
+   "about": "A pair of golden heart set earrings."
+  },
+  {
+   "order": 33,
+   "slug": "classic-diamond-earrings-set",
+   "name": "Classic diamond earrings set",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 138000,
+   "photos": 2,
+   "about": "A pair of classic set earrings with diamond."
+  },
+  {
+   "order": 34,
+   "slug": "red-stone-crescent-pendant",
+   "name": "Red stone crescent pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "2.050 g",
+   "karat": 22,
+   "price": 74500,
+   "photos": 2,
+   "about": "A crescent of gold curling around a round red stone, with a stone-set edge.",
+   "ig": "DclT_xTDr6f"
+  },
+  {
+   "order": 35,
+   "slug": "mother-of-pearl-plain-statement-ring",
+   "name": "Mother of pearl plain statement ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "price": 67000,
+   "photos": 2,
+   "about": "A mother of pearl plain statement ring."
+  },
+  {
+   "order": 36,
+   "slug": "pebble-birthstone-drop-earrings",
+   "name": "Pebble birthstone drop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 71000,
+   "photos": 2,
+   "about": "A pair of pebble birthstone drop earrings."
+  },
+  {
+   "order": 37,
+   "slug": "patterned-bangle",
+   "name": "Patterned bangle",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "30.480 g",
+   "karat": 22,
+   "price": 1105000,
+   "photos": 2,
+   "about": "A wide bangle of engraved bands with a scrolling pattern and small polished accents.",
+   "ig": "DcdKAPsgFUD"
+  },
+  {
+   "order": 38,
+   "slug": "bold-huggie-earrings-yellow-gold",
+   "name": "Bold huggie earrings yellow gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 55500,
+   "photos": 2,
+   "about": "A pair of bold huggie yellow gold earrings."
+  },
+  {
+   "order": 39,
+   "slug": "14ct-gold-birthstone-necklace",
+   "name": "14ct gold birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 138000,
+   "photos": 2,
+   "about": "A 14ct gold birthstone necklace."
+  },
+  {
+   "order": 40,
+   "slug": "red-stone-halo-pendant",
+   "name": "Red stone halo pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "2.760 g",
+   "karat": 22,
+   "price": 100000,
+   "photos": 2,
+   "about": "A circle of red stones ringed with small clear stones, on a twisted chain.",
+   "ig": "DcV23OOCaCR"
+  },
+  {
+   "order": 41,
+   "slug": "initial-and-birthstone-14ct-solid-gold-necklace",
+   "name": "Initial and birthstone 14ct solid gold necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 140000,
+   "photos": 2,
+   "about": "An initial birthstone 14ct solid gold necklace."
+  },
+  {
+   "order": 42,
+   "slug": "solid-gold-double-initial-necklace",
+   "name": "Solid gold double initial necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 148000,
+   "photos": 2,
+   "about": "A solid gold double initial necklace."
+  },
+  {
+   "order": 43,
+   "slug": "infinity-link-bracelet",
+   "name": "Infinity link bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "weight": "9.800 g",
+   "karat": 22,
+   "price": 355000,
+   "photos": 2,
+   "about": "A chain of infinity links, each set with small stones.",
+   "ig": "DcLIF7GGeBf"
+  },
+  {
+   "order": 44,
+   "slug": "initial-diamond-necklace",
+   "name": "Initial diamond necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 185000,
+   "photos": 2,
+   "about": "An initial necklace with diamond."
+  },
+  {
+   "order": 45,
+   "slug": "deco-lapis-and-blue-sapphire-statement-stud-earrings",
+   "name": "Deco lapis and blue sapphire statement stud earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 87500,
+   "photos": 2,
+   "about": "A pair of deco statement stud earrings with blue sapphire and lapis."
+  },
+  {
+   "order": 46,
+   "slug": "medium-twist-hoop-earrings",
+   "name": "Medium twist hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 69000,
+   "photos": 2,
+   "about": "A pair of medium twist hoop earrings."
+  },
+  {
+   "order": 47,
+   "slug": "ballerina-pendant",
+   "name": "Ballerina pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "2.550 g",
+   "karat": 22,
+   "price": 92500,
+   "photos": 2,
+   "about": "A dancer en pointe with a skirt of four blue stones.",
+   "ig": "DcITBfwldTy"
+  },
+  {
+   "order": 48,
+   "slug": "toi-et-moi-customised-gemstone-ring",
+   "name": "Toi et moi customised gemstone ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "price": 59000,
+   "photos": 2,
+   "about": "A toi et moi customised gemstone ring."
+  },
+  {
+   "order": 49,
+   "slug": "toi-et-moi-customised-gemstone-necklace",
+   "name": "Toi et moi customised gemstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 154000,
+   "photos": 2,
+   "about": "A toi et moi customised gemstone necklace."
+  },
+  {
+   "order": 50,
+   "slug": "red-stone-fine-necklace",
+   "name": "Red stone fine necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 128500,
+   "photos": 2,
+   "about": "A fine chain of small red stones, worn close to the neck.",
+   "ig": "Db4v3jmjJNH"
+  },
+  {
+   "order": 51,
+   "slug": "classic-gold-huggie-earrings",
+   "name": "Classic gold huggie earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 57500,
+   "photos": 2,
+   "about": "A pair of classic gold huggie earrings."
+  },
+  {
+   "order": 52,
+   "slug": "marquise-solitaire-station-diamond-bracelet",
+   "name": "Marquise solitaire station diamond bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 148500,
+   "photos": 2,
+   "about": "A marquise solitaire station bracelet with diamond."
+  },
+  {
+   "order": 53,
+   "slug": "heart-link-bracelet",
+   "name": "Heart link bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 88500,
+   "photos": 2,
+   "about": "A chain of open heart-shaped links.",
+   "ig": "Db2bdVHFeKl"
+  },
+  {
+   "order": 54,
+   "slug": "customised-initial-say-my-name-necklace",
+   "name": "Customised initial say my name necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 131500,
+   "photos": 2,
+   "about": "A customised initial say my name necklace."
+  },
+  {
+   "order": 55,
+   "slug": "birthstone-stud-earrings",
+   "name": "Birthstone stud earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 58500,
+   "photos": 2,
+   "about": "A pair of birthstone stud earrings."
+  },
+  {
+   "order": 56,
+   "slug": "branch-necklace-and-earrings",
+   "name": "Branch necklace & earrings",
+   "kind": "Bridal set",
+   "cats": [
+    "necklaces",
+    "bridal"
+   ],
+   "weight": "9.100 g",
+   "note": "necklace",
+   "karat": 22,
+   "price": 330000,
+   "photos": 2,
+   "about": "A spray of fine gold branches tipped with small stones, with matching drop earrings.",
+   "ig": "DbvS75qgdUo"
+  },
+  {
+   "order": 57,
+   "slug": "heart-red-garnet-necklace",
+   "name": "Heart red garnet necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 143000,
+   "photos": 2,
+   "about": "A heart necklace with red garnet."
+  },
+  {
+   "order": 58,
+   "slug": "trinity-customised-gemstone-necklace",
+   "name": "Trinity customised gemstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 134000,
+   "photos": 2,
+   "about": "A trinity customised gemstone necklace."
+  },
+  {
+   "order": 59,
+   "slug": "toi-et-moi-customised-gemstone-bracelet",
+   "name": "Toi et moi customised gemstone bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 89000,
+   "photos": 2,
+   "about": "A toi et moi customised gemstone bracelet."
+  },
+  {
+   "order": 60,
+   "slug": "triple-wave-cuff",
+   "name": "Triple-wave cuff",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "17.390 g",
+   "karat": 22,
+   "price": 630500,
+   "photos": 2,
+   "about": "Three stone-set waves held in an open cuff.",
+   "ig": "DbqIUVjjHED"
+  },
+  {
+   "order": 61,
+   "slug": "spiral-huggie-hoop-earrings-gold",
+   "name": "Spiral huggie hoop earrings gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 60500,
+   "photos": 2,
+   "about": "A pair of spiral huggie hoop gold earrings."
+  },
+  {
+   "order": 62,
+   "slug": "heart-white-sapphire-earrings",
+   "name": "Heart white sapphire earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 65500,
+   "photos": 2,
+   "about": "A pair of heart earrings with white sapphire."
+  },
+  {
+   "order": 63,
+   "slug": "fine-link-bracelet",
+   "name": "Fine link bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "weight": "2.020 g",
+   "karat": 22,
+   "price": 73000,
+   "photos": 2,
+   "about": "A very fine link bracelet for everyday wear.",
+   "ig": "DbiavXRjv2e"
+  },
+  {
+   "order": 64,
+   "slug": "lattice-huggie-hoop-earrings-gold",
+   "name": "Lattice huggie hoop earrings gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 54000,
+   "photos": 2,
+   "about": "A pair of lattice huggie hoop gold earrings."
+  },
+  {
+   "order": 65,
+   "slug": "deco-birthstone-globe-bracelet",
+   "name": "Deco birthstone globe bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 100000,
+   "photos": 2,
+   "about": "A deco birthstone globe bracelet."
+  },
+  {
+   "order": 66,
+   "slug": "bridal-necklace-and-cuff",
+   "name": "Bridal necklace & cuff",
+   "kind": "Bridal set",
+   "cats": [
+    "bridal",
+    "necklaces",
+    "bangles"
+   ],
+   "weight": "11.580 g + 18.880 g",
+   "karat": 22,
+   "price": 1104000,
+   "photos": 2,
+   "about": "A necklace of open links with a stone-set drop, paired with a fretwork cuff.",
+   "ig": "DbcvRA2DKZZ"
+  },
+  {
+   "order": 67,
+   "slug": "solid-gold-heart-ruby-hoop-earrings",
+   "name": "Solid gold heart ruby hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 79000,
+   "photos": 2,
+   "about": "A pair of solid gold heart hoop earrings with ruby."
+  },
+  {
+   "order": 68,
+   "slug": "heart-diamond-pendant-necklace",
+   "name": "Heart diamond pendant necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 255500,
+   "photos": 2,
+   "about": "A heart necklace with diamond."
+  },
+  {
+   "order": 69,
+   "slug": "red-stone-line-necklace",
+   "name": "Red stone line necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "weight": "12.770 g",
+   "karat": 22,
+   "price": 463000,
+   "photos": 2,
+   "about": "A line of oval red stones in gold settings.",
+   "ig": "DbXQ9owiGPR"
+  },
+  {
+   "order": 70,
+   "slug": "solid-gold-lab-grown-diamond-tennis-bracelet",
+   "name": "Solid gold lab grown diamond tennis bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 215500,
+   "photos": 2,
+   "about": "A solid gold tennis bracelet with lab grown diamond."
+  },
+  {
+   "order": 71,
+   "slug": "diamond-halo-necklace",
+   "name": "Diamond halo necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 270000,
+   "photos": 2,
+   "about": "A halo necklace with diamond."
+  },
+  {
+   "order": 72,
+   "slug": "initial-diamond-motif-necklace",
+   "name": "Initial diamond motif necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 186500,
+   "photos": 2,
+   "about": "An initial motif necklace with diamond."
+  },
+  {
+   "order": 73,
+   "slug": "open-cage-cuff",
+   "name": "Open-cage cuff",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "23.530 g",
+   "karat": 22,
+   "price": 853000,
+   "photos": 2,
+   "about": "An open cage of gold bars with stone-set rails.",
+   "ig": "DbUy6vNFTPe"
+  },
+  {
+   "order": 74,
+   "slug": "large-diamond-halo-hoop-earrings",
+   "name": "Large diamond halo hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 102500,
+   "photos": 2,
+   "about": "A pair of large halo hoop earrings with diamond."
+  },
+  {
+   "order": 75,
+   "slug": "lattice-medium-hoop-earrings-gold",
+   "name": "Lattice medium hoop earrings gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 61500,
+   "photos": 2,
+   "about": "A pair of lattice medium hoop gold earrings."
+  },
+  {
+   "order": 76,
+   "slug": "five-row-bangle",
+   "name": "Five-row bangle",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "20.830 g",
+   "karat": 22,
+   "price": 755000,
+   "photos": 2,
+   "about": "Five rows of gold, two of them set with small stones.",
+   "ig": "DbIqk1rlUw8"
+  },
+  {
+   "order": 77,
+   "slug": "malachite-pinky-ring",
+   "name": "Malachite pinky ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "price": 50000,
+   "photos": 2,
+   "about": "A pinky ring with malachite."
+  },
+  {
+   "order": 78,
+   "slug": "dome-triple-pave-hoop-earrings",
+   "name": "Dome triple pave hoop earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 76000,
+   "photos": 2,
+   "about": "A pair of dome triple pave hoop earrings."
+  },
+  {
+   "order": 79,
+   "slug": "rose-gold-pendants",
+   "name": "Rose gold pendants",
+   "kind": "Pair",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "1.150 g + 2.320 g",
+   "karat": 22,
+   "price": 126000,
+   "photos": 2,
+   "about": "Two rose gold pendants: an open geometric knot and a stone-set crescent.",
+   "ig": "Da4bbf5DCv4"
+  },
+  {
+   "order": 80,
+   "slug": "coin-deco-birthstone-necklace",
+   "name": "Coin deco birthstone necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 130000,
+   "photos": 2,
+   "about": "A coin deco birthstone necklace."
+  },
+  {
+   "order": 81,
+   "slug": "large-solitaire-diamond-necklace",
+   "name": "Large solitaire diamond necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 245000,
+   "photos": 2,
+   "about": "A large solitaire necklace with diamond."
+  },
+  {
+   "order": 82,
+   "slug": "open-wave-cuff",
+   "name": "Open wave cuff",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "10.830 g",
+   "karat": 22,
+   "price": 392500,
+   "photos": 2,
+   "about": "An open cuff of stacked stone-set waves.",
+   "ig": "DazRCdPAEyJ"
+  },
+  {
+   "order": 83,
+   "slug": "double-initial-diamond-pendant-necklace",
+   "name": "Double initial diamond pendant necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 213000,
+   "photos": 2,
+   "about": "A double initial necklace with diamond."
+  },
+  {
+   "order": 84,
+   "slug": "fine-personalised-necklace-set",
+   "name": "Fine personalised necklace set",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 182500,
+   "photos": 2,
+   "about": "A fine personalised necklace set."
+  },
+  {
+   "order": 85,
+   "slug": "solid-gold-triple-initial-necklace",
+   "name": "Solid gold triple initial necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 176000,
+   "photos": 2,
+   "about": "A solid gold triple initial necklace."
+  },
+  {
+   "order": 86,
+   "slug": "fine-drop-necklace",
+   "name": "Fine drop necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "weight": "1.080 g",
+   "karat": 22,
+   "price": 39000,
+   "photos": 2,
+   "about": "A small curled drop on a fine chain.",
+   "ig": "DaweU5cFTr_"
+  },
+  {
+   "order": 87,
+   "slug": "golden-glow-diamond-hoop-earrings-set",
+   "name": "Golden glow diamond hoop earrings set",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 172500,
+   "photos": 2,
+   "about": "A pair of golden glow hoop set earrings with diamond."
+  },
+  {
+   "order": 88,
+   "slug": "marquise-diamond-necklace",
+   "name": "Marquise diamond necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 273000,
+   "photos": 2,
+   "about": "A marquise necklace with diamond."
+  },
+  {
+   "order": 89,
+   "slug": "wedding-band-pair",
+   "name": "Wedding band pair",
+   "kind": "Rings",
+   "cats": [
+    "rings",
+    "bridal"
+   ],
+   "price": 107500,
+   "photos": 2,
+   "about": "A matching pair of polished gold bands.",
+   "ig": "DafQjwsFMYH"
+  },
+  {
+   "order": 90,
+   "slug": "3mm-solitaire-diamond-earrings-yellow-gold",
+   "name": "3mm solitaire diamond earrings yellow gold",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 109000,
+   "photos": 2,
+   "about": "A pair of 3mm solitaire yellow gold earrings with diamond."
+  },
+  {
+   "order": 91,
+   "slug": "brilliant-solitaire-diamond-necklace",
+   "name": "Brilliant solitaire diamond necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 233000,
+   "photos": 2,
+   "about": "A brilliant solitaire necklace with diamond."
+  },
+  {
+   "order": 92,
+   "slug": "zigzag-bangle",
+   "name": "Zigzag bangle",
+   "kind": "Bangle",
+   "cats": [
+    "bangles"
+   ],
+   "weight": "7.660 g",
+   "karat": 22,
+   "price": 277500,
+   "photos": 2,
+   "about": "A bangle with a zigzag front and a stone-set edge.",
+   "ig": "DaUunV-DCmn"
+  },
+  {
+   "order": 93,
+   "slug": "personalised-name-necklace",
+   "name": "Personalised name necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 146000,
+   "photos": 2,
+   "about": "A personalised name necklace."
+  },
+  {
+   "order": 94,
+   "slug": "personalised-name-bracelet",
+   "name": "Personalised name bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 86500,
+   "photos": 2,
+   "about": "A personalised name bracelet."
+  },
+  {
+   "order": 95,
+   "slug": "station-chain-necklace",
+   "name": "Station chain necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "weight": "3.730 g",
+   "karat": 22,
+   "price": 135000,
+   "photos": 2,
+   "about": "A fine chain with small gold stations along its length.",
+   "ig": "DZ_vbBzCZgq"
+  },
+  {
+   "order": 96,
+   "slug": "belle-fine-chain-necklace",
+   "name": "Belle fine chain necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 151500,
+   "photos": 2,
+   "about": "A belle fine chain necklace."
+  },
+  {
+   "order": 97,
+   "slug": "ruby-heart-earrings-set",
+   "name": "Ruby heart earrings set",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 90000,
+   "photos": 2,
+   "about": "A pair of heart set earrings with ruby."
+  },
+  {
+   "order": 98,
+   "slug": "heart-white-sapphire-bracelet",
+   "name": "Heart white sapphire bracelet",
+   "kind": "Bracelet",
+   "cats": [
+    "bracelets"
+   ],
+   "price": 101500,
+   "photos": 2,
+   "about": "A heart bracelet with white sapphire."
+  },
+  {
+   "order": 99,
+   "slug": "filigree-pendants",
+   "name": "Filigree pendants",
+   "kind": "Pair",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "2.840 g + 2.430 g",
+   "karat": 22,
+   "price": 191000,
+   "photos": 2,
+   "about": "Two traditional filigree pendants: a heart and a paisley drop.",
+   "ig": "DZpNIAKD4Ah"
+  },
+  {
+   "order": 100,
+   "slug": "your-heart-necklace",
+   "name": "Your heart necklace",
+   "kind": "Necklace",
+   "cats": [
+    "necklaces"
+   ],
+   "price": 151000,
+   "photos": 2,
+   "about": "Your heart necklace."
+  },
+  {
+   "order": 101,
+   "slug": "heart-red-garnet-earrings",
+   "name": "Heart red garnet earrings",
+   "kind": "Earrings",
+   "cats": [
+    "earrings"
+   ],
+   "price": 70000,
+   "photos": 2,
+   "about": "A pair of heart earrings with red garnet."
+  },
+  {
+   "order": 102,
+   "slug": "anchor-and-helm-pendant",
+   "name": "Anchor & helm pendant",
+   "kind": "Pendant",
+   "cats": [
+    "pendants"
+   ],
+   "weight": "9.140 g",
+   "karat": 22,
+   "price": 331500,
+   "photos": 2,
+   "about": "A ship’s wheel and anchor pendant on a fine chain.",
+   "ig": "DZkDbh9AmJt"
+  },
+  {
+   "order": 103,
+   "slug": "trinity-customised-gemstone-ring",
+   "name": "Trinity customised gemstone ring",
+   "kind": "Ring",
+   "cats": [
+    "rings"
+   ],
+   "price": 57000,
+   "photos": 2,
+   "about": "A trinity customised gemstone ring."
+  },
+  {
+   "order": 104,
+   "slug": "casio-mtp-1308d-1avdf",
+   "name": "Casio MTP-1308D-1AVDF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 19475,
+   "photos": 1,
+   "about": "Black dial with silver-tone hands and baton markers, a date window at 3 o’clock, and a silver-tone bracelet.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1308D-1AVDF"
+    ],
+    [
+     "Case size",
+     "48.9 × 43.5 × 9.2 mm"
+    ],
+    [
+     "Water resistance",
+     "50 metres"
+    ],
+    [
+     "Strap",
+     "Stainless steel; triple-fold clasp"
+    ],
+    [
+     "Glass",
+     "Mineral glass"
+    ],
+    [
+     "Watch weight",
+     "123 g"
+    ],
+    [
+     "Finish",
+     "Ion plated"
+    ],
+    [
+     "Battery",
+     "SR626SW; approximately 3 years"
+    ],
+    [
+     "Accuracy",
+     "±20 seconds per month"
+    ],
+    [
+     "Functions",
+     "Hour, minute and second hands; date display"
+    ]
+   ],
+   "casio": "https://www.casio.com/ph/watches/casio/product.MTP-1308D-1AV/",
+   "credit": "Photograph: W. A. De Silva / Casio. Specifications: Casio."
+  },
+  {
+   "order": 105,
+   "slug": "casio-mtp-1308d-9avdf",
+   "name": "Casio MTP-1308D-9AVDF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 19475,
+   "photos": 1,
+   "about": "Light champagne dial with warm gold-tone hands and markers, a date window at 3 o’clock, and a silver-tone bracelet.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1308D-9AVDF"
+    ],
+    [
+     "Case size",
+     "48.9 × 43.5 × 9.2 mm"
+    ],
+    [
+     "Water resistance",
+     "50 metres"
+    ],
+    [
+     "Strap",
+     "Stainless steel; triple-fold clasp"
+    ],
+    [
+     "Glass",
+     "Mineral glass"
+    ],
+    [
+     "Watch weight",
+     "123 g"
+    ],
+    [
+     "Finish",
+     "Ion plated"
+    ],
+    [
+     "Battery",
+     "SR626SW; approximately 3 years"
+    ],
+    [
+     "Accuracy",
+     "±20 seconds per month"
+    ],
+    [
+     "Functions",
+     "Hour, minute and second hands; date display"
+    ]
+   ],
+   "casio": "https://www.casio.com/za/watches/casio/product.MTP-1308D-9AV/",
+   "credit": "Photograph: W. A. De Silva / Casio. Specifications: Casio."
+  },
+  {
+   "order": 106,
+   "slug": "casio-mtp-1253sg-9adf",
+   "name": "Casio MTP-1253SG-9ADF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 21525,
+   "photos": 1,
+   "about": "Champagne dial with prominent 12 and 6 numerals, a gold-tone bezel, and a two-tone gold/silver bracelet.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1253SG-9ADF"
+    ],
+    [
+     "Display",
+     "Analog, three hands"
+    ],
+    [
+     "Design",
+     "Two-tone gold/silver metal bracelet and gold-tone bezel"
+    ]
+   ],
+   "credit": "Photograph: W. A. De Silva / Casio."
+  },
+  {
+   "order": 107,
+   "slug": "casio-mtp-1192a-7adf",
+   "name": "Casio MTP-1192A-7ADF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 24600,
+   "photos": 1,
+   "about": "Silver-tone multi-dial face with darker subdials and a matching silver-tone metal bracelet.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1192A-7ADF"
+    ],
+    [
+     "Display",
+     "Analog with three subdials"
+    ],
+    [
+     "Design",
+     "Silver-tone case, dial and metal bracelet"
+    ]
+   ],
+   "credit": "Photograph: W. A. De Silva / Casio."
+  },
+  {
+   "order": 108,
+   "slug": "casio-mtp-1375l-7avdf",
+   "name": "Casio MTP-1375L-7AVDF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 27675,
+   "photos": 1,
+   "about": "Light silver dial with slim markers and three subdials, paired with a black leather strap with contrasting stitching.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1375L-7AVDF"
+    ],
+    [
+     "Case size",
+     "48.5 × 42 × 9.7 mm"
+    ],
+    [
+     "Water resistance",
+     "50 metres"
+    ],
+    [
+     "Strap",
+     "Genuine leather"
+    ],
+    [
+     "Glass",
+     "Mineral glass"
+    ],
+    [
+     "Watch weight",
+     "67 g"
+    ],
+    [
+     "Finish",
+     "Ion plated"
+    ],
+    [
+     "Battery",
+     "SR927SW; approximately 3 years"
+    ],
+    [
+     "Accuracy",
+     "±20 seconds per month"
+    ],
+    [
+     "Functions",
+     "Hour, minute and second hands; day, date and 24-hour subdials"
+    ]
+   ],
+   "casio": "https://www.casio.com/intl/watches/casio/product.MTP-1375L-7AV/",
+   "credit": "Photograph: W. A. De Silva / Casio. Specifications: Casio."
+  },
+  {
+   "order": 109,
+   "slug": "casio-mtp-1374d-1avdf",
+   "name": "Casio MTP-1374D-1AVDF",
+   "kind": "Watch",
+   "cats": [
+    "watches"
+   ],
+   "price": 28700,
+   "photos": 1,
+   "about": "Black multi-dial face with a large 12 numeral, a red-accented seconds hand, and a silver-tone bracelet.",
+   "brand": "Casio",
+   "line": "Men’s quartz",
+   "specs": [
+    [
+     "Type",
+     "Men’s quartz watch"
+    ],
+    [
+     "Model",
+     "MTP-1374D-1AVDF"
+    ],
+    [
+     "Case size",
+     "47 × 43.5 × 11.1 mm"
+    ],
+    [
+     "Water resistance",
+     "50 metres"
+    ],
+    [
+     "Strap",
+     "Stainless steel; one-touch three-fold clasp"
+    ],
+    [
+     "Glass",
+     "Mineral glass"
+    ],
+    [
+     "Watch weight",
+     "124 g"
+    ],
+    [
+     "Finish",
+     "Ion plated"
+    ],
+    [
+     "Battery",
+     "SR927SW; approximately 3 years"
+    ],
+    [
+     "Accuracy",
+     "±20 seconds per month"
+    ],
+    [
+     "Functions",
+     "Hour, minute and second hands; day, date and 24-hour subdials"
+    ]
+   ],
+   "casio": "https://www.casio.com/intl/watches/casio/product.MTP-1374D-1AV/",
+   "credit": "Photograph: W. A. De Silva / Casio. Specifications: Casio."
+  }
+ ]
+}

@@ -34,7 +34,7 @@ if (!$installed && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         } catch (PDOException $e) {
             throw new RuntimeException('Could not connect with those details. Check the database name, username and password in hPanel → Databases, and try again.');
         }
-        @unlink(pj_data_dir() . '/schema-v1.ok');
+        foreach (glob(pj_data_dir() . '/schema-v*.ok') ?: [] as $marker) @unlink($marker);
         pj_ensure_schema($pdo, DEFAULT_SETTINGS);
         pj_write_config($cfg);
         $done = true;

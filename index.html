@@ -295,7 +295,7 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
     <div class="track-head">
       <h2 class="h2 rv" id="track-h">Track your order</h2>
       <img class="divider rv" src="assets/img/orn/divider.svg" alt="" aria-hidden="true" width="1200" height="240" loading="lazy">
-      <p class="lede rv">Waiting on a made-to-order piece or a repair? Enter the number on your receipt and the last four digits of your mobile, and we will reply on WhatsApp with where it stands.</p>
+      <p class="lede rv">Waiting on a made-to-order piece or a repair? Enter the number on your receipt and the last four digits of your mobile to see where it stands, step by step.</p>
     </div>
     <div class="ledger">
       <form class="tform rv" id="tform" novalidate>
@@ -309,12 +309,13 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
           <div class="field"><label for="t-ph">Mobile, last 4 digits</label><input id="t-ph" name="ph" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="off" aria-describedby="t-ph-h"><span class="hint" id="t-ph-h">So only you can see it.</span></div>
         </div>
         <p class="hint" id="t-err" role="alert" style="color:var(--wine);font-size:14px;min-height:1.4em"></p>
-        <button class="btn" type="submit"><svg aria-hidden="true"><use href="#i-wa"/></svg>Get my status</button>
+        <button class="btn" type="submit">Get my status</button>
       </form>
 
       <div class="tl-card rv" style="--d:2" aria-labelledby="tl-h">
-        <div class="tl-top"><h3 id="tl-h">Your status, step by step</h3><span class="tag">Example</span></div>
-        <div class="tl-w"><span class="bar" id="tl-bar" aria-hidden="true"></span><ol class="tl" id="tl"></ol></div>
+        <div class="tl-top"><h3 id="tl-h">Your status, step by step</h3><span class="tag" id="tl-tag">Example</span></div>
+        <div class="tl-w"><span class="bar" id="tl-bar" aria-hidden="true"></span><ol class="tl" id="tl" aria-live="polite"></ol></div>
+        <p class="tl-note" id="tl-note" hidden></p>
       </div>
     </div>
   </div>

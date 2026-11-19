@@ -115,15 +115,37 @@ const PJ_SCHEMA = [
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 
-/* Runs once per settings-file version; cheap to repeat. */
+/* Added after the first release. Each statement is safe to run again: a column that is already
+   there (MySQL error 1060) is skipped, so a new install and an upgraded one end up the same. */
+const PJ_SCHEMA_V2 = [
+    /* the website's own details for a piece (its address slug, kind, filters, weight as printed,
+       Instagram post, watch specifications...), kept with the product so the shop page can show them */
+    "ALTER TABLE products ADD COLUMN web LONGTEXT NULL",
+    /* order-tracking lookups from the website, counted per visitor so a number cannot be guessed at */
+    "CREATE TABLE IF NOT EXISTS track_attempts (
+        who CHAR(64) NOT NULL,
+        at DATETIME(3) NOT NULL,
+        INDEX track_attempts_who (who, at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+];
+
+/* Runs once per schema version (a marker file in pj-data); cheap to repeat. */
 function pj_ensure_schema(PDO $pdo, array $defaultSettings): void
 {
-    $marker = pj_data_dir() . '/schema-v1.ok';
-    if (is_file($marker)) return;
-    foreach (PJ_SCHEMA as $sql) $pdo->exec($sql);
-    $st = $pdo->prepare('INSERT IGNORE INTO settings (id, data) VALUES (1, ?)');
-    $st->execute([jenc($defaultSettings)]);
-    /* Order numbers start at PJ-1001 */
-    $pdo->exec("INSERT IGNORE INTO counters (name, value) VALUES ('order_number', 1000)");
-    @file_put_contents($marker, now_iso());
+    $dir = pj_data_dir();
+    if (!is_file($dir . '/schema-v1.ok')) {
+        foreach (PJ_SCHEMA as $sql) $pdo->exec($sql);
+        $st = $pdo->prepare('INSERT IGNORE INTO settings (id, data) VALUES (1, ?)');
+        $st->execute([jenc($defaultSettings)]);
+        /* Order numbers start at PJ-1001 */
+        $pdo->exec("INSERT IGNORE INTO counters (name, value) VALUES ('order_number', 1000)");
+        @file_put_contents($dir . '/schema-v1.ok', now_iso());
+    }
+    if (!is_file($dir . '/schema-v2.ok')) {
+        foreach (PJ_SCHEMA_V2 as $sql) {
+            try { $pdo->exec($sql); }
+            catch (PDOException $e) { if ((int) ($e->errorInfo[1] ?? 0) !== 1060) throw $e; }
+        }
+        @file_put_contents($dir . '/schema-v2.ok', now_iso());
+    }
 }

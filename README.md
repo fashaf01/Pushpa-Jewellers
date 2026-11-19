@@ -97,11 +97,22 @@ api/                     the shop backend (PHP + MySQL), every endpoint in docs/
 .htaccess                HTTPS, bare domain to www, short links, keeps repo-only files private
 tools/package-hostinger.sh   builds the upload zip for Hostinger
 tools/dev-router.php     local preview: php -S localhost:8000 tools/dev-router.php
+tools/export-pieces.js   writes api/seed/website-pieces.json from pieces.js, for the admin's import
 tools/frame-photos.py    frames a product photo of any size for the shop, or cuts a close-up from it
 tools/shop-thumbs.py     makes the small grid copies of new shop photos
 ```
 
 ## The shop
+
+**Where the pieces come from.** Once the owner presses *Bring in 110 pieces and link the website* in the admin
+(Settings → Website shop), `/shop/` shows the pieces marked **Published** in the admin, read from
+`/api/public/shop`, with their live price: add, change or hide pieces there. Pieces added in the admin come
+first, newest first, then the website's own pieces in their old order, watches last. Until that button is
+pressed, and whenever the backend cannot be reached, the shop shows the pieces in `assets/js/pieces.js` and
+`pieces-instagram.js`, as below. Each website piece keeps its own details in the product's `web` field (its
+address slug, kind, Bridal/Watches filters, weight as printed, Instagram post, watch specifications), so the
+shop page looks the same either way. After changing those two files, run `node tools/export-pieces.js` to
+refresh `api/seed/website-pieces.json`, the list the admin brings in.
 
 `/shop/` shows every piece in `assets/js/pieces.js` in list order, with its weight in grams and
 in pawn (8 g) where one is known. Visitors can filter by the categories that have pieces (a
@@ -254,7 +265,7 @@ are all worked out from these, so change the logo size there and nothing else ne
 2. **Marks.** 916, 750, 1967 and "weighed for you" stamps.
 3. **The collection.** Necklaces, bangles, rings and pendants, each opening the shop filtered to it.
 4. **Suba Mangala.** The 6 and 12 month gold purchase plan: its terms and conditions, a calculator and the plan table.
-5. **Track your order.** Order or repair-bill lookup, sent on WhatsApp.
+5. **Track your order.** Order or repair-bill lookup: the real steps from the admin (see Order tracking).
 6. **Services.** Pawning, money exchange and airline ticketing, each linking to its own page.
 7. **About.** 1967, the pride of Negombo, with a View more button to the About page.
 8. **Visit.** This week's opening hours in Sri Lanka time, three showrooms, phone lines.
@@ -314,10 +325,18 @@ section 4 of `terms/index.html` says the same. **Two choices were made that the 
    the total to pay instead. The old cash gift and "gold you can buy in rupees" are gone: the card says special gifts,
    with no figure, so none is shown.
 
+## Order tracking
+
+*Track your order* on the home page asks `/api/public/track?number=1001&phone=1418` (the order number, with or
+without `PJ-`, and the last four digits of the customer's mobile on the order). It shows the order's real steps
+as the staff set them in the admin (Order placed, Confirmed, With the goldsmith, Ready to collect or On its way,
+Collected or Delivered), with dates, what was ordered and when it is due. It never shows prices, payments or the
+customer's details. A wrong number or mobile gets the same "not found" answer, and each visitor gets 12 tries
+in 15 minutes. If the backend cannot be reached, the form opens WhatsApp with the question, as it used to.
+
 ## WhatsApp
 
-There is no backend. Enrolling, tracking and every "Ask about" link open WhatsApp
-with the message pre-filled. The number is at the top of `main.js` and in the
+Enrolling and every "Ask about" link open WhatsApp with the message pre-filled (tracking falls back to it). The number is at the top of `main.js` and in the
 `wa.me` links in `index.html`:
 
 ```js
