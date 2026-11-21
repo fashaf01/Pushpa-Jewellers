@@ -403,6 +403,18 @@ var WA = 'https://wa.me/94777770203?text=';
 
 The same details are in the `JewelryStore` JSON-LD in `<head>`. Update both together.
 
+
+**From the client's own documents (21 Nov 2026):**
+- Mobile / WhatsApp on their sheet: 075 796 6709 and 077 304 7503. Telephone 031 223 3857, and 011 225 4689 (Katunayake).
+  The site's WhatsApp buttons still use 077 777 0203, from the public listings: confirm which number takes WhatsApp.
+- **Money exchange** is Pushpa Money Changers (Pvt) Ltd, a licensed Restricted Dealer regulated by the Department of
+  Foreign Exchange, Central Bank of Sri Lanka; over 10 years; currency exchange **only at 67 Greens Road, Negombo**,
+  Tel 031 223 6998. The Central Bank's "Authorised Money Changer" seal is `assets/img/cbsl-authorised-money-changer.webp`.
+- **Money transfers** are with Pushpa Pawning (over 20 years): collecting money sent from abroad through Western Union,
+  MoneyGram and Ria, at all three branches. Their badges, as the client supplied them, are in `assets/img/partners/`.
+- The About page's opening, vision, mission, offerings and "why choose" points are the client's article, in the
+  site's spelling (jewellery).
+
 ## Product photography
 
 New shop photos: `tools/frame-photos.py` frames them to the shop's size and

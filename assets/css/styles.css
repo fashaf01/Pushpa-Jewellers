@@ -1038,3 +1038,38 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
   .band ul[aria-hidden]{display:none}
   .btn:active{transform:none}
 }
+
+/* the three marks after the hero on the home page (1967 Heritage, Weight Transparency, Handcrafted Purity) */
+.marks-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.marks-3 .mk p{max-width:30ch}
+@media (max-width:760px){
+  .marks-3{grid-template-columns:minmax(0,1fr)}
+  .marks-3 .mk{grid-template-columns:96px minmax(0,1fr);justify-items:start;align-items:center;text-align:left;gap:18px;padding:22px 4px;border-left:0}
+  .marks-3 .mk+.mk{border-left:0;border-top:1px solid var(--rule)}
+  .marks-3 .mk:nth-child(3){border-left:0}
+  .marks-3 .stamp{width:96px}
+  .marks-3 .mk b{font-size:14px}
+  .marks-3 .mk p{font-size:13.5px;max-width:none}
+}
+/* the money transfer partners' own badges, as supplied by the client */
+.partner-l{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:0;padding:0;list-style:none}
+.partner-l img{width:auto;height:44px;border-radius:7px;box-shadow:0 0 0 1px rgba(236,210,143,.25)}
+@media (max-width:480px){.partner-l img{height:36px}}
+
+/* About: Vision & mission, two antique tiles side by side */
+.vm{padding-block:var(--sec);border-top:1px solid var(--rule)}
+.vm .pg-h{justify-items:center;text-align:center;margin-bottom:clamp(24px,3vw,40px)}
+.vm-g{grid-template-columns:repeat(2,minmax(0,1fr));max-width:980px;margin-inline:auto}
+.vm-g .tile{grid-template-rows:auto auto 1fr}
+.vm-g .tile p{font-size:16px;line-height:1.65}
+.offer-g .tile.static{grid-template-rows:auto auto 1fr}
+@media (max-width:700px){.vm-g{grid-template-columns:minmax(0,1fr)}}
+
+/* service pages: the Central Bank seal on the money exchange card, the transfer partners on pawning */
+.card .seal{width:132px;height:auto;justify-self:center;margin-bottom:4px}
+.partners-sec{padding-block:var(--sec);background:var(--tint) var(--paper);border-top:1px solid var(--rule)}
+.partners-sec .pg-h{justify-items:center;text-align:center}
+.partner-l.big{gap:clamp(14px,2vw,26px)}
+.partner-l.big img{height:clamp(54px,6vw,76px);box-shadow:0 14px 30px -18px rgba(59,10,37,.4)}
+.steps-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,60px)}
+@media (max-width:760px){.steps-4{grid-template-columns:minmax(0,1fr)}}

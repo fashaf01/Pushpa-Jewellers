@@ -21,9 +21,9 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Noto+Serif+Sinhala:wght@400;500&family=Noto+Serif+Tamil:wght@400;500&display=swap">
-<link rel="stylesheet" href="assets/css/styles.css?v=202611191801">
-<script src="assets/js/site.js?v=202611191801" defer></script>
-<script src="assets/js/main.js?v=202611191801" defer></script>
+<link rel="stylesheet" href="assets/css/styles.css?v=202611210212">
+<script src="assets/js/site.js?v=202611210212" defer></script>
+<script src="assets/js/main.js?v=202611210212" defer></script>
 
 <script type="application/ld+json">
 {
@@ -82,6 +82,7 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
   <symbol id="i-pawn" viewBox="0 0 52 52"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M26 8v34M16 44h20M10 15h32"/><path d="M10 15l-6 13h12zM42 15l-6 13h12z"/><path d="M4 28a6 4 0 0 0 12 0M36 28a6 4 0 0 0 12 0"/><circle cx="26" cy="8" r="2.5"/></g></symbol>
   <symbol id="i-fx" viewBox="0 0 52 52"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="20" r="11"/><circle cx="34" cy="32" r="11"/><path d="M38 9a14 14 0 0 1 7 9M45 18l1-5M45 18l-5-1M14 43a14 14 0 0 1-7-9M7 34l-1 5M7 34l5 1"/></g></symbol>
+  <symbol id="i-gem" viewBox="0 0 52 52"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M15 17H37L44 24L26 44L8 24Z"/><path d="M8 24H44M21 17L18 24L26 44L34 24L31 17"/><path d="M42 5V11M39 8H45"/></g></symbol>
   <symbol id="i-plane" viewBox="0 0 52 52"><path d="M26 4C28 4 29.2 6 29.2 9V20.5L46 30.5V34.5L29.2 29.5V39L34 42.6V46L26 43.8L18 46V42.6L22.8 39V29.5L6 34.5V30.5L22.8 20.5V9C22.8 6 24 4 26 4Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -113,8 +114,8 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
       <li class="dd"><button class="n" id="dd-b" aria-expanded="false" aria-controls="dd-m">Services <svg aria-hidden="true"><use href="#i-down"/></svg></button>
         <div class="dd-m" id="dd-m" hidden>
           <a href="#suba"><b>Suba Mangala plan</b><span>6 and 12 month gold purchase plan</span></a>
-          <a href="services/pawning/"><b>Pawning</b><span>Gold loans at the counter</span></a>
-          <a href="services/money-exchange/"><b>Money exchange</b><span>Western Union &middot; MoneyGram &middot; Ria</span></a>
+          <a href="services/pawning/"><b>Pawning</b><span>Gold loans &middot; money from abroad</span></a>
+          <a href="services/money-exchange/"><b>Money exchange</b><span>Licensed foreign currency exchange</span></a>
           <a href="services/airline-ticketing/"><b>Airline ticketing</b><span>Book flights at the counter</span></a>
         </div>
       </li>
@@ -192,23 +193,19 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
 
 <!-- ================= marks ================= -->
 <section class="marks" aria-labelledby="marks-h">
-  <h2 class="sr" id="marks-h">The marks of Pushpa gold</h2>
-  <ul class="wrap marks-g" role="list">
+  <h2 class="sr" id="marks-h">Why Pushpa</h2>
+  <ul class="wrap marks-g marks-3" role="list">
     <li class="mk rv" style="--d:0">
-      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><ellipse class="o" cx="66" cy="40" rx="63" ry="37"/><ellipse class="i" cx="66" cy="40" rx="57" ry="31"/><text x="66" y="50">916</text></svg>
-      <p><b>22KT gold</b><span>91.6% pure, the 916 mark</span></p>
+      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><rect class="o" x="3" y="3" width="126" height="74" rx="20"/><rect class="i" x="9" y="9" width="114" height="62" rx="15"/><text x="66" y="50">1967</text></svg>
+      <p><b>1967 Heritage</b><span>Nearly 60 years of unwavering family legacy and service.</span></p>
     </li>
     <li class="mk rv" style="--d:1">
-      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><path class="o" d="M12 3H120L129 12V68L120 77H12L3 68V12Z"/><path class="i" d="M15 9H117L123 15V65L117 71H15L9 65V15Z"/><text x="66" y="50">750</text></svg>
-      <p><b>18KT gold</b><span>75% pure, the 750 mark</span></p>
+      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><path class="o" d="M26 3H106L129 40L106 77H26L3 40Z"/><path class="i" d="M29.5 9H102.5L122 40L102.5 71H29.5L10 40Z"/><use href="#i-pawn" x="44" y="18" width="44" height="44"/></svg>
+      <p><b>100% Weight Transparency</b><span>Every piece is weighed with precise clarity, guaranteed.</span></p>
     </li>
     <li class="mk rv" style="--d:2">
-      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><rect class="o" x="3" y="3" width="126" height="74" rx="20"/><rect class="i" x="9" y="9" width="114" height="62" rx="15"/><text x="66" y="50">1967</text></svg>
-      <p><b>Since 1967</b><span>Serving Negombo families for almost sixty years</span></p>
-    </li>
-    <li class="mk rv" style="--d:3">
-      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><path class="o" d="M26 3H106L129 40L106 77H26L3 40Z"/><path class="i" d="M29.5 9H102.5L122 40L102.5 71H29.5L10 40Z"/><use href="#i-pawn" x="44" y="18" width="44" height="44"/></svg>
-      <p><b>Weighed for you</b><span>Every piece shown with its weight, in grams and in pawn</span></p>
+      <svg class="stamp" viewBox="0 0 132 80" aria-hidden="true"><ellipse class="o" cx="66" cy="40" rx="63" ry="37"/><ellipse class="i" cx="66" cy="40" rx="57" ry="31"/><use href="#i-gem" x="44" y="17" width="44" height="44"/></svg>
+      <p><b>Handcrafted Purity</b><span>Purest gold and certified gems, hand-set by expert master craftsmen.</span></p>
     </li>
   </ul>
 </section>
@@ -360,14 +357,14 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
         <a class="svc-hit" href="services/pawning/" tabindex="-1" aria-hidden="true"></a>
         <span class="medal" aria-hidden="true"><svg><use href="#i-pawn"/></svg></span>
         <h3>Pawning</h3>
-        <div class="tx"><p>Pawn your gold with jewellers who know its worth. We weigh it in front of you and explain what we can lend against it, and you take it home again when you redeem it.</p></div>
+        <div class="tx"><p>Pawn your gold with jewellers who know its worth. We weigh it in front of you and explain what we can lend against it, and you take it home again when you redeem it.</p><p class="partners">Collect money from abroad: Western Union, MoneyGram and Ria</p></div>
         <a class="alink" href="services/pawning/">More about pawning <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </article>
       <article class="svc rv" style="--d:1">
         <a class="svc-hit" href="services/money-exchange/" tabindex="-1" aria-hidden="true"></a>
         <span class="medal" aria-hidden="true"><svg><use href="#i-fx"/></svg></span>
         <h3>Money exchange</h3>
-        <div class="tx"><p>We are authorised money changers. Change foreign currency, and send or receive money through the names you know, all at the counter.</p><p class="partners">Western Union, Ria and MoneyGram</p></div>
+        <div class="tx"><p>Pushpa Money Changers is licensed by the Central Bank of Sri Lanka. Change foreign currency at our main branch on Greens Road, Negombo.</p><p class="partners">Authorised money changer</p></div>
         <a class="alink" href="services/money-exchange/">More about money exchange <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </article>
       <article class="svc rv" style="--d:2">
@@ -379,9 +376,9 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
       </article>
     </div>
     <div class="agents rv" style="--d:3">
-      <span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Authorised money changers</span>
-      <ul class="agent-l" role="list"><li>Western Union</li><li>Ria Money Transfer</li><li>MoneyGram</li><li>Foreign currency</li></ul>
-      <p class="agent-c">Call <a href="tel:+94312233857">031 223 3857</a> &middot; <a href="tel:+94312222404">031 222 2404</a> &middot; <a href="tel:+94757966709">075 796 6709</a></p>
+      <span class="label"><svg class="fl" aria-hidden="true"><use href="#flower"/></svg>Money from abroad, at all three branches</span>
+      <ul class="partner-l" role="list"><li><img src="assets/img/partners/western-union.png" alt="Western Union" width="600" height="200" loading="lazy"></li><li><img src="assets/img/partners/moneygram.png" alt="MoneyGram" width="600" height="200" loading="lazy"></li><li><img src="assets/img/partners/ria.png" alt="Ria Money Transfer" width="600" height="200" loading="lazy"></li></ul>
+      <p class="agent-c">Foreign currency exchange at 67 Greens Road, Negombo &middot; <a href="tel:+94312236998">031 223 6998</a></p>
     </div>
   </div>
 </section>
@@ -433,7 +430,9 @@ try { if (sessionStorage.getItem('pj-opened')) document.documentElement.classLis
     </div>
     <dl class="lines rv">
       <div><dt>Hotline</dt><dd>031 223 3857</dd><button class="copy" data-copy="031 223 3857">Copy</button></div>
-      <div><dt>Tel</dt><dd>031 223 3857, 031 222 2404, 075 796 6709</dd><button class="copy" data-copy="031 223 3857">Copy</button></div>
+      <div><dt>Tel</dt><dd>031 222 2404, Katunayake 011 225 4689</dd><button class="copy" data-copy="031 222 2404">Copy</button></div>
+      <div><dt>Mobile</dt><dd>075 796 6709, 077 304 7503</dd><button class="copy" data-copy="075 796 6709">Copy</button></div>
+      <div><dt>Money exchange</dt><dd>031 223 6998</dd><button class="copy" data-copy="031 223 6998">Copy</button></div>
       <div><dt>WhatsApp</dt><dd>077 777 0203</dd><button class="copy" data-copy="077 777 0203">Copy</button></div>
     </dl>
   </div>
