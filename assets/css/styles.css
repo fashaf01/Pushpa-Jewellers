@@ -1073,3 +1073,10 @@ input[type=range]{-webkit-tap-highlight-color:transparent} /* no grey flash on a
 .partner-l.big img{height:clamp(54px,6vw,76px);box-shadow:0 14px 30px -18px rgba(59,10,37,.4)}
 .steps-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,60px)}
 @media (max-width:760px){.steps-4{grid-template-columns:minmax(0,1fr)}}
+
+/* the hero headline in the client's words: two longer lines, so a little smaller, each line kept whole */
+.hero h1.legacy{max-width:none;font-size:clamp(34px,3.7vw,60px)}
+.has-seasons .hero h1.legacy{font-size:clamp(36px,3.9vw,64px)}
+.hero h1.legacy .ln>span{white-space:nowrap}
+@media (max-width:1100px) and (min-width:821px){.hcopy{max-width:min(640px,58%)}}
+@media (max-width:820px){.hero h1.legacy,.has-seasons .hero h1.legacy{font-size:min(40px,calc((100vw - 2 * var(--gut)) / 12.6))}}
